@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-07-24T13:05:18.262Z</updated>
+  <updated>2021-07-24T13:28:06.785Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,84 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>十、附录：Java安全编码规范索引</title>
+    <link href="http://example.com/2021/07/24/%E5%8D%81%E3%80%81%E9%99%84%E5%BD%95%EF%BC%9AJava%E5%AE%89%E5%85%A8%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83%E7%B4%A2%E5%BC%95/"/>
+    <id>http://example.com/2021/07/24/%E5%8D%81%E3%80%81%E9%99%84%E5%BD%95%EF%BC%9AJava%E5%AE%89%E5%85%A8%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83%E7%B4%A2%E5%BC%95/</id>
+    <published>2021-07-24T13:28:06.000Z</published>
+    <updated>2021-07-24T13:28:06.785Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>九、小话IAST与RASP</title>
+    <link href="http://example.com/2021/07/24/%E4%B9%9D%E3%80%81%E5%B0%8F%E8%AF%9DIAST%E4%B8%8ERASP/"/>
+    <id>http://example.com/2021/07/24/%E4%B9%9D%E3%80%81%E5%B0%8F%E8%AF%9DIAST%E4%B8%8ERASP/</id>
+    <published>2021-07-24T13:27:26.000Z</published>
+    <updated>2021-07-24T13:27:26.906Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>八、Jspxcms代码审计实战</title>
+    <link href="http://example.com/2021/07/24/%E5%85%AB%E3%80%81Jspxcms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/"/>
+    <id>http://example.com/2021/07/24/%E5%85%AB%E3%80%81Jspxcms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/</id>
+    <published>2021-07-24T13:26:45.000Z</published>
+    <updated>2021-07-24T13:26:45.818Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>七、Java EE 开发框架安全审计</title>
+    <link href="http://example.com/2021/07/24/%E4%B8%83%E3%80%81Java-EE-%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6%E5%AE%89%E5%85%A8%E5%AE%A1%E8%AE%A1/"/>
+    <id>http://example.com/2021/07/24/%E4%B8%83%E3%80%81Java-EE-%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6%E5%AE%89%E5%85%A8%E5%AE%A1%E8%AE%A1/</id>
+    <published>2021-07-24T13:26:02.000Z</published>
+    <updated>2021-07-24T13:26:02.940Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>六、代码审计 &quot;OWASP Top 10 2017&quot; 漏洞之外的常见漏洞</title>
+    <link href="http://example.com/2021/07/24/%E5%85%AD%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-OWASP-Top-10-2017-%E6%BC%8F%E6%B4%9E%E4%B9%8B%E5%A4%96%E7%9A%84%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://example.com/2021/07/24/%E5%85%AD%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-OWASP-Top-10-2017-%E6%BC%8F%E6%B4%9E%E4%B9%8B%E5%A4%96%E7%9A%84%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E/</id>
+    <published>2021-07-24T13:25:27.000Z</published>
+    <updated>2021-07-24T13:25:27.033Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>五、代码审计 &quot;OWASP Top 10 2017&quot; 漏洞</title>
+    <link href="http://example.com/2021/07/24/%E4%BA%94%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-OWASP-Top-10-2017-%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://example.com/2021/07/24/%E4%BA%94%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-OWASP-Top-10-2017-%E6%BC%8F%E6%B4%9E/</id>
+    <published>2021-07-24T13:24:30.000Z</published>
+    <updated>2021-07-24T13:24:30.085Z</updated>
+    
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>四、Java EE 基础知识</title>
@@ -60,7 +138,7 @@
     <link href="http://example.com/2021/07/24/%E4%B8%80%E3%80%81%E5%88%9D%E8%AF%86Java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     <id>http://example.com/2021/07/24/%E4%B8%80%E3%80%81%E5%88%9D%E8%AF%86Java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</id>
     <published>2021-07-24T12:53:37.000Z</published>
-    <updated>2021-07-24T13:01:19.766Z</updated>
+    <updated>2021-07-24T13:23:51.790Z</updated>
     
     
     
