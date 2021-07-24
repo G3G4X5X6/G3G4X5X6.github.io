@@ -138,7 +138,7 @@
     <link href="http://example.com/2021/07/24/%E4%B8%80%E3%80%81%E5%88%9D%E8%AF%86Java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     <id>http://example.com/2021/07/24/%E4%B8%80%E3%80%81%E5%88%9D%E8%AF%86Java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</id>
     <published>2021-07-24T12:53:37.000Z</published>
-    <updated>2021-07-24T14:12:35.547Z</updated>
+    <updated>2021-07-24T14:12:40.344Z</updated>
     
     <content type="html"><![CDATA[<h1 id="一-初识java代码审计"><a class="markdownIt-Anchor" href="#一-初识java代码审计"></a> 一、初识Java代码审计</h1><p>代码审计（Java Audit）是一种以发现安全漏洞、程序错误和程序违规为目标的源代码分析技能。</p><h2 id="0x00-代码审计的意义"><a class="markdownIt-Anchor" href="#0x00-代码审计的意义"></a> 0x00 代码审计的意义</h2><ul><li>落实 “安全左移”</li><li>避免遗漏在网站代码里的潜在漏洞。</li><li>避免盲目测试，做无用功。</li></ul><h2 id="0x01-java代码审计所需的基础能力"><a class="markdownIt-Anchor" href="#0x01-java代码审计所需的基础能力"></a> 0x01 Java代码审计所需的基础能力</h2><p>Java代码审计要求代码审计人员能够&quot;动静结合&quot;：</p><ul><li><p>在“静”方面，要求代码审计人员具备一定的编程基础，了解基本语法与编程思想。</p></li><li><p>在“动”方面，要求代码审计人员具备调试程序的能力。</p></li></ul><h2 id="0x02-代码审计的常用思路"><a class="markdownIt-Anchor" href="#0x02-代码审计的常用思路"></a> 0x02 代码审计的常用思路</h2><blockquote><p>万物皆有其套路，代码审计亦是如此</p></blockquote><p>为了在应用代码中寻找目标代码的漏洞，需要有明确的方法论做指导。方法论的选择则要视目标程序和要寻找的漏洞类型而定，以下是一些常见思路：</p><ol><li>接口排查（“正向追踪”）：</li><li>危险方法溯源（“逆向追踪”）：</li><li>功能点定向审计：</li><li>第三方组件、中间件版本比对：</li><li>补丁比对：</li><li>“黑盒测试” + “白盒测试”：</li><li>“代码静态扫描工具” + “人工研判”：</li><li>开发框架安全审计：</li></ol>]]></content>
     
