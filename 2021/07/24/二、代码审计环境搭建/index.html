@@ -292,7 +292,7 @@
 </ul>
 <p><strong>3. Docker的基本使用方法</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 使用docker前确保已经启用docker服务</span><br>systemctl stats docker 	# 查看<br>systemctl start docker	# 启动<br>systemctl enable docker	# 开启启动<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 搜索镜像</span><br>docker search tomcat	# tomcat 为需要搜索的镜像的关键字<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 拉取镜像</span><br>docker pull tomcat		# tomcat 为需要拉取的镜像名称，不带版本标签则默认为latest<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 查看镜像</span><br>docker images<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 删除镜像</span><br>docker rmi &lt;镜像名/镜像ID&gt;	# 通过 “docker images” 查看需要删除的镜像<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 生成、运行容器</span><br>docker run &lt;opt&gt; &lt;镜像名/镜像ID&gt;	<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 查看容器</span><br>docker ps -a<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 停止容器</span><br>docker stop &lt;container id&gt;	# “容器ID” 通过 “docker ps -a&quot; 查看<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 启动容器</span><br>docker start &lt;container id&gt;<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 进入容器</span><br>docker exec -it &lt;container id&gt; /bin/bash<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 删除容器</span><br>docker rm &lt;container id&gt;<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 复制文件进出容器</span><br>docker cp ./flag.txt 28:/var/		# 将物理机的flag.txt文件复制到编号缩写为28的容器中var目录下<br>docker cp 28:/var/flag2.txt /root/home # 同理，将容器中 /var/目录下的flag2.txt复制到物理机<br><br></code></pre></td></tr></table></figure>
-<h3 id="0x0101-使用vulhub快速搭建漏洞验证环境"><a class="markdownIt-Anchor" href="#0x0101-使用vulhub快速搭建漏洞验证环境"></a> 0x0101 使用Vulhub快速搭建漏洞验证环境</h3>
+<h3 id="0x0101-vulhub搭建漏洞验证环境"><a class="markdownIt-Anchor" href="#0x0101-vulhub搭建漏洞验证环境"></a> 0x0101 Vulhub搭建漏洞验证环境</h3>
 <p><strong>1. Vulhub简介</strong></p>
 <p>Vulhub是一个基于<code>docker</code>和<code>docker-compose</code>的漏洞环境集合，进入对应目录并执行一条语句即可启动一个全新的漏洞环境，让漏洞复现变得更加简单，让安全研究者更加专注于漏洞原理本身。</p>
 <p><strong>2. docker-compose简介</strong></p>
@@ -316,7 +316,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 运行以下命令以下载 Docker Compose 的当前稳定版本</span><br>sudo curl -L &quot;https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 将可执行权限应用于二进制文件</span><br>sudo chmod +x /usr/local/bin/docker-compose<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 创建软链</span><br>sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 测试是否安装成功</span><br>docker-compose --version<br></code></pre></td></tr></table></figure>
 <p><strong>4. Vulhub的下载与安装</strong></p>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://vulhub.org/">https://vulhub.org/</a></p>
+<p>Vulhub官网：<a target="_blank" rel="noopener" href="https://vulhub.org/">https://vulhub.org/</a></p>
 </blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> Download the latest version of the vulhub (克隆下载vulhub项目)</span><br>git clone https://github.com/vulhub/vulhub.git  <br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> Entry vulnerability directory (进入特定漏洞的子项目目录)</span><br>cd /path/to/vuln/ <br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> Compile (optional)</span> <br>docker-compose build <br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> Run (运行命令)</span><br>docker-compose up -d <br></code></pre></td></tr></table></figure>
 <h2 id="0x02-远程调试"><a class="markdownIt-Anchor" href="#0x02-远程调试"></a> 0x02 远程调试</h2>
@@ -350,12 +350,17 @@
 <p>b. 单击 IntelliJ IDEA 右上角的 Debug 按钮，即可发现程序在断点处暂停，然后就可以进行逐步的调试了，如图：</p>
 <p><img src="/../../images/%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210725094333487.png" srcset="/img/loading.gif" lazyload alt="image-20210725094333487" /></p>
 <h3 id="0x0201-对-weblogic-进行远程调试"><a class="markdownIt-Anchor" href="#0x0201-对-weblogic-进行远程调试"></a> 0x0201 对 Weblogic 进行远程调试</h3>
-<h3 id="0x0202-对-tomcat-进行远程调试"><a class="markdownIt-Anchor" href="#0x0202-对-tomcat-进行远程调试"></a> 0x0202 对 Tomcat 进行远程调试</h3>
-<h3 id="0x0203-vmware虚拟机搭建远程调试环境"><a class="markdownIt-Anchor" href="#0x0203-vmware虚拟机搭建远程调试环境"></a> 0x0203 VMware虚拟机搭建远程调试环境</h3>
 <h4 id="1-配置服务端"><a class="markdownIt-Anchor" href="#1-配置服务端"></a> 1. 配置服务端</h4>
 <ul>
 <li>修改 <code>docker-compose.yml</code> 文件，打开 <code>8453</code> 端口</li>
-<li>修改 weblogic 配置文件 <code>setDomainEnv.sh</code>, 添加如下两行代码：
+</ul>
+<p><img src="/../../images/%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210725104115994.png" srcset="/img/loading.gif" lazyload alt="image-20210725104115994" /></p>
+<ul>
+<li>
+<p>启动容器：<code>docker-compose up -d</code></p>
+</li>
+<li>
+<p>修改 weblogic 配置文件 <code>setDomainEnv.sh</code>, 添加如下两行代码：</p>
 <ul>
 <li><code>ebugFlag=&quot;true&quot;</code></li>
 <li><code>export debugFlag</code></li>
@@ -363,6 +368,8 @@
 </li>
 </ul>
 <h4 id="2-复制调试文件到物理机"><a class="markdownIt-Anchor" href="#2-复制调试文件到物理机"></a> 2. 复制调试文件到物理机</h4>
+<h3 id="0x0202-对-tomcat-进行远程调试"><a class="markdownIt-Anchor" href="#0x0202-对-tomcat-进行远程调试"></a> 0x0202 对 Tomcat 进行远程调试</h3>
+<h3 id="0x0203-vmware虚拟机搭建远程调试环境"><a class="markdownIt-Anchor" href="#0x0203-vmware虚拟机搭建远程调试环境"></a> 0x0203 VMware虚拟机搭建远程调试环境</h3>
 <h2 id="0x03-项目构建工具"><a class="markdownIt-Anchor" href="#0x03-项目构建工具"></a> 0x03 项目构建工具</h2>
 
             </div>
