@@ -69,13 +69,31 @@
   
   
   <entry>
-    <title>五、代码审计 OWASP Top 10 2017 漏洞</title>
+    <title>五、代码审计 “OWASP Top 10 2017” 漏洞</title>
     <link href="/2021/07/24/%E4%BA%94%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-OWASP-Top-10-2017-%E6%BC%8F%E6%B4%9E/"/>
     <url>/2021/07/24/%E4%BA%94%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-OWASP-Top-10-2017-%E6%BC%8F%E6%B4%9E/</url>
     
-    <content type="html"><![CDATA[]]></content>
+    <content type="html"><![CDATA[<p>OWASP( Open Web Application Security Project，开放式 Web 应用程序安全项目 ) 是一个组织，它提供有关计算机和和互联网应用程序的公正、实际、有成本效益的信息，其目的是协助个人、企业和机构来发现和使用可信赖软件。其中 OWASP Top 10 （十大安全漏洞列表）颇具权威性。</p><h2 id="0x00-注入"><a class="markdownIt-Anchor" href="#0x00-注入"></a> 0x00 注入</h2><h3 id="0x0000-注入漏洞简介"><a class="markdownIt-Anchor" href="#0x0000-注入漏洞简介"></a> 0x0000 注入漏洞简介</h3><h3 id="0x0001-sql-注入"><a class="markdownIt-Anchor" href="#0x0001-sql-注入"></a> 0x0001 SQL 注入</h3><h3 id="0x0002-命令注入"><a class="markdownIt-Anchor" href="#0x0002-命令注入"></a> 0x0002 命令注入</h3><h3 id="0x0003-代码注入"><a class="markdownIt-Anchor" href="#0x0003-代码注入"></a> 0x0003 代码注入</h3><h3 id="0x0004-表达式注入"><a class="markdownIt-Anchor" href="#0x0004-表达式注入"></a> 0x0004 表达式注入</h3><h3 id="0x0005-模板注入"><a class="markdownIt-Anchor" href="#0x0005-模板注入"></a> 0x0005 模板注入</h3><h2 id="0x01-失效的身份认证"><a class="markdownIt-Anchor" href="#0x01-失效的身份认证"></a> 0x01 失效的身份认证</h2><h3 id="0x0100-失效的身份认证漏洞简介"><a class="markdownIt-Anchor" href="#0x0100-失效的身份认证漏洞简介"></a> 0x0100 失效的身份认证漏洞简介</h3><h3 id="0x0101-jwt-token-猜解实验"><a class="markdownIt-Anchor" href="#0x0101-jwt-token-猜解实验"></a> 0x0101 JWT Token 猜解实验</h3><h2 id="0x02-敏感信息泄露"><a class="markdownIt-Anchor" href="#0x02-敏感信息泄露"></a> 0x02 敏感信息泄露</h2>]]></content>
     
     
+    <categories>
+      
+      <category>代码审计</category>
+      
+      <category>Java代码审计</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>代码审计</tag>
+      
+      <tag>java</tag>
+      
+      <tag>OWASP Top 10</tag>
+      
+    </tags>
     
   </entry>
   
@@ -103,6 +121,14 @@
       <tag>代码审计</tag>
       
       <tag>java</tag>
+      
+      <tag>MVC</tag>
+      
+      <tag>类加载</tag>
+      
+      <tag>Java代理</tag>
+      
+      <tag>Javassist</tag>
       
     </tags>
     
@@ -133,6 +159,8 @@
       
       <tag>java</tag>
       
+      <tag>工具</tag>
+      
     </tags>
     
   </entry>
@@ -162,6 +190,8 @@
       
       <tag>java</tag>
       
+      <tag>环境</tag>
+      
     </tags>
     
   </entry>
@@ -190,6 +220,8 @@
       <tag>代码审计</tag>
       
       <tag>java</tag>
+      
+      <tag>思路</tag>
       
     </tags>
     
