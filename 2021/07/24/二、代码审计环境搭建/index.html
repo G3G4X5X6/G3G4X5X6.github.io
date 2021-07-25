@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      18
+      19
        分钟
     </span>
   
@@ -355,6 +355,12 @@
 <h4 id="1-配置服务端"><a class="markdownIt-Anchor" href="#1-配置服务端"></a> 1. 配置服务端</h4>
 <ul>
 <li>修改 <code>docker-compose.yml</code> 文件，打开 <code>8453</code> 端口</li>
+<li>修改 weblogic 配置文件 <code>setDomainEnv.sh</code>, 添加如下两行代码：
+<ul>
+<li><code>ebugFlag=&quot;true&quot;</code></li>
+<li><code>export debugFlag</code></li>
+</ul>
+</li>
 </ul>
 <h4 id="2-复制调试文件到物理机"><a class="markdownIt-Anchor" href="#2-复制调试文件到物理机"></a> 2. 复制调试文件到物理机</h4>
 <h2 id="0x03-项目构建工具"><a class="markdownIt-Anchor" href="#0x03-项目构建工具"></a> 0x03 项目构建工具</h2>
