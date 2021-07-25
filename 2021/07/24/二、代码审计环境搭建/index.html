@@ -198,7 +198,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.5k 字
+      3k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      19
+      37
        分钟
     </span>
   
@@ -242,7 +242,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年7月25日 上午
+                  本文最后更新于：2021年7月25日 下午
                 
               </p>
             
@@ -350,6 +350,7 @@
 <p>b. 单击 IntelliJ IDEA 右上角的 Debug 按钮，即可发现程序在断点处暂停，然后就可以进行逐步的调试了，如图：</p>
 <p><img src="/../../images/%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210725094333487.png" srcset="/img/loading.gif" lazyload alt="image-20210725094333487" /></p>
 <h3 id="0x0201-对-weblogic-进行远程调试"><a class="markdownIt-Anchor" href="#0x0201-对-weblogic-进行远程调试"></a> 0x0201 对 Weblogic 进行远程调试</h3>
+<p>进入文件夹：<code>/root/vulhub/weblogic/CVE-2017-10271</code></p>
 <h4 id="1-配置服务端"><a class="markdownIt-Anchor" href="#1-配置服务端"></a> 1. 配置服务端</h4>
 <ul>
 <li>修改 <code>docker-compose.yml</code> 文件，打开 <code>8453</code> 端口</li>
@@ -360,17 +361,220 @@
 <p>启动容器：<code>docker-compose up -d</code></p>
 </li>
 <li>
-<p>修改 weblogic 配置文件 <code>setDomainEnv.sh</code>, 添加如下两行代码：</p>
+<p>查看容器id：<code>dcoker ps -a</code></p>
+</li>
+<li>
+<p>进入容器：<code>docker exec -it c14 /bin/bash</code></p>
+</li>
+<li>
+<p>容器中使用<code>vi</code> 修改 weblogic 配置文件</p>
 <ul>
-<li><code>ebugFlag=&quot;true&quot;</code></li>
+<li><code>/root/Oracle/Middleware/user_projects/domains/base_domain/bin/setDomainEnv.sh</code></li>
+</ul>
+</li>
+<li>
+<p>添加如下两行代码：</p>
+<ul>
+<li><code>debugFlag=&quot;true&quot;</code></li>
 <li><code>export debugFlag</code></li>
 </ul>
 </li>
 </ul>
 <h4 id="2-复制调试文件到物理机"><a class="markdownIt-Anchor" href="#2-复制调试文件到物理机"></a> 2. 复制调试文件到物理机</h4>
+<ul>
+<li>使用 <code>docker restart &lt;container id&gt;</code> 重启容器。</li>
+<li>进入容器，将 <code>/root/Oracle/Middleware</code> 文件夹下的 <code>modules</code> 文件夹和 <code>wlserver_10.3</code>  文件夹使用zip命令压缩成zip压缩包。
+<ul>
+<li><code>zip -q -r modules.zip modules/</code></li>
+<li><code>zip -q -r wlserver_10.3.zip wlserver_10.3/</code></li>
+</ul>
+</li>
+<li>使用 docker 的 cp 指令分别将 modules.zip 和 wlserver_10.3.zip 复制至本机当前路径文件夹中。
+<ul>
+<li><code>docker cp 1b0:/root/Oracle/Middleware/modules.zip ./</code></li>
+<li><code>docker cp 1b0:/root/Oracle/Middleware/wlserver_10.3.zip ./</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-配置-idea-调试环境"><a class="markdownIt-Anchor" href="#3-配置-idea-调试环境"></a> 3. 配置 IDEA 调试环境</h4>
+<ul>
+<li>新建 IDEA 项目</li>
+<li>将复制出来的文件添加到项目中，并将文件夹 <code>wlserver_10.3/server/lib</code> 和 <code>modules</code> 添加到项目依赖中</li>
+<li>设置 <code>Add Configureations</code> -&gt; 点击 “+” 添加<code>Remote JVM Debug</code> 远程调试配置</li>
+<li>修改 <code>Host</code>，远程IP：<code>192.168.31.31</code></li>
+<li>修改 <code>Port</code>，需与 <code>docker-compose.yml</code>  映射端口一致</li>
+</ul>
+<p><img src="/../../images/%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210725114905889.png" srcset="/img/loading.gif" lazyload alt="image-20210725114905889" /></p>
+<h4 id="4-测试配置"><a class="markdownIt-Anchor" href="#4-测试配置"></a> 4. 测试配置</h4>
+<ul>
+<li>设置断点
+<ul>
+<li><code>wlserver_10.3\server\lib\weblogic.jar!\weblogic\wsee\jaxws\WLSServletAdapter.class</code></li>
+<li>点击右上角 <code>Debug</code> 按钮，开始监听调试</li>
+</ul>
+</li>
+<li>访问浏览器
+<ul>
+<li><code>http://192.168.31.31:7001/wls-wsat/CoordinatorPortType</code></li>
+</ul>
+</li>
+<li>查看 IDEA</li>
+</ul>
+<p><img src="/../../images/%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210725114615656.png" srcset="/img/loading.gif" lazyload alt="image-20210725114615656" /></p>
 <h3 id="0x0202-对-tomcat-进行远程调试"><a class="markdownIt-Anchor" href="#0x0202-对-tomcat-进行远程调试"></a> 0x0202 对 Tomcat 进行远程调试</h3>
-<h3 id="0x0203-vmware虚拟机搭建远程调试环境"><a class="markdownIt-Anchor" href="#0x0203-vmware虚拟机搭建远程调试环境"></a> 0x0203 VMware虚拟机搭建远程调试环境</h3>
+<p>进入文件夹：<code>/root/vulhub/tomcat/CVE-2017-12615</code></p>
+<h4 id="1-配置服务端-2"><a class="markdownIt-Anchor" href="#1-配置服务端-2"></a> 1. 配置服务端</h4>
+<ul>
+<li>修改 <code>docker-compose.yml</code> 文件，打开 <code>5005</code> 端口</li>
+</ul>
+<p><img src="/../../images/%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210725115240016.png" srcset="/img/loading.gif" lazyload alt="image-20210725115240016" /></p>
+<ul>
+<li>启动容器：<code>docker-compose up -d</code></li>
+<li>查看容器：<code>docker ps -a</code></li>
+<li>进入容器：<code>docker exec -it c3d /bin/bash</code></li>
+<li>进入容器中，修改 <code>/usr/local/tomcat/bin/catalina.sh</code> 文件，添加Tomcat调试参数：
+<ul>
+<li><code>JAVA_OPTS=&quot;-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-复制调试文件到物理机-2"><a class="markdownIt-Anchor" href="#2-复制调试文件到物理机-2"></a> 2. 复制调试文件到物理机</h4>
+<ul>
+<li>重启容器：<code>docker restart c3d</code></li>
+<li>进入容器，使用 <code>docker cp</code> 命令将 <code>/usr/local/tomcat/lib</code> 目录复制至物理机
+<ul>
+<li><code>docker cp c3d:/usr/local/tomcat/lib ./</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-配置idea调试环境"><a class="markdownIt-Anchor" href="#3-配置idea调试环境"></a> 3. 配置IDEA调试环境</h4>
+<ul>
+<li>新建 IDEA 项目</li>
+<li>将复制出来的 <code>/usr/local/tomcat/lib</code> 目录添加到 “IDEA 项目” 中，并添加至项目依赖
+<ul>
+<li>单击 “lib” 目录，右键选中 <code>Add as Library...</code></li>
+</ul>
+</li>
+<li>单击 IDEA 右上角的 <code>Add Configuration</code>，添加远程调试配置</li>
+</ul>
+<p><img src="/../../images/%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210725121216214.png" srcset="/img/loading.gif" lazyload alt="image-20210725121216214" /></p>
+<h4 id="4-测试配置-2"><a class="markdownIt-Anchor" href="#4-测试配置-2"></a> 4. 测试配置</h4>
+<ul>
+<li>设置断点（建议再次重启容器）
+<ul>
+<li><code>lib\catalina.jar!\org\apache\catalina\connector\Request.class</code></li>
+<li><code>Request()</code></li>
+</ul>
+</li>
+<li>单击 IDEA 右上角的 <code>Debug</code> 调试运行</li>
+<li>访问浏览器：<code>http://192.168.31.31:8080/</code></li>
+</ul>
+<p><img src="/../../images/%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210725122007335.png" srcset="/img/loading.gif" lazyload alt="image-20210725122007335" /></p>
+<h3 id="0x0203-vmware搭建远程调试环境"><a class="markdownIt-Anchor" href="#0x0203-vmware搭建远程调试环境"></a> 0x0203 VMware搭建远程调试环境</h3>
+<ul>
+<li>CentOS7</li>
+<li>docker</li>
+<li>docker-compose</li>
+<li>vulhub</li>
+</ul>
 <h2 id="0x03-项目构建工具"><a class="markdownIt-Anchor" href="#0x03-项目构建工具"></a> 0x03 项目构建工具</h2>
+<h3 id="0x0300-maven基础知识及掌握"><a class="markdownIt-Anchor" href="#0x0300-maven基础知识及掌握"></a> 0x0300 Maven基础知识及掌握</h3>
+<blockquote>
+<p>Maven菜鸟教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/maven/maven-tutorial.html">https://www.runoob.com/maven/maven-tutorial.html</a></p>
+</blockquote>
+<p>Maven 翻译为&quot;专家&quot;、“内行”，是 Apache 下的一个纯 Java 开发的开源项目。基于项目对象模型（缩写：POM）概念，Maven利用一个中央信息片断能管理一个项目的构建、报告和文档等步骤。</p>
+<p>Maven 是一个项目管理工具，可以对 Java 项目进行构建、依赖管理。</p>
+<p>Maven 也可被用于构建和管理各种项目，例如 C#，Ruby，Scala 和其他语言编写的项目。Maven 曾是 Jakarta 项目的子项目，现为由 Apache 软件基金会主持的独立 Apache 项目。</p>
+<h4 id="maven-功能"><a class="markdownIt-Anchor" href="#maven-功能"></a> Maven 功能</h4>
+<p>Maven 能够帮助开发者完成以下工作：</p>
+<ul>
+<li>构建</li>
+<li>文档生成</li>
+<li>报告</li>
+<li>依赖</li>
+<li>SCMs</li>
+<li>发布</li>
+<li>分发</li>
+<li>邮件列表</li>
+</ul>
+<h4 id="约定配置"><a class="markdownIt-Anchor" href="#约定配置"></a> 约定配置</h4>
+<p>Maven 提倡使用一个共同的标准目录结构，Maven 使用约定优于配置的原则，大家尽可能的遵守这样的目录结构。如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>${basedir}</td>
+<td>存放pom.xml和所有的子目录</td>
+</tr>
+<tr>
+<td>${basedir}/src/main/java</td>
+<td>项目的java源代码</td>
+</tr>
+<tr>
+<td>${basedir}/src/main/resources</td>
+<td>项目的资源，比如说property文件，springmvc.xml</td>
+</tr>
+<tr>
+<td>${basedir}/src/test/java</td>
+<td>项目的测试类，比如说Junit代码</td>
+</tr>
+<tr>
+<td>${basedir}/src/test/resources</td>
+<td>测试用的资源</td>
+</tr>
+<tr>
+<td>${basedir}/src/main/webapp/WEB-INF</td>
+<td>web应用文件目录，web项目的信息，比如存放web.xml、本地图片、jsp视图页面</td>
+</tr>
+<tr>
+<td>${basedir}/target</td>
+<td>打包输出目录</td>
+</tr>
+<tr>
+<td>${basedir}/target/classes</td>
+<td>编译输出目录</td>
+</tr>
+<tr>
+<td>${basedir}/target/test-classes</td>
+<td>测试编译输出目录</td>
+</tr>
+<tr>
+<td>Test.java</td>
+<td>Maven只会自动运行符合该命名规则的测试类</td>
+</tr>
+<tr>
+<td>~/.m2/repository</td>
+<td>Maven默认的本地仓库目录位置</td>
+</tr>
+</tbody>
+</table>
+<h4 id="maven-特点"><a class="markdownIt-Anchor" href="#maven-特点"></a> Maven 特点</h4>
+<ul>
+<li>项目设置遵循统一的规则。</li>
+<li>任意工程中共享。</li>
+<li>依赖管理包括自动更新。</li>
+<li>一个庞大且不断增长的库。</li>
+<li>可扩展，能够轻松编写 Java 或脚本语言的插件。</li>
+<li>只需很少或不需要额外配置即可即时访问新功能。</li>
+<li><strong>基于模型的构建</strong> − Maven能够将任意数量的项目构建到预定义的输出类型中，如 JAR，WAR 或基于项目元数据的分发，而不需要在大多数情况下执行任何脚本。</li>
+<li><strong>项目信息的一致性站点</strong> − 使用与构建过程相同的元数据，Maven 能够生成一个网站或PDF，包括您要添加的任何文档，并添加到关于项目开发状态的标准报告中。</li>
+<li><strong>发布管理和发布单独的输出</strong> − Maven 将不需要额外的配置，就可以与源代码管理系统（如 Subversion 或  Git）集成，并可以基于某个标签管理项目的发布。它也可以将其发布到分发位置供其他项目使用。Maven 能够发布单独的输出，如  JAR，包含其他依赖和文档的归档，或者作为源代码发布。</li>
+<li><strong>向后兼容性</strong> −  您可以很轻松的从旧版本 Maven 的多个模块移植到 Maven 3 中。</li>
+<li>子项目使用父项目依赖时，正常情况子项目应该继承父项目依赖，无需使用版本号，</li>
+<li><strong>并行构建</strong> − 编译的速度能普遍提高20 - 50 %。</li>
+<li><strong>更好的错误报告</strong> − Maven 改进了错误报告，它为您提供了 Maven wiki 页面的链接，您可以点击链接查看错误的完整描述。</li>
+</ul>
+<h3 id="0x0301-swagger特点及使用"><a class="markdownIt-Anchor" href="#0x0301-swagger特点及使用"></a> 0x0301 Swagger特点及使用</h3>
+<blockquote>
+<p>官网：<a target="_blank" rel="noopener" href="https://swagger.io/">https://swagger.io/</a></p>
+<p>开源：<a target="_blank" rel="noopener" href="https://swagger.io/tools/open-source/">https://swagger.io/tools/open-source/</a></p>
+</blockquote>
+<p>使用 Swagger 开源和专业工具集为用户、团队和企业简化 API 开发。了解 Swagger 如何帮助您大规模设计和记录 API。</p>
 
             </div>
             <hr>
