@@ -8,7 +8,7 @@
     <link href="/2021/07/28/RMI%E7%BC%96%E7%A8%8B/"/>
     <url>/2021/07/28/RMI%E7%BC%96%E7%A8%8B/</url>
     
-    <content type="html"><![CDATA[]]></content>
+    <content type="html"><![CDATA[<h2 id="0x00-使用代理的远程方法调用"><a class="markdownIt-Anchor" href="#0x00-使用代理的远程方法调用"></a> 0x00 使用代理的远程方法调用</h2><p><img src="../images/2021-07-28-RMI%E7%BC%96%E7%A8%8B/image-20210728142924796.png" alt="image-20210728142924796" /></p><h2 id="0x01-代理之间通信技术"><a class="markdownIt-Anchor" href="#0x01-代理之间通信技术"></a> 0x01 代理之间通信技术</h2><ul><li>CORBA：</li><li>Web</li><li>RMI</li></ul><h3 id="0x0100-远程方法调用"><a class="markdownIt-Anchor" href="#0x0100-远程方法调用"></a> 0x0100 远程方法调用</h3><p><img src="../images/2021-07-28-RMI%E7%BC%96%E7%A8%8B/image-20210728143612552.png" alt="image-20210728143612552" /></p>]]></content>
     
     
     <categories>

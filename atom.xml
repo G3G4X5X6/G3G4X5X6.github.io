@@ -6,7 +6,7 @@
   <link href="https://g3g4x5x6.github.io/atom.xml" rel="self"/>
   
   <link href="https://g3g4x5x6.github.io/"/>
-  <updated>2021-07-28T06:25:20.352Z</updated>
+  <updated>2021-07-28T06:38:24.147Z</updated>
   <id>https://g3g4x5x6.github.io/</id>
   
   <author>
@@ -21,8 +21,16 @@
     <link href="https://g3g4x5x6.github.io/2021/07/28/RMI%E7%BC%96%E7%A8%8B/"/>
     <id>https://g3g4x5x6.github.io/2021/07/28/RMI%E7%BC%96%E7%A8%8B/</id>
     <published>2021-07-28T06:11:02.000Z</published>
-    <updated>2021-07-28T06:25:20.352Z</updated>
+    <updated>2021-07-28T06:38:24.147Z</updated>
     
+    <content type="html"><![CDATA[<h2 id="0x00-使用代理的远程方法调用"><a class="markdownIt-Anchor" href="#0x00-使用代理的远程方法调用"></a> 0x00 使用代理的远程方法调用</h2><p><img src="../images/2021-07-28-RMI%E7%BC%96%E7%A8%8B/image-20210728142924796.png" alt="image-20210728142924796" /></p><h2 id="0x01-代理之间通信技术"><a class="markdownIt-Anchor" href="#0x01-代理之间通信技术"></a> 0x01 代理之间通信技术</h2><ul><li>CORBA：</li><li>Web</li><li>RMI</li></ul><h3 id="0x0100-远程方法调用"><a class="markdownIt-Anchor" href="#0x0100-远程方法调用"></a> 0x0100 远程方法调用</h3><p><img src="../images/2021-07-28-RMI%E7%BC%96%E7%A8%8B/image-20210728143612552.png" alt="image-20210728143612552" /></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;0x00-使用代理的远程方法调用&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#0x00-使用代理的远程方法调用&quot;&gt;&lt;/a&gt; 0x00 使用代理的远程方法调用&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;../images/2021-07-28</summary>
+      
     
     
     
