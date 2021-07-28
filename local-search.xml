@@ -4,13 +4,29 @@
   
   
   <entry>
-    <title>RMI编程</title>
+    <title>Java RMI 编程</title>
     <link href="/2021/07/28/RMI%E7%BC%96%E7%A8%8B/"/>
     <url>/2021/07/28/RMI%E7%BC%96%E7%A8%8B/</url>
     
-    <content type="html"><![CDATA[<p><img src="/2021-07-28-RMI%E7%BC%96%E7%A8%8B/image-20210728142304968.png" alt="image-20210728142304968" /></p>]]></content>
+    <content type="html"><![CDATA[]]></content>
     
     
+    <categories>
+      
+      <category>编程</category>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>java</tag>
+      
+      <tag>RMI</tag>
+      
+    </tags>
     
   </entry>
   
@@ -100,9 +116,9 @@
     
     <tags>
       
-      <tag>代码审计</tag>
-      
       <tag>java</tag>
+      
+      <tag>代码审计</tag>
       
       <tag>笔记</tag>
       
@@ -133,9 +149,9 @@
     
     <tags>
       
-      <tag>代码审计</tag>
-      
       <tag>java</tag>
+      
+      <tag>代码审计</tag>
       
       <tag>笔记</tag>
       
@@ -172,9 +188,9 @@
     
     <tags>
       
-      <tag>代码审计</tag>
-      
       <tag>java</tag>
+      
+      <tag>代码审计</tag>
       
       <tag>笔记</tag>
       
@@ -207,9 +223,9 @@
     
     <tags>
       
-      <tag>代码审计</tag>
-      
       <tag>java</tag>
+      
+      <tag>代码审计</tag>
       
       <tag>笔记</tag>
       
@@ -240,9 +256,9 @@
     
     <tags>
       
-      <tag>代码审计</tag>
-      
       <tag>java</tag>
+      
+      <tag>代码审计</tag>
       
       <tag>思路</tag>
       
