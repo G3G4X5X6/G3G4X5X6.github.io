@@ -260,7 +260,7 @@
 </ul>
 <p>Spring框架的组成结构图如下所示：</p>
 <p><img src="/../../images/2021-08-05-Spring%E5%88%9D%E5%AD%A6%E8%AE%B0%E5%BD%95/673670c9a34075831373b711cb8f21b7.png" srcset="/images/loading.gif" lazyload alt="spring-overview" /></p>
-<h1 id="二-spring的核心机制"><a class="markdownIt-Anchor" href="#二-spring的核心机制"></a> 二、Spring的核心机制</h1>
+<h1 id="二-spring-核心机制"><a class="markdownIt-Anchor" href="#二-spring-核心机制"></a> 二、Spring 核心机制</h1>
 <h2 id="21-管理bean"><a class="markdownIt-Anchor" href="#21-管理bean"></a> 2.1 管理Bean</h2>
 <p>程序主要是通过Spring容器来访问容器中的Bean，ApplicationContext是Spring容器最常用的接口，该接口有如下两个实现类：</p>
 <ul>
@@ -275,17 +275,20 @@
 <li>Spring容器管理容器中Bean之间的依赖关系，Spring使用一种被称为&quot;依赖注入&quot;的方式来管理Bean之间的依赖关系。</li>
 </ul>
 <h2 id="23-spring容器中的bean"><a class="markdownIt-Anchor" href="#23-spring容器中的bean"></a> 2.3 Spring容器中的Bean</h2>
-<p>对于开发者来说，开发者使用Spring框架主要是做两件事：①开发Bean；②配置Bean。对于Spring框架来说，它要做的就是根据配置文件来创建Bean实例，并调用Bean实例的方法完成&quot;依赖注入&quot;——这就是所谓IoC的本质。</p>
-<h3 id="231-容器中bean的作用域"><a class="markdownIt-Anchor" href="#231-容器中bean的作用域"></a> 2.3.1 容器中Bean的作用域</h3>
+<ul>
+<li>对于开发者来说，开发者使用Spring框架主要是做两件事：①开发Bean；②配置Bean。</li>
+<li>对于Spring框架来说，它要做的就是根据配置文件来创建Bean实例，并调用Bean实例的方法完成&quot;依赖注入&quot;   ——这就是所谓IoC的本质。</li>
+</ul>
+<h2 id="24-容器中bean的作用域"><a class="markdownIt-Anchor" href="#24-容器中bean的作用域"></a> 2.4 容器中Bean的作用域</h2>
 <p>当通过Spring容器创建一个Bean实例时，不仅可以完成Bean实例的实例化，还可以为Bean指定特定的作用域。Spring支持如下五种作用域：</p>
 <ol>
-<li>singleton: 单例模式，在整个Spring IoC容器中，singleton作用域的Bean将只生成一个实例。</li>
-<li>prototype: 每次通过容器的getBean()方法获取prototype作用域的Bean时，都将产生一个新的Bean实例。</li>
-<li>request: 对于一次HTTP请求，request作用域的Bean将只生成一个实例，这意味着，在同一次HTTP请求内，程序每次请求该Bean，得到的总是同一个实例。只有在Web应用中使用Spring时，该作用域才真正有效。</li>
-<li>session：该作用域将 bean 的定义限制为 HTTP 会话。 只在web-aware Spring ApplicationContext的上下文中有效。</li>
-<li>global session: 每个全局的HTTP Session对应一个Bean实例。在典型的情况下，仅在使用portlet context的时候有效，同样只在Web应用中有效。</li>
+<li><strong>singleton</strong>: 单例模式，在整个Spring IoC容器中，singleton作用域的Bean将只生成一个实例。</li>
+<li><strong>prototype</strong>: 每次通过容器的getBean()方法获取prototype作用域的Bean时，都将产生一个新的Bean实例。</li>
+<li><strong>request</strong>: 对于一次HTTP请求，request作用域的Bean将只生成一个实例，这意味着，在同一次HTTP请求内，程序每次请求该Bean，得到的总是同一个实例。只有在Web应用中使用Spring时，该作用域才真正有效。</li>
+<li><strong>session</strong>：该作用域将 bean 的定义限制为 HTTP 会话。 只在web-aware Spring ApplicationContext的上下文中有效。</li>
+<li><strong>global session</strong>: 每个全局的HTTP Session对应一个Bean实例。在典型的情况下，仅在使用portlet context的时候有效，同样只在Web应用中有效。</li>
 </ol>
-<p>如果不指定Bean的作用域，Spring默认使用singleton作用域。prototype作用域的Bean的创建、销毁代价比较大。而singleton作用域的Bean实例一旦创建成果，就可以重复使用。因此，应该尽量避免将Bean设置成prototype作用域。</p>
+<p>如果不指定Bean的作用域，**Spring默认使用singleton作用域。**prototype作用域的Bean的创建、销毁代价比较大。而singleton作用域的Bean实例一旦创建成果，就可以重复使用。因此，应该尽量避免将Bean设置成prototype作用域。</p>
 <h1 id="三-spring-第一个程序"><a class="markdownIt-Anchor" href="#三-spring-第一个程序"></a> 三、Spring 第一个程序</h1>
 <h2 id="31-开发工具"><a class="markdownIt-Anchor" href="#31-开发工具"></a> 3.1 开发工具</h2>
 <ul>
@@ -308,7 +311,7 @@
 <p><img src="/../../images/2021-08-05-Spring%E5%88%9D%E5%AD%A6%E8%AE%B0%E5%BD%95/image-20210805130934452.png" srcset="/images/loading.gif" lazyload alt="测试执行结果" /></p>
 <h1 id="四-其他"><a class="markdownIt-Anchor" href="#四-其他"></a> 四、其他</h1>
 <blockquote>
-<p>视频学习：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1nz4y1d7uy">https://www.bilibili.com/video/BV1nz4y1d7uy</a></p>
+<p>学习视频：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1nz4y1d7uy">https://www.bilibili.com/video/BV1nz4y1d7uy</a></p>
 <p>参考文章：<a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/basic-knowledge-summary-of-spring.html">https://www.runoob.com/w3cnote/basic-knowledge-summary-of-spring.html</a></p>
 </blockquote>
 
