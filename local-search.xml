@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>Spring学习记录之 AOP 面向切面编程</title>
+    <link href="/2021/08/05/Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BAOP%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/"/>
+    <url>/2021/08/05/Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BAOP%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/</url>
+    
+    <content type="html"><![CDATA[<h1 id="一-动态代理"><a class="markdownIt-Anchor" href="#一-动态代理"></a> 一、动态代理*</h1><h2 id="11-jdk-动态代理"><a class="markdownIt-Anchor" href="#11-jdk-动态代理"></a> 1.1 JDK 动态代理</h2><h2 id="12-cglib-动态代理"><a class="markdownIt-Anchor" href="#12-cglib-动态代理"></a> 1.2 CGLIB 动态代理</h2><h1 id="二-什么是-aop"><a class="markdownIt-Anchor" href="#二-什么是-aop"></a> 二、什么是 AOP</h1><h2 id="21-aop-概述"><a class="markdownIt-Anchor" href="#21-aop-概述"></a> 2.1 AOP 概述</h2><h2 id="22-aop-实现框架"><a class="markdownIt-Anchor" href="#22-aop-实现框架"></a> 2.2 AOP 实现框架</h2><h1 id="三-aspect-的5个通知注解"><a class="markdownIt-Anchor" href="#三-aspect-的5个通知注解"></a> 三、aspect 的5个通知注解</h1><h1 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h1><blockquote><p>学习视频：<a href="https://www.bilibili.com/video/BV1nz4y1d7uy">https://www.bilibili.com/video/BV1nz4y1d7uy</a></p><p>参考文章：<a href="https://www.cnblogs.com/gonjan-blog/p/6685611.html">https://www.cnblogs.com/gonjan-blog/p/6685611.html</a></p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>SSM</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>spring</tag>
+      
+      <tag>SSM</tag>
+      
+      <tag>AOP</tag>
+      
+      <tag>面向切面编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Spring初学记录之IoC控制反转</title>
     <link href="/2021/08/05/Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BIoC%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC/"/>
     <url>/2021/08/05/Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BIoC%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC/</url>
