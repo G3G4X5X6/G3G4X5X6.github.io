@@ -18,7 +18,7 @@
   <meta name="author" content="G3G4X5X6">
   <meta name="keywords" content="">
   
-  <title>maven打包第三方jar包到本地仓库 - G3G4X5X6</title>
+  <title>Maven打包第三方jar包到本地仓库 - G3G4X5X6</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -176,7 +176,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="maven打包第三方jar包到本地仓库">
+            <span class="h2" id="subtitle" title="Maven打包第三方jar包到本地仓库">
               
             </span>
 
@@ -198,7 +198,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      173 字
+      178 字
     </span>
   
 
@@ -238,7 +238,7 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">maven打包第三方jar包到本地仓库</h1>
+            <h1 style="display: none">Maven打包第三方jar包到本地仓库</h1>
             
               <p class="note note-info">
                 
@@ -248,7 +248,7 @@
             
             <div class="markdown-body">
               <h1 id="1-问题"><a class="markdownIt-Anchor" href="#1-问题"></a> 1. 问题</h1>
-<p>有时候需要用到的jar包在Maven中找不到依赖，我们可能会从其他第三方引入需要的jar包。这时在IDEA中运行是没有什么问题的，但是在打包jar包时就会报错，提示找不到引入的第三方jar包。</p>
+<p>有时候需要用到的 jar 包在 Maven 中央仓库中找不到依赖，我们可能会从其他第三方引入需要的 jar 包。这时在 IDEA 中运行是没有什么问题的，但是在打包 jar 包时就会报错，提示找不到引入的第三方 jar 包。</p>
 <h1 id="2-安装第三方jar包到本地仓库"><a class="markdownIt-Anchor" href="#2-安装第三方jar包到本地仓库"></a> 2. 安装第三方jar包到本地仓库</h1>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mvn install:install-file -Dfile=C:\Users\Security\IdeaProjects\test\lib\test-2.49.jar -DgroupId=com.g3g4x5x6 -DartifactId=test -Dversion=2.49 -Dpackaging=jar<br></code></pre></td></tr></table></figure>
 <h1 id="3-pomxml-中引用安装的jar包"><a class="markdownIt-Anchor" href="#3-pomxml-中引用安装的jar包"></a> 3. pom.xml 中引用安装的jar包</h1>
