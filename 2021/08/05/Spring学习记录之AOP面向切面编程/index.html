@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
@@ -9,14 +9,32 @@
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/images/favicon.jpg">
   <link rel="icon" href="/images/favicon.jpg">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="网络空间安全">
   <meta name="author" content="G3G4X5X6">
   <meta name="keywords" content="">
+  
+    <meta name="description" content="一、动态代理*  1.1 JDK 动态代理  1.2 CGLIB 动态代理  二、什么是 AOP  2.1 AOP 概述 AOP ( Aspect Orient Programming ) 面向切面编程。  2.2 AOP 相关术语  Aspect：切面， JoinPoint：连接点， Pointcut：切入点， 目标对象：给哪个类的方法添加功能，这个类就是目标对象。 Advice：通知，表示切">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring学习记录之 AOP 面向切面编程">
+<meta property="og:url" content="https://g3g4x5x6.github.io/2021/08/05/Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BAOP%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="G3G4X5X6">
+<meta property="og:description" content="一、动态代理*  1.1 JDK 动态代理  1.2 CGLIB 动态代理  二、什么是 AOP  2.1 AOP 概述 AOP ( Aspect Orient Programming ) 面向切面编程。  2.2 AOP 相关术语  Aspect：切面， JoinPoint：连接点， Pointcut：切入点， 目标对象：给哪个类的方法添加功能，这个类就是目标对象。 Advice：通知，表示切">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://g3g4x5x6.github.io/images/2021-08-05-Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BAOP%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/image-20210805210345159.png">
+<meta property="og:image" content="https://g3g4x5x6.github.io/images/2021-08-05-Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BAOP%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/image-20210805210531353.png">
+<meta property="article:published_time" content="2021-08-05T10:58:56.000Z">
+<meta property="article:modified_time" content="2021-08-05T14:28:10.665Z">
+<meta property="article:author" content="G3G4X5X6">
+<meta property="article:tag" content="spring">
+<meta property="article:tag" content="SSM">
+<meta property="article:tag" content="AOP">
+<meta property="article:tag" content="面向切面编程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://g3g4x5x6.github.io/images/2021-08-05-Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BAOP%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/image-20210805210345159.png">
+  
   
   <title>Spring学习记录之 AOP 面向切面编程 - G3G4X5X6</title>
 
@@ -39,7 +57,6 @@
   
 
 
-
 <!-- 主题依赖的图标库，不要自行修改 -->
 
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
@@ -56,7 +73,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"g3g4x5x6.github.io","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/images/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"g3g4x5x6.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/images/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -68,8 +85,9 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/">&nbsp;<strong>G3G4X5X6</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>G3G4X5X6</strong>
+    </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -153,15 +171,28 @@
             </li>
           
         
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tools/">
+                <i class="iconfont icon-rss"></i>
+                矛与盾
+              </a>
+            </li>
+          
+        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
-                class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self">&nbsp;<i
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
                 class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
@@ -195,21 +226,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      490 字
+      1.3k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
-       分钟
+      12 分钟
     </span>
   
 
@@ -318,7 +346,7 @@
 <p><img src="/../../images/2021-08-05-Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BAOP%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/image-20210805210345159.png" srcset="/images/loading.gif" lazyload alt="image-20210805210345159" /></p>
 <p><img src="/../../images/2021-08-05-Spring%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8BAOP%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/image-20210805210531353.png" srcset="/images/loading.gif" lazyload alt="image-20210805210531353" /></p>
 <h3 id="1-myaspectjava"><a class="markdownIt-Anchor" href="#1-myaspectjava"></a> 1) MyAspect.java</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> top.metatron.ba01;<br><br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Aspect;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Before;<br><br><span class="hljs-keyword">import</span> java.util.Date;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Aspect</span>: 表示当前类是切面类</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Aspect</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyAspect</span> </span>&#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 切面功能方法的定义要求：</span><br><span class="hljs-comment">     * 1. 公共方法 public</span><br><span class="hljs-comment">     * 2. 没有返回值</span><br><span class="hljs-comment">     * 3. 方法名称自定义</span><br><span class="hljs-comment">     * 4. 可以有参数，但不是自定义的，也可以没有参数</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Before(value = &quot;execution(* do*(..))&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">myBefore</span><span class="hljs-params">()</span></span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;前置通知5，在目标方法执行前输出执行时间：&quot;</span> + <span class="hljs-keyword">new</span> Date());<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> top.metatron.ba01;<br><br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Aspect;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Before;<br><br><span class="hljs-keyword">import</span> java.util.Date;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Aspect</span>: 表示当前类是切面类</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Aspect</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyAspect</span> </span>&#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 切面功能方法的定义要求：</span><br><span class="hljs-comment">     * 1. 公共方法 public</span><br><span class="hljs-comment">     * 2. 没有返回值</span><br><span class="hljs-comment">     * 3. 方法名称自定义</span><br><span class="hljs-comment">     * 4. 可以有参数，但不是自定义的，也可以没有参数</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Before(value = &quot;execution(* do*(..))&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">myBefore</span><span class="hljs-params">()</span></span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;前置通知5，在目标方法执行前输出执行时间：&quot;</span> + <span class="hljs-keyword">new</span> Date());<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 <h2 id="34-pointcut-注解辅助"><a class="markdownIt-Anchor" href="#34-pointcut-注解辅助"></a> 3.4 Pointcut 注解（辅助？）</h2>
 <h1 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h1>
 <blockquote>
@@ -409,7 +437,7 @@
     
 
     
-      <a id="scroll-top-button" href="#" role="button">
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
         <i class="iconfont icon-arrowup" aria-hidden="true"></i>
       </a>
     
@@ -499,6 +527,10 @@
 <!-- Plugins -->
 
 
+  <script  src="/js/local-search.js" ></script>
+
+
+
   
     <script  src="/js/img-lazyload.js" ></script>
   
@@ -509,23 +541,18 @@
 
 
 
-  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
-
-
-
-  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
-
-
-
-  <script  src="/js/local-search.js" ></script>
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+  
 
 
 
@@ -540,7 +567,7 @@
       var typing = Fluid.plugins.typing;
       var title = document.getElementById('subtitle').title;
       
-      typing(title)
+        typing(title);
       
     })(window, document);
   </script>
