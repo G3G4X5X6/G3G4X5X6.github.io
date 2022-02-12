@@ -16,15 +16,15 @@
   <meta name="author" content="G3G4X5X6">
   <meta name="keywords" content="">
   
-    <meta name="description" content="网络空间安全">
+    <meta name="description" content="0x00 跨站请求伪造（CSRF）  0x0000 CSRF 简介  0x01 服务端请求伪造（SSRF）  0x0100 SSRF 简介  0x02 URL 跳转  0x0200 URL 跳转漏洞简介  0x03 文件操作漏洞  0x0300 文件操作漏洞简介  0x04 Web 后门漏洞  0x0400 Web 后门漏洞简介  0x05 逻辑漏洞  0x0500 逻辑漏洞简介  0x06 前">
 <meta property="og:type" content="article">
 <meta property="og:title" content="六、代码审计 OWASP Top 10 2017 漏洞之外的常见漏洞">
 <meta property="og:url" content="https://g3g4x5x6.github.io/2021/07/24/%E5%85%AD%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-OWASP-Top-10-2017-%E6%BC%8F%E6%B4%9E%E4%B9%8B%E5%A4%96%E7%9A%84%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E/index.html">
 <meta property="og:site_name" content="G3G4X5X6">
-<meta property="og:description" content="网络空间安全">
+<meta property="og:description" content="0x00 跨站请求伪造（CSRF）  0x0000 CSRF 简介  0x01 服务端请求伪造（SSRF）  0x0100 SSRF 简介  0x02 URL 跳转  0x0200 URL 跳转漏洞简介  0x03 文件操作漏洞  0x0300 文件操作漏洞简介  0x04 Web 后门漏洞  0x0400 Web 后门漏洞简介  0x05 逻辑漏洞  0x0500 逻辑漏洞简介  0x06 前">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-24T13:25:27.000Z">
-<meta property="article:modified_time" content="2021-07-24T13:34:12.344Z">
+<meta property="article:modified_time" content="2022-02-12T07:59:19.671Z">
 <meta property="article:author" content="G3G4X5X6">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -221,7 +221,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      0 字
+      275 字
     </span>
   
 
@@ -230,7 +230,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1 分钟
+      3 分钟
     </span>
   
 
@@ -263,12 +263,33 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年7月24日 晚上
+                  本文最后更新于：2022年2月12日 下午
                 
               </p>
             
             <div class="markdown-body">
-              
+              <h2 id="0x00-跨站请求伪造csrf"><a class="markdownIt-Anchor" href="#0x00-跨站请求伪造csrf"></a> 0x00 跨站请求伪造（CSRF）</h2>
+<h3 id="0x0000-csrf-简介"><a class="markdownIt-Anchor" href="#0x0000-csrf-简介"></a> 0x0000 CSRF 简介</h3>
+<h2 id="0x01-服务端请求伪造ssrf"><a class="markdownIt-Anchor" href="#0x01-服务端请求伪造ssrf"></a> 0x01 服务端请求伪造（SSRF）</h2>
+<h3 id="0x0100-ssrf-简介"><a class="markdownIt-Anchor" href="#0x0100-ssrf-简介"></a> 0x0100 SSRF 简介</h3>
+<h2 id="0x02-url-跳转"><a class="markdownIt-Anchor" href="#0x02-url-跳转"></a> 0x02 URL 跳转</h2>
+<h3 id="0x0200-url-跳转漏洞简介"><a class="markdownIt-Anchor" href="#0x0200-url-跳转漏洞简介"></a> 0x0200 URL 跳转漏洞简介</h3>
+<h2 id="0x03-文件操作漏洞"><a class="markdownIt-Anchor" href="#0x03-文件操作漏洞"></a> 0x03 文件操作漏洞</h2>
+<h3 id="0x0300-文件操作漏洞简介"><a class="markdownIt-Anchor" href="#0x0300-文件操作漏洞简介"></a> 0x0300 文件操作漏洞简介</h3>
+<h2 id="0x04-web-后门漏洞"><a class="markdownIt-Anchor" href="#0x04-web-后门漏洞"></a> 0x04 Web 后门漏洞</h2>
+<h3 id="0x0400-web-后门漏洞简介"><a class="markdownIt-Anchor" href="#0x0400-web-后门漏洞简介"></a> 0x0400 Web 后门漏洞简介</h3>
+<h2 id="0x05-逻辑漏洞"><a class="markdownIt-Anchor" href="#0x05-逻辑漏洞"></a> 0x05 逻辑漏洞</h2>
+<h3 id="0x0500-逻辑漏洞简介"><a class="markdownIt-Anchor" href="#0x0500-逻辑漏洞简介"></a> 0x0500 逻辑漏洞简介</h3>
+<h2 id="0x06-前端配置不当漏洞"><a class="markdownIt-Anchor" href="#0x06-前端配置不当漏洞"></a> 0x06 前端配置不当漏洞</h2>
+<h3 id="0x0600-前端配置不当漏洞简介"><a class="markdownIt-Anchor" href="#0x0600-前端配置不当漏洞简介"></a> 0x0600 前端配置不当漏洞简介</h3>
+<p>CORS、CSP、SOP</p>
+<h2 id="0x07-拒绝服务攻击漏洞"><a class="markdownIt-Anchor" href="#0x07-拒绝服务攻击漏洞"></a> 0x07 拒绝服务攻击漏洞</h2>
+<h3 id="0x0700-拒绝服务攻击漏洞简介"><a class="markdownIt-Anchor" href="#0x0700-拒绝服务攻击漏洞简介"></a> 0x0700 拒绝服务攻击漏洞简介</h3>
+<h2 id="0x08-点击劫持漏洞"><a class="markdownIt-Anchor" href="#0x08-点击劫持漏洞"></a> 0x08 点击劫持漏洞</h2>
+<h3 id="0x0800-点击劫持漏洞简介"><a class="markdownIt-Anchor" href="#0x0800-点击劫持漏洞简介"></a> 0x0800 点击劫持漏洞简介</h3>
+<h2 id="0x09-http-参数污染漏洞"><a class="markdownIt-Anchor" href="#0x09-http-参数污染漏洞"></a> 0x09 HTTP 参数污染漏洞</h2>
+<h3 id="0x0900-http-参数污染漏洞简介"><a class="markdownIt-Anchor" href="#0x0900-http-参数污染漏洞简介"></a> 0x0900 HTTP 参数污染漏洞简介</h3>
+
             </div>
             <hr>
             <div>
