@@ -235,27 +235,6 @@
   </url>
   
   <url>
-    <loc>https://g3g4x5x6.github.io/tags/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2022-02-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://g3g4x5x6.github.io/tags/%E5%BC%80%E6%BA%90/</loc>
-    <lastmod>2022-02-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://g3g4x5x6.github.io/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/</loc>
-    <lastmod>2022-02-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://g3g4x5x6.github.io/tags/jar/</loc>
     <lastmod>2022-02-26</lastmod>
     <changefreq>daily</changefreq>
@@ -271,6 +250,27 @@
   
   <url>
     <loc>https://g3g4x5x6.github.io/tags/maven/</loc>
+    <lastmod>2022-02-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://g3g4x5x6.github.io/tags/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2022-02-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://g3g4x5x6.github.io/tags/%E5%BC%80%E6%BA%90/</loc>
+    <lastmod>2022-02-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://g3g4x5x6.github.io/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/</loc>
     <lastmod>2022-02-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -384,14 +384,14 @@
   </url>
   
   <url>
-    <loc>https://g3g4x5x6.github.io/categories/%E7%9F%9B%E4%B8%8E%E7%9B%BE/</loc>
+    <loc>https://g3g4x5x6.github.io/categories/%E6%9D%82%E8%AE%B0/</loc>
     <lastmod>2022-02-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://g3g4x5x6.github.io/categories/%E6%9D%82%E8%AE%B0/</loc>
+    <loc>https://g3g4x5x6.github.io/categories/%E7%9F%9B%E4%B8%8E%E7%9B%BE/</loc>
     <lastmod>2022-02-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
