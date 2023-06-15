@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-06-15T06:43:43.457Z</updated>
+  <updated>2023-06-15T07:01:08.640Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/"/>
     <id>http://example.com/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/</id>
     <published>2023-06-15T04:44:19.000Z</published>
-    <updated>2023-06-15T06:43:43.457Z</updated>
+    <updated>2023-06-15T07:01:08.640Z</updated>
     
     
     <summary type="html">&lt;p&gt;域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。&lt;/p&gt;</summary>
