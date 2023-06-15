@@ -18,10 +18,10 @@
   --btn-default-hover-bg: #222;
   --btn-default-hover-color: #fff;
   --btn-default-hover-border-color: #222;
-  --highlight-background: #2b2b2b;
-  --highlight-foreground: #e6e1dc;
-  --highlight-gutter-background: #3d3d3c;
-  --highlight-gutter-foreground: #d3ceca;
+  --highlight-background: #f4fbf4;
+  --highlight-foreground: #5e6e5e;
+  --highlight-gutter-background: #e5ece5;
+  --highlight-gutter-foreground: #6d7c6d;
   color-scheme: light;
 }
 html {
@@ -366,12 +366,12 @@ td {
   transform: rotate(-45deg);
 }
 /*!
-  Theme: Railscasts
-  Author: Ryan Bates (http://railscasts.com)
+  Theme: Atelier Seaside Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
   License: ~ MIT (or more permissive) [via base16-schemes-source]
   Maintainer: @highlightjs/core-team
   Version: 2021.09.0
-*/pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}.hljs{color:#e6e1dc;background:#2b2b2b}.hljs ::selection,.hljs::selection{background-color:#3a4055;color:#e6e1dc}.hljs-comment{color:#5a647e}.hljs-tag{color:#d4cfc9}.hljs-operator,.hljs-punctuation,.hljs-subst{color:#e6e1dc}.hljs-operator{opacity:.7}.hljs-bullet,.hljs-deletion,.hljs-name,.hljs-selector-tag,.hljs-template-variable,.hljs-variable{color:#da4939}.hljs-attr,.hljs-link,.hljs-literal,.hljs-number,.hljs-symbol,.hljs-variable.constant_{color:#cc7833}.hljs-class .hljs-title,.hljs-title,.hljs-title.class_{color:#ffc66d}.hljs-strong{font-weight:700;color:#ffc66d}.hljs-addition,.hljs-code,.hljs-string,.hljs-title.class_.inherited__{color:#a5c261}.hljs-built_in,.hljs-doctag,.hljs-keyword.hljs-atrule,.hljs-quote,.hljs-regexp{color:#519f50}.hljs-attribute,.hljs-function .hljs-title,.hljs-section,.hljs-title.function_,.ruby .hljs-property{color:#6d9cbe}.diff .hljs-meta,.hljs-keyword,.hljs-template-tag,.hljs-type{color:#b6b3eb}.hljs-emphasis{color:#b6b3eb;font-style:italic}.hljs-meta,.hljs-meta .hljs-keyword,.hljs-meta .hljs-string{color:#bc9458}.hljs-meta .hljs-keyword,.hljs-meta-keyword{font-weight:700}
+*/pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}.hljs{color:#5e6e5e;background:#f4fbf4}.hljs ::selection,.hljs::selection{background-color:#8ca68c;color:#5e6e5e}.hljs-comment{color:#809980}.hljs-tag{color:#687d68}.hljs-operator,.hljs-punctuation,.hljs-subst{color:#5e6e5e}.hljs-operator{opacity:.7}.hljs-bullet,.hljs-deletion,.hljs-name,.hljs-selector-tag,.hljs-template-variable,.hljs-variable{color:#e6193c}.hljs-attr,.hljs-link,.hljs-literal,.hljs-number,.hljs-symbol,.hljs-variable.constant_{color:#87711d}.hljs-class .hljs-title,.hljs-title,.hljs-title.class_{color:#98981b}.hljs-strong{font-weight:700;color:#98981b}.hljs-addition,.hljs-code,.hljs-string,.hljs-title.class_.inherited__{color:#29a329}.hljs-built_in,.hljs-doctag,.hljs-keyword.hljs-atrule,.hljs-quote,.hljs-regexp{color:#1999b3}.hljs-attribute,.hljs-function .hljs-title,.hljs-section,.hljs-title.function_,.ruby .hljs-property{color:#3d62f5}.diff .hljs-meta,.hljs-keyword,.hljs-template-tag,.hljs-type{color:#ad2bee}.hljs-emphasis{color:#ad2bee;font-style:italic}.hljs-meta,.hljs-meta .hljs-keyword,.hljs-meta .hljs-string{color:#e619c3}.hljs-meta .hljs-keyword,.hljs-meta-keyword{font-weight:700}
 .highlight:hover .copy-btn,
 pre:hover .copy-btn {
   opacity: 1;
