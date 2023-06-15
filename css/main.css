@@ -18,10 +18,10 @@
   --btn-default-hover-bg: #222;
   --btn-default-hover-color: #fff;
   --btn-default-hover-border-color: #222;
-  --highlight-background: #011627;
-  --highlight-foreground: #d6deeb;
-  --highlight-gutter-background: #162a3a;
-  --highlight-gutter-foreground: #c0cad7;
+  --highlight-background: #2b2b2b;
+  --highlight-foreground: #e6e1dc;
+  --highlight-gutter-background: #3d3d3c;
+  --highlight-gutter-foreground: #d3ceca;
   color-scheme: light;
 }
 html {
@@ -365,7 +365,13 @@ td {
   top: -6px;
   transform: rotate(-45deg);
 }
-pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}.hljs{background:#011627;color:#d6deeb}.hljs-keyword{color:#c792ea;font-style:italic}.hljs-built_in{color:#addb67;font-style:italic}.hljs-type{color:#82aaff}.hljs-literal{color:#ff5874}.hljs-number{color:#f78c6c}.hljs-regexp{color:#5ca7e4}.hljs-string{color:#ecc48d}.hljs-subst{color:#d3423e}.hljs-symbol{color:#82aaff}.hljs-class{color:#ffcb8b}.hljs-function{color:#82aaff}.hljs-title{color:#dcdcaa;font-style:italic}.hljs-params{color:#7fdbca}.hljs-comment{color:#637777;font-style:italic}.hljs-doctag{color:#7fdbca}.hljs-meta,.hljs-meta .hljs-keyword{color:#82aaff}.hljs-meta .hljs-string{color:#ecc48d}.hljs-section{color:#82b1ff}.hljs-attr,.hljs-name,.hljs-tag{color:#7fdbca}.hljs-attribute{color:#80cbc4}.hljs-variable{color:#addb67}.hljs-bullet{color:#d9f5dd}.hljs-code{color:#80cbc4}.hljs-emphasis{color:#c792ea;font-style:italic}.hljs-strong{color:#addb67;font-weight:700}.hljs-formula{color:#c792ea}.hljs-link{color:#ff869a}.hljs-quote{color:#697098;font-style:italic}.hljs-selector-tag{color:#ff6363}.hljs-selector-id{color:#fad430}.hljs-selector-class{color:#addb67;font-style:italic}.hljs-selector-attr,.hljs-selector-pseudo{color:#c792ea;font-style:italic}.hljs-template-tag{color:#c792ea}.hljs-template-variable{color:#addb67}.hljs-addition{color:#addb67ff;font-style:italic}.hljs-deletion{color:#ef535090;font-style:italic}
+/*!
+  Theme: Railscasts
+  Author: Ryan Bates (http://railscasts.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}.hljs{color:#e6e1dc;background:#2b2b2b}.hljs ::selection,.hljs::selection{background-color:#3a4055;color:#e6e1dc}.hljs-comment{color:#5a647e}.hljs-tag{color:#d4cfc9}.hljs-operator,.hljs-punctuation,.hljs-subst{color:#e6e1dc}.hljs-operator{opacity:.7}.hljs-bullet,.hljs-deletion,.hljs-name,.hljs-selector-tag,.hljs-template-variable,.hljs-variable{color:#da4939}.hljs-attr,.hljs-link,.hljs-literal,.hljs-number,.hljs-symbol,.hljs-variable.constant_{color:#cc7833}.hljs-class .hljs-title,.hljs-title,.hljs-title.class_{color:#ffc66d}.hljs-strong{font-weight:700;color:#ffc66d}.hljs-addition,.hljs-code,.hljs-string,.hljs-title.class_.inherited__{color:#a5c261}.hljs-built_in,.hljs-doctag,.hljs-keyword.hljs-atrule,.hljs-quote,.hljs-regexp{color:#519f50}.hljs-attribute,.hljs-function .hljs-title,.hljs-section,.hljs-title.function_,.ruby .hljs-property{color:#6d9cbe}.diff .hljs-meta,.hljs-keyword,.hljs-template-tag,.hljs-type{color:#b6b3eb}.hljs-emphasis{color:#b6b3eb;font-style:italic}.hljs-meta,.hljs-meta .hljs-keyword,.hljs-meta .hljs-string{color:#bc9458}.hljs-meta .hljs-keyword,.hljs-meta-keyword{font-weight:700}
 .highlight:hover .copy-btn,
 pre:hover .copy-btn {
   opacity: 1;
