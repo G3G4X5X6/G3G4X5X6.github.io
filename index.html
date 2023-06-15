@@ -198,7 +198,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-06-15 12:44:19 / 修改时间：13:07:11" itemprop="dateCreated datePublished" datetime="2023-06-15T12:44:19+08:00">2023-06-15</time>
+      <time title="创建时间：2023-06-15 12:44:19 / 修改时间：14:13:06" itemprop="dateCreated datePublished" datetime="2023-06-15T12:44:19+08:00">2023-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -221,10 +221,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。</p>
-<p>例如，测试人员可以提交某安全软件更新所使用的域名，如果有记录，说明该网络使用该种安全软件。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> dns.message</span><br><span class="line"><span class="keyword">import</span> dns.rdatatype</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">resolve_dns</span>(<span class="params">domain, nameserver=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="comment"># 创建 UDP 套接字</span></span><br><span class="line">    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置超时时间</span></span><br><span class="line">    sock.settimeout(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构造 DNS 请求数据包</span></span><br><span class="line">    query = dns.message.make_query(domain, dns.rdatatype.A, dns.rdataclass.IN)</span><br><span class="line">    query.flags &amp;= ~dns.flags.RD</span><br><span class="line">    <span class="comment"># query.flags |= dns.flags.RD</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># # 添加 DNS 服务器记录</span></span><br><span class="line">    <span class="comment"># if nameserver:</span></span><br><span class="line">    <span class="comment">#     query.additional.append(</span></span><br><span class="line">    <span class="comment">#         dns.rrset.from_text(&quot;.&quot;, &quot;IN&quot;, &quot;NS&quot;, nameserver))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 发送 DNS 请求数据包</span></span><br><span class="line">    sock.sendto(query.to_wire(), (<span class="string">&quot;192.168.233.133&quot;</span>, <span class="number">53</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 接收 DNS 响应数据包</span></span><br><span class="line">        data, _ = sock.recvfrom(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 解析 DNS 响应数据包</span></span><br><span class="line">        response = dns.message.from_wire(data)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取解析结果</span></span><br><span class="line">        answers = response.answer</span><br><span class="line">        <span class="built_in">print</span>(answers)</span><br><span class="line">        <span class="comment"># for ans in answers:</span></span><br><span class="line">        <span class="comment">#     if ans.rdtype == dns.rdatatype.A:</span></span><br><span class="line">        <span class="comment">#         ips = [rdata.address for rdata in ans]</span></span><br><span class="line">        <span class="comment">#         return ips</span></span><br><span class="line">    <span class="keyword">except</span> socket.timeout:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;DNS query timeout&quot;</span>)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># 关闭套接字</span></span><br><span class="line">        sock.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析 example.com 的 A 记录</span></span><br><span class="line">ips = resolve_dns(<span class="string">&quot;example.com&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析 example.com 的 A 记录，并指定要查询的 DNS 服务器地址为 8.8.4.4</span></span><br><span class="line"><span class="comment"># ips = resolve_dns(&quot;example.com&quot;, &quot;8.8.4.4&quot;)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -286,7 +290,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-15 13:12:16" itemprop="dateModified" datetime="2023-06-15T13:12:16+08:00">2023-06-15</time>
+      <time title="修改时间：2023-06-15 14:10:23" itemprop="dateModified" datetime="2023-06-15T14:10:23+08:00">2023-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -309,19 +313,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br><span class="line"></span><br><span class="line"><span class="comment"># custom</span></span><br><span class="line"><span class="comment"># alias hexod=&quot;cd /home/xxx/Documents/hexo_docs &amp;&amp; hexo clean &amp;&amp; hexo deploy&quot;</span></span><br><span class="line">$ hexod</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/06/14/hello-world/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
