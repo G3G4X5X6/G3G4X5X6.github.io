@@ -3,7 +3,9 @@
   <entry>
     <title>ARP协议</title>
     <url>/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/</url>
-    <content><![CDATA[<h1 id="ARP协议解析"><a href="#ARP协议解析" class="headerlink" title="ARP协议解析"></a>ARP协议解析</h1><p>ARP（Address Resolution Protocol）协议是一种用于在计算机网络中解析网络层地址（如IP地址）与物理地址（如MAC地址）之间映射关系的协议。在数据包从源主机发送到目标主机的过程中，需要将目标主机的网络层地址转换为物理地址，才能在链路层上进行数据传输。</p>
+    <content><![CDATA[<h1 id="协议解析"><a href="#协议解析" class="headerlink" title="协议解析"></a>协议解析</h1><p>ARP（Address Resolution Protocol）协议是一种用于在计算机网络中解析网络层地址（如IP地址）与物理地址（如MAC地址）之间映射关系的协议。在数据包从源主机发送到目标主机的过程中，需要将目标主机的网络层地址转换为物理地址，才能在链路层上进行数据传输。</p>
+<span id="more"></span>
+
 <p>ARP协议工作流程如下：</p>
 <ol>
 <li>源主机检查目标IP地址是否在本地网络，如果不在，则将数据包转发给默认网关。</li>
