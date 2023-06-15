@@ -86,7 +86,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">1</span></a></li><li class="menu-item menu-item-sitemap"><a href="/atom.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">2</span></a></li><li class="menu-item menu-item-sitemap"><a href="/atom.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
   </ul>
 </nav>
 
@@ -123,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -159,6 +159,79 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E6%8E%A2%E6%B5%8B%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="G3G4X5X6">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勾三股四弦五小六">
+      <meta itemprop="description" content="学而时习之">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 勾三股四弦五小六">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E6%8E%A2%E6%B5%8B%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">域名缓存探测技术</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-06-15 12:44:19 / 修改时间：12:46:09" itemprop="dateCreated datePublished" datetime="2023-06-15T12:44:19+08:00">2023-06-15</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。</p>
+<p>例如，测试人员可以提交某安全软件更新所使用的域名，如果有记录，说明该网络使用该种安全软件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> dns.message</span><br><span class="line"><span class="keyword">import</span> dns.rdatatype</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">resolve_dns</span>(<span class="params">domain, nameserver=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="comment"># 创建 UDP 套接字</span></span><br><span class="line">    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置超时时间</span></span><br><span class="line">    sock.settimeout(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构造 DNS 请求数据包</span></span><br><span class="line">    query = dns.message.make_query(domain, dns.rdatatype.A, dns.rdataclass.IN)</span><br><span class="line">    query.flags &amp;= ~dns.flags.RD</span><br><span class="line">    <span class="comment"># query.flags |= dns.flags.RD</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># # 添加 DNS 服务器记录</span></span><br><span class="line">    <span class="comment"># if nameserver:</span></span><br><span class="line">    <span class="comment">#     query.additional.append(</span></span><br><span class="line">    <span class="comment">#         dns.rrset.from_text(&quot;.&quot;, &quot;IN&quot;, &quot;NS&quot;, nameserver))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 发送 DNS 请求数据包</span></span><br><span class="line">    sock.sendto(query.to_wire(), (<span class="string">&quot;192.168.233.133&quot;</span>, <span class="number">53</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 接收 DNS 响应数据包</span></span><br><span class="line">        data, _ = sock.recvfrom(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 解析 DNS 响应数据包</span></span><br><span class="line">        response = dns.message.from_wire(data)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取解析结果</span></span><br><span class="line">        answers = response.answer</span><br><span class="line">        <span class="built_in">print</span>(answers)</span><br><span class="line">        <span class="comment"># for ans in answers:</span></span><br><span class="line">        <span class="comment">#     if ans.rdtype == dns.rdatatype.A:</span></span><br><span class="line">        <span class="comment">#         ips = [rdata.address for rdata in ans]</span></span><br><span class="line">        <span class="comment">#         return ips</span></span><br><span class="line">    <span class="keyword">except</span> socket.timeout:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;DNS query timeout&quot;</span>)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># 关闭套接字</span></span><br><span class="line">        sock.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析 example.com 的 A 记录</span></span><br><span class="line">ips = resolve_dns(<span class="string">&quot;example.com&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析 example.com 的 A 记录，并指定要查询的 DNS 服务器地址为 8.8.4.4</span></span><br><span class="line"><span class="comment"># ips = resolve_dns(&quot;example.com&quot;, &quot;8.8.4.4&quot;)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -204,7 +277,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-15 11:28:41" itemprop="dateModified" datetime="2023-06-15T11:28:41+08:00">2023-06-15</time>
+      <time title="修改时间：2023-06-15 11:34:33" itemprop="dateModified" datetime="2023-06-15T11:34:33+08:00">2023-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
