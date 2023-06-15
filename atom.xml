@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-06-15T11:42:11.396Z</updated>
+  <updated>2023-06-15T12:44:09.638Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/"/>
     <id>http://example.com/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/</id>
     <published>2023-06-15T11:11:59.000Z</published>
-    <updated>2023-06-15T11:42:11.396Z</updated>
+    <updated>2023-06-15T12:44:09.638Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;协议解析&quot;&gt;&lt;a href=&quot;#协议解析&quot; class=&quot;headerlink&quot; title=&quot;协议解析&quot;&gt;&lt;/a&gt;协议解析&lt;/h1&gt;&lt;p&gt;ARP（Address Resolution Protocol）协议是一种用于在计算机网络中解析网络层地址（如IP地址）与物理地址（如MAC地址）之间映射关系的协议。在数据包从源主机发送到目标主机的过程中，需要将目标主机的网络层地址转换为物理地址，才能在链路层上进行数据传输。&lt;/p&gt;</summary>
@@ -30,14 +30,14 @@
     
     <category term="TCP/IP协议" scheme="http://example.com/categories/TCP-IP%E5%8D%8F%E8%AE%AE/"/>
     
-    <category term="网络编程" scheme="http://example.com/categories/TCP-IP%E5%8D%8F%E8%AE%AE/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"/>
-    
     
     <category term="arp" scheme="http://example.com/tags/arp/"/>
     
     <category term="socket" scheme="http://example.com/tags/socket/"/>
     
     <category term="chatgpt" scheme="http://example.com/tags/chatgpt/"/>
+    
+    <category term="网络编程" scheme="http://example.com/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
