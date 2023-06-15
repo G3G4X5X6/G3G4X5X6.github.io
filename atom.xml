@@ -48,7 +48,7 @@
     <link href="http://example.com/2023/06/14/hello-world/"/>
     <id>http://example.com/2023/06/14/hello-world/</id>
     <published>2023-06-14T15:37:49.509Z</published>
-    <updated>2023-06-15T03:34:33.094Z</updated>
+    <updated>2023-06-15T05:12:16.956Z</updated>
     
     
       
@@ -61,12 +61,10 @@
     
     
     
-    <category term="Diary" scheme="http://example.com/categories/Diary/"/>
+    <category term="hello-world" scheme="http://example.com/categories/hello-world/"/>
     
     
-    <category term="PS3" scheme="http://example.com/tags/PS3/"/>
-    
-    <category term="Games" scheme="http://example.com/tags/Games/"/>
+    <category term="hello" scheme="http://example.com/tags/hello/"/>
     
   </entry>
   
