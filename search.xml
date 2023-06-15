@@ -16,66 +16,7 @@
 <li>源主机收到ARP回复后，将目标主机的IP地址和物理地址存储在ARP缓存表中，以便下一次发送数据包时可以直接使用。</li>
 </ol>
 <p>ARP协议是一个简单而重要的协议，它能够帮助网络中的主机快速地解析IP地址和物理地址之间的映射关系，从而实现数据包在局域网内的快速传输。</p>
-<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> binascii
-<span class="token keyword">import</span> socket
-<span class="token keyword">import</span> struct
-
-
-<span class="token keyword">def</span> <span class="token function">send_arp_request</span><span class="token punctuation">(</span>source_ip<span class="token punctuation">,</span> target_ip<span class="token punctuation">,</span> interface<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token comment"># 构建 Ethernet 请求数据包</span>
-    <span class="token comment"># 广播地址</span>
-    broadcast_bytes <span class="token operator">=</span> <span class="token string">b'\xff\xff\xff\xff\xff\xff'</span>
-    <span class="token comment"># 源 MAC 地址</span>
-    src_mac_bytes <span class="token operator">=</span> binascii<span class="token punctuation">.</span>unhexlify<span class="token punctuation">(</span><span class="token string">'00:50:56:c0:00:08'</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">':'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    ethernet_header <span class="token operator">=</span> struct<span class="token punctuation">.</span>pack<span class="token punctuation">(</span><span class="token string">"!6s6s2s"</span><span class="token punctuation">,</span> broadcast_bytes<span class="token punctuation">,</span> src_mac_bytes<span class="token punctuation">,</span> <span class="token string">b'\x08\x06'</span><span class="token punctuation">)</span>  <span class="token comment"># ARP</span>
-
-    <span class="token comment"># 构建 ARP 请求数据包</span>
-    source_ip <span class="token operator">=</span> socket<span class="token punctuation">.</span>inet_aton<span class="token punctuation">(</span>source_ip<span class="token punctuation">)</span>  <span class="token comment"># 源IP地址</span>
-    target_mac_bytes <span class="token operator">=</span> <span class="token string">b'\x00\x00\x00\x00\x00\x00'</span>  <span class="token comment"># 目标 MAC 地址</span>
-    target_ip <span class="token operator">=</span> socket<span class="token punctuation">.</span>inet_aton<span class="token punctuation">(</span>target_ip<span class="token punctuation">)</span>  <span class="token comment"># 目标IP地址</span>
-
-    arp_request <span class="token operator">=</span> struct<span class="token punctuation">.</span>pack<span class="token punctuation">(</span><span class="token string">'!HHBBH6s4s6s4s'</span><span class="token punctuation">,</span>
-                              <span class="token number">0x0001</span><span class="token punctuation">,</span>  <span class="token comment"># 硬件类型：以太网</span>
-                              <span class="token number">0x0800</span><span class="token punctuation">,</span>  <span class="token comment"># 协议类型：IPv4（表示发送方要映射的协议地址类型。对于IP地址，该值为0x0800。）</span>
-                              <span class="token number">6</span><span class="token punctuation">,</span>  <span class="token comment"># 硬件地址长度：6字节</span>
-                              <span class="token number">4</span><span class="token punctuation">,</span>  <span class="token comment"># 协议地址长度：4字节</span>
-                              <span class="token number">0x0001</span><span class="token punctuation">,</span>  <span class="token comment"># 操作码：ARP请求</span>
-                              src_mac_bytes<span class="token punctuation">,</span>
-                              source_ip<span class="token punctuation">,</span>
-                              target_mac_bytes<span class="token punctuation">,</span>
-                              target_ip<span class="token punctuation">)</span>
-
-    <span class="token comment"># 创建原始套接字</span>
-    <span class="token comment"># 不可或缺：socket.htons(0x0806)，否则无法接受返回</span>
-    raw_socket <span class="token operator">=</span> socket<span class="token punctuation">.</span>socket<span class="token punctuation">(</span>socket<span class="token punctuation">.</span>PF_PACKET<span class="token punctuation">,</span> socket<span class="token punctuation">.</span>SOCK_RAW<span class="token punctuation">,</span> socket<span class="token punctuation">.</span>htons<span class="token punctuation">(</span><span class="token number">0x0806</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-    <span class="token comment"># 绑定指定的网络接口</span>
-    raw_socket<span class="token punctuation">.</span>bind<span class="token punctuation">(</span><span class="token punctuation">(</span>interface<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-    <span class="token comment"># 发送ARP请求</span>
-    raw_socket<span class="token punctuation">.</span>send<span class="token punctuation">(</span>ethernet_header <span class="token operator">+</span> arp_request<span class="token punctuation">)</span>
-
-    <span class="token comment"># 接收并解析响应</span>
-    response <span class="token operator">=</span> raw_socket<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">2048</span><span class="token punctuation">)</span>
-
-    <span class="token comment"># 解析响应数据包</span>
-    _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> sender_mac<span class="token punctuation">,</span> sender_ip<span class="token punctuation">,</span> target_mac<span class="token punctuation">,</span> target_ip <span class="token operator">=</span> struct<span class="token punctuation">.</span>unpack<span class="token punctuation">(</span><span class="token string">'!6s6s2sHHBBH6s4s6s4s'</span><span class="token punctuation">,</span>
-                                                                                         response<span class="token punctuation">)</span>
-
-    <span class="token comment"># 打印目标MAC地址</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Reply -> IP: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>socket<span class="token punctuation">.</span>inet_ntoa<span class="token punctuation">(</span>sender_ip<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">  MAC: </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token string">':'</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token builtin">format</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token string">'02x'</span><span class="token punctuation">)</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> sender_mac<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
-
-    <span class="token comment"># 关闭原始套接字</span>
-    raw_socket<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-
-<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
-    src_ip <span class="token operator">=</span> <span class="token string">'172.16.66.1'</span>  <span class="token comment"># 目标IP地址</span>
-    dst_ip <span class="token operator">=</span> <span class="token string">'172.16.66.130'</span>  <span class="token comment"># 目标IP地址</span>
-    inter <span class="token operator">=</span> <span class="token string">'vmnet8'</span>  <span class="token comment"># 网络接口名</span>
-
-    send_arp_request<span class="token punctuation">(</span>src_ip<span class="token punctuation">,</span> dst_ip<span class="token punctuation">,</span> inter<span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">send_arp_request</span>(<span class="params">source_ip, target_ip, interface</span>):</span><br><span class="line">    <span class="comment"># 构建 Ethernet 请求数据包</span></span><br><span class="line">    <span class="comment"># 广播地址</span></span><br><span class="line">    broadcast_bytes = <span class="string">b&#x27;\xff\xff\xff\xff\xff\xff&#x27;</span></span><br><span class="line">    <span class="comment"># 源 MAC 地址</span></span><br><span class="line">    src_mac_bytes = binascii.unhexlify(<span class="string">&#x27;00:50:56:c0:00:08&#x27;</span>.replace(<span class="string">&#x27;:&#x27;</span>, <span class="string">&#x27;&#x27;</span>))</span><br><span class="line">    ethernet_header = struct.pack(<span class="string">&quot;!6s6s2s&quot;</span>, broadcast_bytes, src_mac_bytes, <span class="string">b&#x27;\x08\x06&#x27;</span>)  <span class="comment"># ARP</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构建 ARP 请求数据包</span></span><br><span class="line">    source_ip = socket.inet_aton(source_ip)  <span class="comment"># 源IP地址</span></span><br><span class="line">    target_mac_bytes = <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00&#x27;</span>  <span class="comment"># 目标 MAC 地址</span></span><br><span class="line">    target_ip = socket.inet_aton(target_ip)  <span class="comment"># 目标IP地址</span></span><br><span class="line"></span><br><span class="line">    arp_request = struct.pack(<span class="string">&#x27;!HHBBH6s4s6s4s&#x27;</span>,</span><br><span class="line">                              <span class="number">0x0001</span>,  <span class="comment"># 硬件类型：以太网</span></span><br><span class="line">                              <span class="number">0x0800</span>,  <span class="comment"># 协议类型：IPv4（表示发送方要映射的协议地址类型。对于IP地址，该值为0x0800。）</span></span><br><span class="line">                              <span class="number">6</span>,  <span class="comment"># 硬件地址长度：6字节</span></span><br><span class="line">                              <span class="number">4</span>,  <span class="comment"># 协议地址长度：4字节</span></span><br><span class="line">                              <span class="number">0x0001</span>,  <span class="comment"># 操作码：ARP请求</span></span><br><span class="line">                              src_mac_bytes,</span><br><span class="line">                              source_ip,</span><br><span class="line">                              target_mac_bytes,</span><br><span class="line">                              target_ip)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建原始套接字</span></span><br><span class="line">    <span class="comment"># 不可或缺：socket.htons(0x0806)，否则无法接受返回</span></span><br><span class="line">    raw_socket = socket.socket(socket.PF_PACKET, socket.SOCK_RAW, socket.htons(<span class="number">0x0806</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 绑定指定的网络接口</span></span><br><span class="line">    raw_socket.bind((interface, <span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 发送ARP请求</span></span><br><span class="line">    raw_socket.send(ethernet_header + arp_request)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 接收并解析响应</span></span><br><span class="line">    response = raw_socket.recv(<span class="number">2048</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 解析响应数据包</span></span><br><span class="line">    _, _, _, _, _, _, _, _, sender_mac, sender_ip, target_mac, target_ip = struct.unpack(<span class="string">&#x27;!6s6s2sHHBBH6s4s6s4s&#x27;</span>,</span><br><span class="line">                                                                                         response)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 打印目标MAC地址</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Reply -&gt; IP: <span class="subst">&#123;socket.inet_ntoa(sender_ip)&#125;</span>  MAC: <span class="subst">&#123;<span class="string">&#x27;:&#x27;</span>.join(<span class="built_in">format</span>(x, <span class="string">&#x27;02x&#x27;</span>) <span class="keyword">for</span> x <span class="keyword">in</span> sender_mac)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 关闭原始套接字</span></span><br><span class="line">    raw_socket.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    src_ip = <span class="string">&#x27;172.16.66.1&#x27;</span>  <span class="comment"># 目标IP地址</span></span><br><span class="line">    dst_ip = <span class="string">&#x27;172.16.66.130&#x27;</span>  <span class="comment"># 目标IP地址</span></span><br><span class="line">    inter = <span class="string">&#x27;vmnet8&#x27;</span>  <span class="comment"># 网络接口名</span></span><br><span class="line"></span><br><span class="line">    send_arp_request(src_ip, dst_ip, inter)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
@@ -94,20 +35,16 @@
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <span id="more"></span>
 
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy
-
-<span class="token comment"># custom</span>
-<span class="token comment"># alias hexod="cd /home/xxx/Documents/hexo_docs &amp;&amp; hexo clean &amp;&amp; hexo deploy"</span>
-$ hexod<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br><span class="line"></span><br><span class="line"><span class="comment"># custom</span></span><br><span class="line"><span class="comment"># alias hexod=&quot;cd /home/xxx/Documents/hexo_docs &amp;&amp; hexo clean &amp;&amp; hexo deploy&quot;</span></span><br><span class="line">$ hexod</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
@@ -125,58 +62,7 @@ $ hexod<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <span id="more"></span>
 
 <p>例如，测试人员可以提交某安全软件更新所使用的域名，如果有记录，说明该网络使用该种安全软件。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> socket
-<span class="token keyword">import</span> dns<span class="token punctuation">.</span>message
-<span class="token keyword">import</span> dns<span class="token punctuation">.</span>rdatatype
-
-
-<span class="token keyword">def</span> <span class="token function">resolve_dns</span><span class="token punctuation">(</span>domain<span class="token punctuation">,</span> nameserver<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token comment"># 创建 UDP 套接字</span>
-    sock <span class="token operator">=</span> socket<span class="token punctuation">.</span>socket<span class="token punctuation">(</span>socket<span class="token punctuation">.</span>AF_INET<span class="token punctuation">,</span> socket<span class="token punctuation">.</span>SOCK_DGRAM<span class="token punctuation">)</span>
-
-    <span class="token comment"># 设置超时时间</span>
-    sock<span class="token punctuation">.</span>settimeout<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
-
-    <span class="token comment"># 构造 DNS 请求数据包</span>
-    query <span class="token operator">=</span> dns<span class="token punctuation">.</span>message<span class="token punctuation">.</span>make_query<span class="token punctuation">(</span>domain<span class="token punctuation">,</span> dns<span class="token punctuation">.</span>rdatatype<span class="token punctuation">.</span>A<span class="token punctuation">,</span> dns<span class="token punctuation">.</span>rdataclass<span class="token punctuation">.</span>IN<span class="token punctuation">)</span>
-    query<span class="token punctuation">.</span>flags <span class="token operator">&amp;</span><span class="token operator">=</span> <span class="token operator">~</span>dns<span class="token punctuation">.</span>flags<span class="token punctuation">.</span>RD
-    <span class="token comment"># query.flags |= dns.flags.RD</span>
-
-    <span class="token comment"># # 添加 DNS 服务器记录</span>
-    <span class="token comment"># if nameserver:</span>
-    <span class="token comment">#     query.additional.append(</span>
-    <span class="token comment">#         dns.rrset.from_text(".", "IN", "NS", nameserver))</span>
-
-    <span class="token comment"># 发送 DNS 请求数据包</span>
-    sock<span class="token punctuation">.</span>sendto<span class="token punctuation">(</span>query<span class="token punctuation">.</span>to_wire<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token string">"192.168.233.133"</span><span class="token punctuation">,</span> <span class="token number">53</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-    <span class="token keyword">try</span><span class="token punctuation">:</span>
-        <span class="token comment"># 接收 DNS 响应数据包</span>
-        data<span class="token punctuation">,</span> _ <span class="token operator">=</span> sock<span class="token punctuation">.</span>recvfrom<span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span>
-
-        <span class="token comment"># 解析 DNS 响应数据包</span>
-        response <span class="token operator">=</span> dns<span class="token punctuation">.</span>message<span class="token punctuation">.</span>from_wire<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
-
-        <span class="token comment"># 获取解析结果</span>
-        answers <span class="token operator">=</span> response<span class="token punctuation">.</span>answer
-        <span class="token keyword">print</span><span class="token punctuation">(</span>answers<span class="token punctuation">)</span>
-        <span class="token comment"># for ans in answers:</span>
-        <span class="token comment">#     if ans.rdtype == dns.rdatatype.A:</span>
-        <span class="token comment">#         ips = [rdata.address for rdata in ans]</span>
-        <span class="token comment">#         return ips</span>
-    <span class="token keyword">except</span> socket<span class="token punctuation">.</span>timeout<span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"DNS query timeout"</span><span class="token punctuation">)</span>
-    <span class="token keyword">finally</span><span class="token punctuation">:</span>
-        <span class="token comment"># 关闭套接字</span>
-        sock<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-
-<span class="token comment"># 解析 example.com 的 A 记录</span>
-ips <span class="token operator">=</span> resolve_dns<span class="token punctuation">(</span><span class="token string">"example.com"</span><span class="token punctuation">)</span>
-
-<span class="token comment"># 解析 example.com 的 A 记录，并指定要查询的 DNS 服务器地址为 8.8.4.4</span>
-<span class="token comment"># ips = resolve_dns("example.com", "8.8.4.4")</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> dns.message</span><br><span class="line"><span class="keyword">import</span> dns.rdatatype</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">resolve_dns</span>(<span class="params">domain, nameserver=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="comment"># 创建 UDP 套接字</span></span><br><span class="line">    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置超时时间</span></span><br><span class="line">    sock.settimeout(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构造 DNS 请求数据包</span></span><br><span class="line">    query = dns.message.make_query(domain, dns.rdatatype.A, dns.rdataclass.IN)</span><br><span class="line">    query.flags &amp;= ~dns.flags.RD</span><br><span class="line">    <span class="comment"># query.flags |= dns.flags.RD</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># # 添加 DNS 服务器记录</span></span><br><span class="line">    <span class="comment"># if nameserver:</span></span><br><span class="line">    <span class="comment">#     query.additional.append(</span></span><br><span class="line">    <span class="comment">#         dns.rrset.from_text(&quot;.&quot;, &quot;IN&quot;, &quot;NS&quot;, nameserver))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 发送 DNS 请求数据包</span></span><br><span class="line">    sock.sendto(query.to_wire(), (<span class="string">&quot;192.168.233.133&quot;</span>, <span class="number">53</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 接收 DNS 响应数据包</span></span><br><span class="line">        data, _ = sock.recvfrom(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 解析 DNS 响应数据包</span></span><br><span class="line">        response = dns.message.from_wire(data)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取解析结果</span></span><br><span class="line">        answers = response.answer</span><br><span class="line">        <span class="built_in">print</span>(answers)</span><br><span class="line">        <span class="comment"># for ans in answers:</span></span><br><span class="line">        <span class="comment">#     if ans.rdtype == dns.rdatatype.A:</span></span><br><span class="line">        <span class="comment">#         ips = [rdata.address for rdata in ans]</span></span><br><span class="line">        <span class="comment">#         return ips</span></span><br><span class="line">    <span class="keyword">except</span> socket.timeout:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;DNS query timeout&quot;</span>)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># 关闭套接字</span></span><br><span class="line">        sock.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析 example.com 的 A 记录</span></span><br><span class="line">ips = resolve_dns(<span class="string">&quot;example.com&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析 example.com 的 A 记录，并指定要查询的 DNS 服务器地址为 8.8.4.4</span></span><br><span class="line"><span class="comment"># ips = resolve_dns(&quot;example.com&quot;, &quot;8.8.4.4&quot;)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>

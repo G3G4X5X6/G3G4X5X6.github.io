@@ -228,58 +228,7 @@
 <span id="more"></span>
 
 <p>例如，测试人员可以提交某安全软件更新所使用的域名，如果有记录，说明该网络使用该种安全软件。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> socket
-<span class="token keyword">import</span> dns<span class="token punctuation">.</span>message
-<span class="token keyword">import</span> dns<span class="token punctuation">.</span>rdatatype
-
-
-<span class="token keyword">def</span> <span class="token function">resolve_dns</span><span class="token punctuation">(</span>domain<span class="token punctuation">,</span> nameserver<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token comment"># 创建 UDP 套接字</span>
-    sock <span class="token operator">=</span> socket<span class="token punctuation">.</span>socket<span class="token punctuation">(</span>socket<span class="token punctuation">.</span>AF_INET<span class="token punctuation">,</span> socket<span class="token punctuation">.</span>SOCK_DGRAM<span class="token punctuation">)</span>
-
-    <span class="token comment"># 设置超时时间</span>
-    sock<span class="token punctuation">.</span>settimeout<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
-
-    <span class="token comment"># 构造 DNS 请求数据包</span>
-    query <span class="token operator">=</span> dns<span class="token punctuation">.</span>message<span class="token punctuation">.</span>make_query<span class="token punctuation">(</span>domain<span class="token punctuation">,</span> dns<span class="token punctuation">.</span>rdatatype<span class="token punctuation">.</span>A<span class="token punctuation">,</span> dns<span class="token punctuation">.</span>rdataclass<span class="token punctuation">.</span>IN<span class="token punctuation">)</span>
-    query<span class="token punctuation">.</span>flags <span class="token operator">&amp;</span><span class="token operator">=</span> <span class="token operator">~</span>dns<span class="token punctuation">.</span>flags<span class="token punctuation">.</span>RD
-    <span class="token comment"># query.flags |= dns.flags.RD</span>
-
-    <span class="token comment"># # 添加 DNS 服务器记录</span>
-    <span class="token comment"># if nameserver:</span>
-    <span class="token comment">#     query.additional.append(</span>
-    <span class="token comment">#         dns.rrset.from_text(".", "IN", "NS", nameserver))</span>
-
-    <span class="token comment"># 发送 DNS 请求数据包</span>
-    sock<span class="token punctuation">.</span>sendto<span class="token punctuation">(</span>query<span class="token punctuation">.</span>to_wire<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token string">"192.168.233.133"</span><span class="token punctuation">,</span> <span class="token number">53</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-    <span class="token keyword">try</span><span class="token punctuation">:</span>
-        <span class="token comment"># 接收 DNS 响应数据包</span>
-        data<span class="token punctuation">,</span> _ <span class="token operator">=</span> sock<span class="token punctuation">.</span>recvfrom<span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span>
-
-        <span class="token comment"># 解析 DNS 响应数据包</span>
-        response <span class="token operator">=</span> dns<span class="token punctuation">.</span>message<span class="token punctuation">.</span>from_wire<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
-
-        <span class="token comment"># 获取解析结果</span>
-        answers <span class="token operator">=</span> response<span class="token punctuation">.</span>answer
-        <span class="token keyword">print</span><span class="token punctuation">(</span>answers<span class="token punctuation">)</span>
-        <span class="token comment"># for ans in answers:</span>
-        <span class="token comment">#     if ans.rdtype == dns.rdatatype.A:</span>
-        <span class="token comment">#         ips = [rdata.address for rdata in ans]</span>
-        <span class="token comment">#         return ips</span>
-    <span class="token keyword">except</span> socket<span class="token punctuation">.</span>timeout<span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"DNS query timeout"</span><span class="token punctuation">)</span>
-    <span class="token keyword">finally</span><span class="token punctuation">:</span>
-        <span class="token comment"># 关闭套接字</span>
-        sock<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-
-<span class="token comment"># 解析 example.com 的 A 记录</span>
-ips <span class="token operator">=</span> resolve_dns<span class="token punctuation">(</span><span class="token string">"example.com"</span><span class="token punctuation">)</span>
-
-<span class="token comment"># 解析 example.com 的 A 记录，并指定要查询的 DNS 服务器地址为 8.8.4.4</span>
-<span class="token comment"># ips = resolve_dns("example.com", "8.8.4.4")</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> dns.message</span><br><span class="line"><span class="keyword">import</span> dns.rdatatype</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">resolve_dns</span>(<span class="params">domain, nameserver=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="comment"># 创建 UDP 套接字</span></span><br><span class="line">    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置超时时间</span></span><br><span class="line">    sock.settimeout(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构造 DNS 请求数据包</span></span><br><span class="line">    query = dns.message.make_query(domain, dns.rdatatype.A, dns.rdataclass.IN)</span><br><span class="line">    query.flags &amp;= ~dns.flags.RD</span><br><span class="line">    <span class="comment"># query.flags |= dns.flags.RD</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># # 添加 DNS 服务器记录</span></span><br><span class="line">    <span class="comment"># if nameserver:</span></span><br><span class="line">    <span class="comment">#     query.additional.append(</span></span><br><span class="line">    <span class="comment">#         dns.rrset.from_text(&quot;.&quot;, &quot;IN&quot;, &quot;NS&quot;, nameserver))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 发送 DNS 请求数据包</span></span><br><span class="line">    sock.sendto(query.to_wire(), (<span class="string">&quot;192.168.233.133&quot;</span>, <span class="number">53</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 接收 DNS 响应数据包</span></span><br><span class="line">        data, _ = sock.recvfrom(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 解析 DNS 响应数据包</span></span><br><span class="line">        response = dns.message.from_wire(data)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取解析结果</span></span><br><span class="line">        answers = response.answer</span><br><span class="line">        <span class="built_in">print</span>(answers)</span><br><span class="line">        <span class="comment"># for ans in answers:</span></span><br><span class="line">        <span class="comment">#     if ans.rdtype == dns.rdatatype.A:</span></span><br><span class="line">        <span class="comment">#         ips = [rdata.address for rdata in ans]</span></span><br><span class="line">        <span class="comment">#         return ips</span></span><br><span class="line">    <span class="keyword">except</span> socket.timeout:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;DNS query timeout&quot;</span>)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># 关闭套接字</span></span><br><span class="line">        sock.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析 example.com 的 A 记录</span></span><br><span class="line">ips = resolve_dns(<span class="string">&quot;example.com&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析 example.com 的 A 记录，并指定要查询的 DNS 服务器地址为 8.8.4.4</span></span><br><span class="line"><span class="comment"># ips = resolve_dns(&quot;example.com&quot;, &quot;8.8.4.4&quot;)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
     </div>
