@@ -2172,6 +2172,9 @@ ul.breadcrumb li:last-child {
   border-bottom-color: #111;
   color: #111;
 }
+.utterances {
+  max-width: unset;
+}
 .use-motion .animated {
   animation-fill-mode: none;
   visibility: inherit;
