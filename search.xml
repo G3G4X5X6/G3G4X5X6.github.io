@@ -56,6 +56,17 @@
       </tags>
   </entry>
   <entry>
+    <title>大语言模型</title>
+    <url>/2023/06/15/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>人工智能</category>
+      </categories>
+      <tags>
+        <tag>大语言模型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>域名缓存侦测技术</title>
     <url>/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/</url>
     <content><![CDATA[<p>域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。</p>
