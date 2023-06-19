@@ -70,7 +70,11 @@
 
 
 
-<h1 id="多域名文件测试"><a href="#多域名文件测试" class="headerlink" title="多域名文件测试"></a>多域名文件测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(venv) ➜  info-tools git:(main) ✗ python test_DNS_Cache_Snooping.py -f domains.txt -s 114.114.114.114</span><br><span class="line">No Cache <span class="keyword">for</span> [example.com] <span class="keyword">in</span> [114.114.114.114]</span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br></pre></td></tr></table></figure>
+<h1 id="多域名文件测试"><a href="#多域名文件测试" class="headerlink" title="多域名文件测试"></a>多域名文件测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># domains.txt</span></span><br><span class="line"><span class="comment"># 每行一个域名</span></span><br><span class="line">example.com</span><br><span class="line">baidu.com</span><br><span class="line">google.com</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(venv) ➜  info-tools git:(main) ✗ python test_DNS_Cache_Snooping.py -f domains.txt -s 114.114.114.114</span><br><span class="line">No Cache <span class="keyword">for</span> [example.com] <span class="keyword">in</span> [114.114.114.114]</span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
