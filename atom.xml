@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-08-20T04:49:22.983Z</updated>
+  <updated>2023-09-01T16:07:34.711Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,102 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CentOS7 下部署 PySpark 开发环境</title>
+    <link href="http://example.com/2023/09/02/setup-pyspark/"/>
+    <id>http://example.com/2023/09/02/setup-pyspark/</id>
+    <published>2023-09-01T16:05:11.000Z</published>
+    <updated>2023-09-01T16:07:34.711Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;一、下载预编译包&quot;&gt;&lt;a href=&quot;#一、下载预编译包&quot; class=&quot;headerlink&quot; title=&quot;一、下载预编译包&quot;&gt;&lt;/a&gt;一、下载预编译包&lt;/h1&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 下载页面&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://spark.apache.org/downloads.html&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 下载地址&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# Spark Standalone Mode&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://spark.apache.org/docs/latest/spark-standalone.html&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 下安装 Jupyter</title>
+    <link href="http://example.com/2023/09/02/setup-jupyter/"/>
+    <id>http://example.com/2023/09/02/setup-jupyter/</id>
+    <published>2023-09-01T16:03:38.000Z</published>
+    <updated>2023-09-01T16:07:31.223Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;JupyterLab&quot;&gt;&lt;a href=&quot;#JupyterLab&quot; class=&quot;headerlink&quot; title=&quot;JupyterLab&quot;&gt;&lt;/a&gt;JupyterLab&lt;/h1&gt;&lt;p&gt;Install JupyterLab with pip:&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip3 install jupyterlab&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;Once installed, launch JupyterLab with:&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;jupyter lab&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 下安装 Python3.8.5</title>
+    <link href="http://example.com/2023/09/02/setup-python3-8-5/"/>
+    <id>http://example.com/2023/09/02/setup-python3-8-5/</id>
+    <published>2023-09-01T16:01:07.000Z</published>
+    <updated>2023-09-01T16:07:38.159Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;一、前置条件&quot;&gt;&lt;a href=&quot;#一、前置条件&quot; class=&quot;headerlink&quot; title=&quot;一、前置条件&quot;&gt;&lt;/a&gt;一、前置条件&lt;/h1&gt;&lt;h2 id=&quot;1）安装依赖&quot;&gt;&lt;a href=&quot;#1）安装依赖&quot; class=&quot;headerlink&quot; title=&quot;1）安装依赖&quot;&gt;&lt;/a&gt;1）安装依赖&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;yum -y install libffi-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;2）更新-openssl&quot;&gt;&lt;a href=&quot;#2）更新-openssl&quot; class=&quot;headerlink&quot; title=&quot;2）更新 openssl&quot;&gt;&lt;/a&gt;2）更新 openssl&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget --no-check-certificate   https://www.openssl.org/source/openssl-1.1.1t.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;tar -zxvf openssl-1.1.1t.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; openssl-1.1.1t/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;./config --prefix=/usr/local/my_openssl&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;make&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;make install&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;mv&lt;/span&gt; /usr/bin/openssl /usr/bin/oldopenssl&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;ln&lt;/span&gt; -s /usr/local/my_openssl/bin/openssl /usr/bin/openssl&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;ln&lt;/span&gt; -s /usr/local/my_openssl/lib/libssl.so.1.1 /usr/lib64/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;ln&lt;/span&gt; -s /usr/local/my_openssl/lib/libcrypto.so.1.1  /usr/lib64/&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="python3" scheme="http://example.com/tags/python3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 下安装 JDK</title>
+    <link href="http://example.com/2023/09/01/setup-jdk/"/>
+    <id>http://example.com/2023/09/01/setup-jdk/</id>
+    <published>2023-09-01T15:58:29.000Z</published>
+    <updated>2023-09-01T16:07:25.351Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;一、卸载系统自带的-OpenJDK&quot;&gt;&lt;a href=&quot;#一、卸载系统自带的-OpenJDK&quot; class=&quot;headerlink&quot; title=&quot;一、卸载系统自带的 OpenJDK&quot;&gt;&lt;/a&gt;一、卸载系统自带的 OpenJDK&lt;/h1&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 查看&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[root@docker ~]&lt;span class=&quot;comment&quot;&gt;# java -version&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;openjdk version &lt;span class=&quot;string&quot;&gt;&amp;quot;1.8.0_222&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;OpenJDK Runtime Environment (build 1.8.0_222-b10)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 卸载&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;rpm -qa | grep openjdk | xargs rpm -e --nodeps&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 确认&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;java -version&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+  </entry>
   
   <entry>
     <title>开发环境依赖组件备忘 docker-compose</title>
