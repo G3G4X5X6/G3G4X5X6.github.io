@@ -82,6 +82,21 @@
       </tags>
   </entry>
   <entry>
+    <title>反弹 shell</title>
+    <url>/2023/09/02/oneline-shell/</url>
+    <content><![CDATA[<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><p><a href="https://www.anquanke.com/post/id/87017">【技术分享】linux各种一句话反弹shell总结</a></p>
+</li>
+<li><p><a href="https://xz.aliyun.com/t/9488">反弹Shell，看这一篇就够了</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/sdgfsdgfsd/p/13305556.html">常用的一句话反弹shell总结</a></p>
+</li>
+<li><p><a href="https://www.wangan.com/wenda/2047">内网一句话反弹 shell 都有哪些</a></p>
+</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
     <title>CentOS7 下安装 JDK</title>
     <url>/2023/09/01/setup-jdk/</url>
     <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
@@ -103,21 +118,6 @@
         <tag>jdk</tag>
         <tag>pyspark</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>oneline_shell</title>
-    <url>/2023/09/02/oneline-shell/</url>
-    <content><![CDATA[<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><p><a href="https://www.anquanke.com/post/id/87017">【技术分享】linux各种一句话反弹shell总结</a></p>
-</li>
-<li><p><a href="https://xz.aliyun.com/t/9488">反弹Shell，看这一篇就够了</a></p>
-</li>
-<li><p><a href="https://www.cnblogs.com/sdgfsdgfsd/p/13305556.html">常用的一句话反弹shell总结</a></p>
-</li>
-<li><p><a href="https://www.wangan.com/wenda/2047">内网一句话反弹 shell 都有哪些</a></p>
-</li>
-</ul>
-]]></content>
   </entry>
   <entry>
     <title>CentOS7 下安装 Jupyter</title>
