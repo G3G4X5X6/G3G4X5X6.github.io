@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-10-29T02:04:51.334Z</updated>
+  <updated>2023-10-29T02:26:14.741Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,17 +21,17 @@
     <link href="http://example.com/2023/10/29/harden-mysql/"/>
     <id>http://example.com/2023/10/29/harden-mysql/</id>
     <published>2023-10-29T01:57:11.000Z</published>
-    <updated>2023-10-29T02:04:51.334Z</updated>
+    <updated>2023-10-29T02:26:14.741Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;MySQL基线核查与加固&quot;&gt;&lt;a href=&quot;#MySQL基线核查与加固&quot; class=&quot;headerlink&quot; title=&quot;MySQL基线核查与加固&quot;&gt;&lt;/a&gt;MySQL基线核查与加固&lt;/h1&gt;&lt;blockquote&gt;
-&lt;p&gt;基于</summary>
-        
-      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;基于 &lt;code&gt;MySQL8.0.12&lt;/code&gt; 进行操作，环境：&lt;code&gt;phpstudy_pro&lt;/code&gt; &amp;amp; &lt;code&gt;Windows11&lt;/code&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;网络安全等级保护基本要求 - &lt;code&gt;第三级安全要求&lt;/code&gt; - &lt;code&gt;安全计算环境&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;核查&lt;/li&gt;
+&lt;li&gt;加固&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;</summary>
     
     
     
