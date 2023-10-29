@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-10-29T02:00:22.172Z</updated>
+  <updated>2023-10-29T02:04:51.334Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,20 +21,28 @@
     <link href="http://example.com/2023/10/29/harden-mysql/"/>
     <id>http://example.com/2023/10/29/harden-mysql/</id>
     <published>2023-10-29T01:57:11.000Z</published>
-    <updated>2023-10-29T02:00:22.172Z</updated>
+    <updated>2023-10-29T02:04:51.334Z</updated>
     
     
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;基于 &lt;code&gt;MySQL8.0.12&lt;/code&gt; 进行操作，环境：&lt;code&gt;phpstudy_pro&lt;/code&gt; &amp;amp; &lt;code&gt;Windows11&lt;/code&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;网络安全等级保护基本要求 - &lt;code&gt;第三级安全要求&lt;/code&gt; - &lt;code&gt;安全计算环境&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;核查&lt;/li&gt;
-&lt;li&gt;加固&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;</summary>
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;MySQL基线核查与加固&quot;&gt;&lt;a href=&quot;#MySQL基线核查与加固&quot; class=&quot;headerlink&quot; title=&quot;MySQL基线核查与加固&quot;&gt;&lt;/a&gt;MySQL基线核查与加固&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;基于</summary>
+        
+      
     
     
     
+    <category term="基线核查与加固" scheme="http://example.com/categories/%E5%9F%BA%E7%BA%BF%E6%A0%B8%E6%9F%A5%E4%B8%8E%E5%8A%A0%E5%9B%BA/"/>
+    
+    
+    <category term="基线核查与加固" scheme="http://example.com/tags/%E5%9F%BA%E7%BA%BF%E6%A0%B8%E6%9F%A5%E4%B8%8E%E5%8A%A0%E5%9B%BA/"/>
+    
+    <category term="mysql" scheme="http://example.com/tags/mysql/"/>
+    
+    <category term="网络安全等级保护基本要求" scheme="http://example.com/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AD%89%E7%BA%A7%E4%BF%9D%E6%8A%A4%E5%9F%BA%E6%9C%AC%E8%A6%81%E6%B1%82/"/>
     
   </entry>
   
