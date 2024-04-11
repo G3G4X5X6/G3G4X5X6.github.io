@@ -40,7 +40,7 @@
     <link href="http://example.com/2023/10/29/harden-mysql/"/>
     <id>http://example.com/2023/10/29/harden-mysql/</id>
     <published>2023-10-29T01:57:11.000Z</published>
-    <updated>2024-04-11T06:25:25.533Z</updated>
+    <updated>2024-04-11T06:29:21.910Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -182,9 +182,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
     
   </entry>
   
@@ -230,9 +230,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
-    
     <category term="jdk" scheme="http://example.com/tags/jdk/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
     
   </entry>
   
