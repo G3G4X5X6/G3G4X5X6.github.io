@@ -389,7 +389,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># update user set host=&#x27;$&#123;IP&#125;&#x27; where user=&#x27;root&#x27; and host=&#x27;%&#x27;;</span><br><span class="line"># 设置 root 用户只允许本地登录</span><br><span class="line">use mysql;</span><br><span class="line">update user set host=&#x27;localhost&#x27; where user=&#x27;root&#x27; and host=&#x27;%&#x27;;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213000524679.png" alt="image-20221213000524679"></p>
-<p><img data-src="/./harden-mysql/image-20240411134901748.png" alt="image-20240411134901748"></p>
+<p><img data-src="/harden-mysql/image-20240411135715854.png" alt="image-20240411135715854"></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><h3 id="安全标准"><a href="#安全标准" class="headerlink" title="安全标准"></a>安全标准</h3><ul>
 <li><a href="http://c.gb688.cn/bzgk/gb/showGb?type=online&hcno=BAFB47E8874764186BDB7865E8344DAF"><strong>《信息安全技术  网络安全等级保护基本要求》</strong></a></li>
 </ul>
