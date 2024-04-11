@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>ARP协议</title>
+    <url>/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/</url>
+    <content><![CDATA[<h2 id="协议解析"><a href="#协议解析" class="headerlink" title="协议解析"></a>协议解析</h2><p>ARP（Address Resolution Protocol）协议是一种用于在计算机网络中解析网络层地址（如IP地址）与物理地址（如MAC地址）之间映射关系的协议。在数据包从源主机发送到目标主机的过程中，需要将目标主机的网络层地址转换为物理地址，才能在链路层上进行数据传输。</p>
+<span id="more"></span>
+
+<p>ARP协议工作流程如下：</p>
+<ol>
+<li>源主机检查目标IP地址是否在本地网络，如果不在，则将数据包转发给默认网关。</li>
+<li>源主机检查ARP缓存表中是否已经有目标IP地址对应的物理地址，如果有，则直接将数据包发送到目标主机的物理地址。</li>
+<li>如果ARP缓存表中没有目标IP地址对应的物理地址，源主机就会发送一个ARP请求广播，请求目标主机回复自己的物理地址。</li>
+<li>网络中所有的主机都会接收到这个ARP请求广播，但只有目标主机会回复自己的物理地址。</li>
+<li>目标主机收到ARP请求后，会将自己的物理地址打包在ARP回复中发送给源主机。</li>
+<li>源主机收到ARP回复后，将目标主机的IP地址和物理地址存储在ARP缓存表中，以便下一次发送数据包时可以直接使用。</li>
+</ol>
+<p>ARP协议是一个简单而重要的协议，它能够帮助网络中的主机快速地解析IP地址和物理地址之间的映射关系，从而实现数据包在局域网内的快速传输。</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">send_arp_request</span>(<span class="params">source_ip, target_ip, interface</span>):</span><br><span class="line">    <span class="comment"># 构建 Ethernet 请求数据包</span></span><br><span class="line">    <span class="comment"># 广播地址</span></span><br><span class="line">    broadcast_bytes = <span class="string">b&#x27;\xff\xff\xff\xff\xff\xff&#x27;</span></span><br><span class="line">    <span class="comment"># 源 MAC 地址</span></span><br><span class="line">    src_mac_bytes = binascii.unhexlify(<span class="string">&#x27;00:50:56:c0:00:08&#x27;</span>.replace(<span class="string">&#x27;:&#x27;</span>, <span class="string">&#x27;&#x27;</span>))</span><br><span class="line">    ethernet_header = struct.pack(<span class="string">&quot;!6s6s2s&quot;</span>, broadcast_bytes, src_mac_bytes, <span class="string">b&#x27;\x08\x06&#x27;</span>)  <span class="comment"># ARP</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构建 ARP 请求数据包</span></span><br><span class="line">    source_ip = socket.inet_aton(source_ip)  <span class="comment"># 源IP地址</span></span><br><span class="line">    target_mac_bytes = <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00&#x27;</span>  <span class="comment"># 目标 MAC 地址</span></span><br><span class="line">    target_ip = socket.inet_aton(target_ip)  <span class="comment"># 目标IP地址</span></span><br><span class="line"></span><br><span class="line">    arp_request = struct.pack(<span class="string">&#x27;!HHBBH6s4s6s4s&#x27;</span>,</span><br><span class="line">                              <span class="number">0x0001</span>,  <span class="comment"># 硬件类型：以太网</span></span><br><span class="line">                              <span class="number">0x0800</span>,  <span class="comment"># 协议类型：IPv4（表示发送方要映射的协议地址类型。对于IP地址，该值为0x0800。）</span></span><br><span class="line">                              <span class="number">6</span>,  <span class="comment"># 硬件地址长度：6字节</span></span><br><span class="line">                              <span class="number">4</span>,  <span class="comment"># 协议地址长度：4字节</span></span><br><span class="line">                              <span class="number">0x0001</span>,  <span class="comment"># 操作码：ARP请求</span></span><br><span class="line">                              src_mac_bytes,</span><br><span class="line">                              source_ip,</span><br><span class="line">                              target_mac_bytes,</span><br><span class="line">                              target_ip)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建原始套接字</span></span><br><span class="line">    <span class="comment"># 不可或缺：socket.htons(0x0806)，否则无法接受返回</span></span><br><span class="line">    raw_socket = socket.socket(socket.PF_PACKET, socket.SOCK_RAW, socket.htons(<span class="number">0x0806</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 绑定指定的网络接口</span></span><br><span class="line">    raw_socket.bind((interface, <span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 发送ARP请求</span></span><br><span class="line">    raw_socket.send(ethernet_header + arp_request)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 接收并解析响应</span></span><br><span class="line">    response = raw_socket.recv(<span class="number">2048</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 解析响应数据包</span></span><br><span class="line">    _, _, _, _, _, _, _, _, sender_mac, sender_ip, target_mac, target_ip = struct.unpack(<span class="string">&#x27;!6s6s2sHHBBH6s4s6s4s&#x27;</span>,</span><br><span class="line">                                                                                         response)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 打印目标MAC地址</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Reply -&gt; IP: <span class="subst">&#123;socket.inet_ntoa(sender_ip)&#125;</span>  MAC: <span class="subst">&#123;<span class="string">&#x27;:&#x27;</span>.join(<span class="built_in">format</span>(x, <span class="string">&#x27;02x&#x27;</span>) <span class="keyword">for</span> x <span class="keyword">in</span> sender_mac)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 关闭原始套接字</span></span><br><span class="line">    raw_socket.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    src_ip = <span class="string">&#x27;172.16.66.1&#x27;</span>  <span class="comment"># 目标IP地址</span></span><br><span class="line">    dst_ip = <span class="string">&#x27;172.16.66.130&#x27;</span>  <span class="comment"># 目标IP地址</span></span><br><span class="line">    inter = <span class="string">&#x27;vmnet8&#x27;</span>  <span class="comment"># 网络接口名</span></span><br><span class="line"></span><br><span class="line">    send_arp_request(src_ip, dst_ip, inter)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>TCP/IP协议</category>
+      </categories>
+      <tags>
+        <tag>arp</tag>
+        <tag>socket</tag>
+        <tag>chatgpt</tag>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>开发环境依赖组件备忘 docker-compose</title>
+    <url>/2023/08/20/docker-compose4dev/</url>
+    <content><![CDATA[<p>为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 <code>docker-compose</code> 用于快速部署依赖组件环境</p>
+<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><ul>
+<li>elasticsearch:8.8.0</li>
+<li>kibana:8.8.0</li>
+<li>redis:7.0.11</li>
+<li>mysql:8</li>
+</ul>
+<p>​	</p>
+<span id="more"></span>
+
+
+
+<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/elasticsearch/elasticsearch:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">elasticsearch</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ELASTIC_PASSWORD=&lt;Your_ELASTIC_PASSWORD&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9200:9200&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">esdata:/usr/share/elasticsearch/data</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">kibana:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/kibana/kibana:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kibana</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SERVER_NAME=kibana</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">XPACK_SECURITY_ENABLED=true</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5601:5601&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kibanadata:/usr/share/kibana/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:7.0.11</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="comment"># 修改密码以及绑定地址</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">--requirepass</span> <span class="string">&quot;&lt;your_redis_pass&gt;&quot;</span> <span class="string">--bind</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6379:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redisdata:/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">--default-authentication-plugin=caching_sha2_password</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&lt;root_pass&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">&lt;your_db&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">&lt;your_user&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">&lt;your_pass&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">esdata:</span></span><br><span class="line">  <span class="attr">kibanadata:</span></span><br><span class="line">  <span class="attr">redisdata:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>docker-compose</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基线核查与加固 - MySQL</title>
+    <url>/2023/10/29/harden-mysql/</url>
+    <content><![CDATA[<blockquote>
+<p>基于 <code>MySQL8.0.12</code> 进行操作，环境：<code>phpstudy_pro</code> &amp; <code>Windows11</code></p>
+<ol>
+<li>网络安全等级保护基本要求 - <code>第三级安全要求</code> - <code>安全计算环境</code></li>
+<li>核查</li>
+<li>加固</li>
+</ol>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="8-1-4-安全计算环境"><a href="#8-1-4-安全计算环境" class="headerlink" title="8.1.4 安全计算环境"></a>8.1.4 安全计算环境</h2><h3 id="8-1-4-1-身份鉴别"><a href="#8-1-4-1-身份鉴别" class="headerlink" title="8.1.4.1 身份鉴别"></a>8.1.4.1 身份鉴别</h3><p>本项要求包括：</p>
+<p>a) 应对登录的用户进行身份标识和鉴别，身份标识具有唯一性，身份鉴别信息具有复杂度要求并定期更换；</p>
+<ul>
+<li>核查密码复杂度</li>
+<li>核查密码生命周期</li>
+</ul>
+<p>b) 应具有登录失败处理功能，应配置并启用结束会话、限制非法登录次数和当登录连接超时自动退出等相关措施；</p>
+<ul>
+<li>核查是否限制非法登录次数</li>
+<li>核查登录连接超时配置</li>
+</ul>
+<p>c) 当进行远程管理时，应采取必要措施防止鉴别信息在网络传输过程中被窃听；</p>
+<ul>
+<li>核查是否开启远程加密通信</li>
+</ul>
+<p>d) 应采用口令、密码技术、生物技术等两种或两种以上组合的鉴别技术对用户进行身份鉴别，且其中一种鉴别技术至少应使用密码技术来实现。</p>
+<ul>
+<li>不适用</li>
+</ul>
+<h4 id="核查密码复杂度"><a href="#核查密码复杂度" class="headerlink" title="核查密码复杂度"></a>核查密码复杂度</h4><p>MySQL 系统自带有 validate_password 插件，此插件可以验证密码强度，未达到规定强度的密码则不允许被设置。MySQL 5.7 及 8.0 版本默认情况下貌似都不启用该插件，这也使得我们可以随意设置密码，比如设置为 123、123456等。如果我们想从根源上规范密码强度，可以启用该插件，下面一起来看下如何通过此插件来设置密码复杂度策略。</p>
+<h5 id="核查方式"><a href="#核查方式" class="headerlink" title="核查方式"></a>核查方式</h5><p>安装前检查 为空则说明未安装此插件：<code>show variables like &#39;validate%&#39;; </code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; show variables like &#x27;validate%&#x27;; </span><br><span class="line">Empty set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212213316407.png" alt="image-20221212213316407"></p>
+<h5 id="加固方式"><a href="#加固方式" class="headerlink" title="加固方式"></a>加固方式</h5><h6 id="1）安装-validate-password-插件"><a href="#1）安装-validate-password-插件" class="headerlink" title="1）安装 validate_password 插件"></a>1）安装 validate_password 插件</h6><p><code>INSTALL PLUGIN validate_password SONAME &#39;validate_password.so&#39;;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 通过 INSTALL PLUGIN 命令可安装此插件</span><br><span class="line"># 每个平台的文件名后缀都不同 对于 Unix 和类 Unix 系统，为.so，对于 Windows 为.dll</span><br><span class="line">mysql&gt; INSTALL PLUGIN validate_password SONAME &#x27;validate_password.so&#x27;;</span><br><span class="line">Query OK, 0 rows affected, 1 warning (0.28 sec)</span><br><span class="line"></span><br><span class="line"># 查看 validate_password 相关参数</span><br><span class="line">mysql&gt; show variables like &#x27;validate%&#x27;;</span><br><span class="line">+--------------------------------------+--------+</span><br><span class="line">| Variable_name                        | Value  |</span><br><span class="line">+--------------------------------------+--------+</span><br><span class="line">| validate_password_check_user_name    | ON     |</span><br><span class="line">| validate_password_dictionary_file    |        |</span><br><span class="line">| validate_password_length             | 8      |</span><br><span class="line">| validate_password_mixed_case_count   | 1      |</span><br><span class="line">| validate_password_number_count       | 1      |</span><br><span class="line">| validate_password_policy             | MEDIUM |</span><br><span class="line">| validate_password_special_char_count | 1      |</span><br><span class="line">+--------------------------------------+--------+</span><br><span class="line">7 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212213649720.png" alt="image-20221212213649720"></p>
+<h6 id="2）密码强度相关参数解释"><a href="#2）密码强度相关参数解释" class="headerlink" title="2）密码强度相关参数解释"></a>2）密码强度相关参数解释</h6><p>安装 validate_password 插件后，多了一些密码强度相关参数，这些参数从字面意思上也很容易看懂，下面简单解释下几个重点参数。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> validate<span class="emphasis">_password_</span>policy</span><br><span class="line"><span class="bullet">	-</span> 代表的密码策略，默认是MEDIUM 可配置的值有以下：</span><br><span class="line"><span class="code">        0 or LOW 仅需需符合密码长度（由参数validate_password_length指定）</span></span><br><span class="line"><span class="code">        1 or MEDIUM 满足LOW策略，同时还需满足至少有1个数字，小写字母，大写字母和特殊字符</span></span><br><span class="line"><span class="code">        2 or STRONG 满足MEDIUM策略，同时密码不能存在字典文件（dictionary file）中</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="bullet">2.</span> validate<span class="emphasis">_password_</span>dictionary<span class="emphasis">_file</span></span><br><span class="line"><span class="emphasis">	- 用于配置密码的字典文件，当validate_</span>password<span class="emphasis">_policy设置为STRONG时可以配置密码字典文件，字典文件中存在的密码不得使用。</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">3. validate_</span>password<span class="emphasis">_length</span></span><br><span class="line"><span class="emphasis">	- 用来设置密码的最小长度，默认值是8</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">4. validate_</span>password<span class="emphasis">_mixed_</span>case<span class="emphasis">_count</span></span><br><span class="line"><span class="emphasis">	- 当validate_</span>password<span class="emphasis">_policy设置为MEDIUM或者STRONG时，密码中至少同时拥有的小写和大写字母的数量</span></span><br><span class="line"><span class="emphasis">	- 默认是1最小是0；默认是至少拥有一个小写和一个大写字母。</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">5. validate_</span>password<span class="emphasis">_number_</span>count</span><br><span class="line"><span class="bullet">	-</span> 当validate<span class="emphasis">_password_</span>policy设置为MEDIUM或者STRONG时，密码中至少拥有的数字的个数，默认1最小是0</span><br><span class="line"></span><br><span class="line"><span class="bullet">6.</span> validate<span class="emphasis">_password_</span>special<span class="emphasis">_char_</span>count</span><br><span class="line"><span class="bullet">	-</span> 当validate<span class="emphasis">_password_</span>policy设置为MEDIUM或者STRONG时，密码中至少拥有的特殊字符的个数，默认1最小是0</span><br></pre></td></tr></table></figure>
+
+<h6 id="3）密码复杂度策略具体设置"><a href="#3）密码复杂度策略具体设置" class="headerlink" title="3）密码复杂度策略具体设置"></a>3）密码复杂度策略具体设置</h6><p><code>set global validate_password_length = 16;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 设置密码长度至少10位</span><br><span class="line">mysql&gt; set global validate_password_length = 16;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show variables like &#x27;validate%&#x27;;                                                                                   </span><br><span class="line">+--------------------------------------+--------+</span><br><span class="line">| Variable_name                        | Value  |</span><br><span class="line">+--------------------------------------+--------+</span><br><span class="line">| validate_password_check_user_name    | ON     |</span><br><span class="line">| validate_password_dictionary_file    |        |</span><br><span class="line">| validate_password_length             | 16     |</span><br><span class="line">| validate_password_mixed_case_count   | 1      |</span><br><span class="line">| validate_password_number_count       | 1      |</span><br><span class="line">| validate_password_policy             | MEDIUM |</span><br><span class="line">| validate_password_special_char_count | 1      |</span><br><span class="line">+--------------------------------------+--------+</span><br><span class="line">7 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>!!! note “若想永久生效，建议将以下参数写入配置文件”</p>
+<pre><code><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">plugin-load = validate_password.dll</span><br><span class="line">validate_password_length = 16</span><br><span class="line">validate_password_policy = 1</span><br><span class="line">validate-password = FORCE_PLUS_PERMANENT</span><br></pre></td></tr></table></figure>
+</code></pre>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212220000175.png" alt="image-20221212220000175"></p>
+<h4 id="核查密码生命周期"><a href="#核查密码生命周期" class="headerlink" title="核查密码生命周期"></a>核查密码生命周期</h4><h5 id="核查方式-1"><a href="#核查方式-1" class="headerlink" title="核查方式"></a>核查方式</h5><p>查看密码有效期：<code>SHOW VARIABLES LIKE &#39;default_password_lifetime&#39;; </code></p>
+<blockquote>
+<p><code>default_password_lifetime</code> 设置为 <code>0</code> ，即表示密码永不过期。</p>
+</blockquote>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212211606097.png" alt="image-20221212211606097"></p>
+<h5 id="加固方式-1"><a href="#加固方式-1" class="headerlink" title="加固方式"></a>加固方式</h5><ul>
+<li><p>一次性设置全局过期策略：<code>SET GLOBAL default_password_lifetime = 90;</code></p>
+</li>
+<li><p>或者直接写入配置文件并重启以永久生效</p>
+  <figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 写入配置文件使得重启生效</span></span><br><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">default_password_lifetime</span> = <span class="number">90</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>设置全局过期策略后，需要把配置写入配置文件 <code>mysql.cn</code>中并重启才能永久生效，否则 <code>MySQL</code> 重启后恢复默认值。</p>
+</blockquote>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212211840616.png" alt="image-20221212211840616"></p>
+<h4 id="核查是否限制非法登录次数"><a href="#核查是否限制非法登录次数" class="headerlink" title="核查是否限制非法登录次数"></a>核查是否限制非法登录次数</h4><p>MySQL&gt;&#x3D; 5.7.17 以后提供了 Connection-Control 插件，用来控制客户端在登录操作连续失败一定次数后的响应的延迟。</p>
+<h5 id="核查方式-2"><a href="#核查方式-2" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li><code>show variables like &#39;%connection_control%&#39;;</code><ul>
+<li>为空，则未启用插件，需要安装再进行加固。</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212220652885.png" alt="image-20221212220652885"></p>
+<h5 id="加固方式-2"><a href="#加固方式-2" class="headerlink" title="加固方式"></a>加固方式</h5><h6 id="1）安装-Connection-Control-插件"><a href="#1）安装-Connection-Control-插件" class="headerlink" title="1）安装 Connection-Control 插件"></a>1）安装 Connection-Control 插件</h6><ul>
+<li>CONNECTION_CONTROL：用来控制登录失败的次数及延迟响应时间。</li>
+<li>CONNECTION_CONTROL_FAILED_LOGIN_ATTEMPTS：该表将登录失败的操作记录至IS库中。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 每个平台的文件名后缀都不同 对于 Unix 和类 Unix 系统，为.so，对于 Windows 为.dll</span><br><span class="line">install plugin CONNECTION_CONTROL soname &#x27;connection_control.so&#x27;;</span><br><span class="line">install plugin CONNECTION_CONTROL_FAILED_LOGIN_ATTEMPTS soname &#x27;connection_control.so&#x27;;</span><br><span class="line">	# 开启的选项</span><br><span class="line">	# connection_control_failed_connections_threshold	3</span><br><span class="line">	# connection_control_max_connection_delay	2147483647</span><br><span class="line">	# connection_control_min_connection_delay	1000</span><br><span class="line">	</span><br></pre></td></tr></table></figure>
+
+<h6 id="2）参数解释"><a href="#2）参数解释" class="headerlink" title="2）参数解释"></a>2）参数解释</h6><ul>
+<li><p>connection_control_failed_connections_threshold</p>
+<ul>
+<li>失败尝试的次数，默认为3，表示当连接失败3次后启用连接控制，0表示不开启。</li>
+</ul>
+</li>
+<li><p>connection_control_max_connection_delay</p>
+<ul>
+<li>响应延迟的最大时间，默认约25天</li>
+</ul>
+</li>
+<li><p>connection_control_min_connection_delay</p>
+<ul>
+<li>响应延迟的最小时间，默认1000微秒，1秒</li>
+</ul>
+</li>
+</ul>
+<h6 id="3）具体配置"><a href="#3）具体配置" class="headerlink" title="3）具体配置"></a>3）具体配置</h6><p>方式一：修改配置文件 <code>my.cnf</code> or <code>my.ini</code>（永久生效）</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/my.cnf</span></span><br><span class="line"><span class="comment"># 添加下面两项</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.登陆失败次数限制</span></span><br><span class="line"><span class="attr">connection-control-failed-connections-threshold</span>=<span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.限制重试时间，此处为毫秒，注意按需求换算</span></span><br><span class="line"><span class="attr">connection-control-min-connection-delay</span>=<span class="number">900000</span> </span><br></pre></td></tr></table></figure>
+
+<p>方式二：设置全局变量（重启失效）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 登陆失败次数限制</span><br><span class="line">SET GLOBAL connection_control_failed_connections_threshold = 5;</span><br><span class="line"></span><br><span class="line"># 限制重试时间，此处为毫秒，注意按需求换算</span><br><span class="line">SET GLOBAL connection_control_min_connection_delay = 900000;</span><br><span class="line"></span><br><span class="line"># 配置完成，再次查看参数：</span><br><span class="line">show variables like &#x27;%connection_control%&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212222219404.png" alt="image-20221212222219404"></p>
+<h4 id="核查超时功能"><a href="#核查超时功能" class="headerlink" title="核查超时功能"></a>核查超时功能</h4><blockquote>
+<p>从官方文档上来看 wait_timeout 和 interactive_timeout 都是指不活跃的连接超时时间，连接线程启动的时候wait_timeout会根据是交互模式还是非交互模式被设置为这两个值中的一个。</p>
+<p>如果我们运行mysql -uroot -p命令登陆到mysql，wait_timeout就会被设置为interactive_timeout的值。<br>如果我们在wait_timeout时间内没有进行任何操作，那么再次操作的时候就会提示超时，这时 mysql client会重新连接。</p>
+</blockquote>
+<p>MySQL连接超时退出主要看三个参数：</p>
+<ul>
+<li><p>interactive_timeout</p>
+<ul>
+<li>服务器关闭交互式连接前等待活动的秒数。</li>
+</ul>
+</li>
+<li><p>wait_timeout</p>
+<ul>
+<li>服务器关闭非交互连接之前等待活动的秒数。</li>
+</ul>
+</li>
+<li><p>两者生效取决于</p>
+<ul>
+<li>客户端是交互或者非交互的连接。</li>
+<li>在交互模式下，interactive_timeout才生效；非交互模式下，wait_timeout生效。</li>
+</ul>
+</li>
+<li><p>connect_timeout &#x3D;10</p>
+<ul>
+<li>指的是连接过程中握手的超时时间(s)</li>
+</ul>
+</li>
+</ul>
+<h5 id="核查方式-3"><a href="#核查方式-3" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li><code>show global variables like &#39;%timeout%&#39;;</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212223356808.png" alt="image-20221212223356808"></p>
+<h5 id="加固方式-3"><a href="#加固方式-3" class="headerlink" title="加固方式"></a>加固方式</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 设置全局变量 `connect_timeout` 为 `10s`</span><br><span class="line">msyql&gt; set global connect_timeout=10;</span><br><span class="line"></span><br><span class="line"># 设置 MySQL Server 超时时间（以秒为单位）</span><br><span class="line"># 默认是28800，即8小时。</span><br><span class="line">msyql&gt; set global wait_timeout=28800;</span><br><span class="line">msyql&gt; set global interactive_timeout=28800;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212225225553.png" alt="image-20221212225225553"></p>
+<h4 id="核查是否开启远程加密通信"><a href="#核查是否开启远程加密通信" class="headerlink" title="核查是否开启远程加密通信"></a>核查是否开启远程加密通信</h4><h5 id="核查方式-4"><a href="#核查方式-4" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li><code>show variables like &#39;have_openssl&#39;;</code></li>
+<li><code>SHOW VARIABLES LIKE &#39;%ssl%&#39;;</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212203451814.png" alt="image-20221212203451814"></p>
+<blockquote>
+<p>MySQL8.0.12默认开启加密通信</p>
+<p>禁用加密通信：在配置文件 <code>my.cnf</code> 中的 <code>[mysqld]</code> 下加入<code>skip_ssl</code>，重启MySQL。</p>
+</blockquote>
+<h5 id="加固方式-4"><a href="#加固方式-4" class="headerlink" title="加固方式"></a>加固方式</h5><p>加固通信传输要求项：启用 <code>ssl</code> 加密通信，<em><strong>注释</strong></em> 配置文件 <code>my.cnf</code> 中的 <code>[mysqld]</code> 下的<code>skip_ssl</code>，并在下面追加 <code>ssl</code>，重启MySQL。</p>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212204608383.png" alt="image-20221212204608383"></p>
+<h3 id="8-1-4-2-访问控制"><a href="#8-1-4-2-访问控制" class="headerlink" title="8.1.4.2 访问控制"></a>8.1.4.2 访问控制</h3><p>本项要求包括：</p>
+<p>a) 应对登录的用户分配账户和权限；</p>
+<ul>
+<li>核查是否对登录的用户分配账户和权限</li>
+</ul>
+<p>b) 应重命名或删除默认账户，修改默认账户的默认口令；</p>
+<ul>
+<li>核查是否重命名账号</li>
+<li>核查是否修改默认口令</li>
+</ul>
+<p>c) 应及时删除或停用多余的、过期的账户，避免共享账户的存在；</p>
+<ul>
+<li>核查是否存在多余的、过期的账号</li>
+</ul>
+<p>d) 应授予管理用户所需的最小权限，实现管理用户的权限分离；</p>
+<p>e) 应由授权主体配置访问控制策略，访问控制策略规定主体对客体的访问规则；</p>
+<p>f) 访问控制的粒度应达到主体为用户级或进程级，客体为文件、数据库表级；</p>
+<p>g) 应对重要主体和客体设置安全标记，并控制主体对有安全标记信息资源的访问。</p>
+<h4 id="核查是否对登录的用户分配账户和权限"><a href="#核查是否对登录的用户分配账户和权限" class="headerlink" title="核查是否对登录的用户分配账户和权限"></a>核查是否对登录的用户分配账户和权限</h4><h5 id="核查方式-5"><a href="#核查方式-5" class="headerlink" title="核查方式"></a>核查方式</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># MySQL 中所有使用者的权限是记录在 `mysql` 这个数据库的 `user` 资料表中:</span></span><br><span class="line">SELECT * FROM mysql.user;</span><br><span class="line"><span class="comment"># 你可以看到所有的使用者权限</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 有关db的数据是记录在Db(大小写要注意)这个数据表中</span></span><br><span class="line">SELECT * FROM mysql.Db;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者你可以用条件查询找出你要的答案</span></span><br><span class="line">SELECT * FROM mysql.Db WHERE Db=<span class="string">&#x27;$&#123;dbname&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213000354563.png" alt="image-20221213000354563"></p>
+<h5 id="加固方式-5"><a href="#加固方式-5" class="headerlink" title="加固方式"></a>加固方式</h5><ul>
+<li><p>禁止root账号远程登录</p>
+</li>
+<li><p>禁止程序使用root账号</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 设置允许任何IP登录</span><br><span class="line">use mysql;</span><br><span class="line">update user set host=&#x27;localhost&#x27; where user=&#x27;root&#x27; and host=&#x27;%&#x27;;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213000524679.png" alt="image-20221213000524679"></p>
+<h4 id="核查是否重命名账号"><a href="#核查是否重命名账号" class="headerlink" title="核查是否重命名账号"></a>核查是否重命名账号</h4><h5 id="核查方式-6"><a href="#核查方式-6" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li><code>SELECT user, host FROM mysql.user</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212234533536.png" alt="image-20221212234533536"></p>
+<h5 id="加固方式-6"><a href="#加固方式-6" class="headerlink" title="加固方式"></a>加固方式</h5><ul>
+<li><p>修改root账号名</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">use mysql;</span><br><span class="line">update user set user=&#x27;haiyi_root&#x27; where user=&#x27;root&#x27; and host=&#x27;localhost&#x27;;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213000732709.png" alt="image-20221213000732709"></p>
+<h4 id="核查是否修改默认口令"><a href="#核查是否修改默认口令" class="headerlink" title="核查是否修改默认口令"></a>核查是否修改默认口令</h4><h5 id="核查方式-7"><a href="#核查方式-7" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li>访谈</li>
+<li>查询空口令账号<ul>
+<li><code>select * from mysql.user where length(authentication_string)=0 or authentication_string is null;</code></li>
+</ul>
+</li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213162949400.png" alt="image-20221213162949400"></p>
+<h5 id="加固方式-7"><a href="#加固方式-7" class="headerlink" title="加固方式"></a>加固方式</h5><ul>
+<li>修改默认口令、空口令(谨慎操作)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; USE mysql;</span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; UPDATE user SET authentication_string=&quot;H!q@31UI!&quot; WHERE user=&quot;root&quot;;</span><br><span class="line">Query OK, 1 row affected (0.39 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; FLUSH privileges;  # 刷新保存</span><br><span class="line">Query OK, 0 rows affected (0.13 sec)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="核查是否存在多余的、过期的账号"><a href="#核查是否存在多余的、过期的账号" class="headerlink" title="核查是否存在多余的、过期的账号"></a>核查是否存在多余的、过期的账号</h4><h5 id="核查方式-8"><a href="#核查方式-8" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li><code>SELECT user, host FROM mysql.user</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212235526618.png" alt="image-20221212235526618"></p>
+<h5 id="加固方式-8"><a href="#加固方式-8" class="headerlink" title="加固方式"></a>加固方式</h5><ul>
+<li><p>删除多余的、过期的账号，如：test, dev等测试账号。</p>
+</li>
+<li><p>删除 <code>test</code>：<code>drop user &#39;test&#39;@&#39;localhost&#39;;</code></p>
+</li>
+<li><p>删除 <code>dev</code> ：<code>drop user &#39;dev&#39;@&#39;localhost&#39;;</code></p>
+</li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221212235744110.png" alt="image-20221212235744110"></p>
+<h3 id="8-1-4-3-安全审计"><a href="#8-1-4-3-安全审计" class="headerlink" title="8.1.4.3 安全审计"></a>8.1.4.3 安全审计</h3><p>本项要求包括：</p>
+<p>a) 应启用安全审计功能，审计覆盖到每个用户，对重要的用户行为和重要安全事件进行审计；</p>
+<ul>
+<li>核查是否启用日志记录</li>
+</ul>
+<p>b) 审计记录应包括事件的日期和时间、用户、事件类型、事件是否成功及其他与审计相关的信息；</p>
+<p>c) 应对审计记录进行保护，定期备份，避免受到未预期的删除、修改或覆盖等；</p>
+<ul>
+<li>核查日志保存时间</li>
+<li>核查日志文件权限信息</li>
+</ul>
+<p>d) 应对审计进程进行保护，防止未经授权的中断。</p>
+<h4 id="核查是否启用日志记录"><a href="#核查是否启用日志记录" class="headerlink" title="核查是否启用日志记录"></a>核查是否启用日志记录</h4><h5 id="核查方式-9"><a href="#核查方式-9" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li>查询所有日志相关信息：<code>show variables like &#39;%log%&#39;;</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213094849716.png" alt="image-20221213094849716"></p>
+<h5 id="加固方式-9"><a href="#加固方式-9" class="headerlink" title="加固方式"></a>加固方式</h5><h6 id="1-开启常规日志审计功能"><a href="#1-开启常规日志审计功能" class="headerlink" title="1) 开启常规日志审计功能"></a>1) 开启常规日志审计功能</h6><ul>
+<li><code>set global general_log=on;</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213095710756.png" alt="image-20221213095710756"></p>
+<h6 id="2-开启错误日志审计功能"><a href="#2-开启错误日志审计功能" class="headerlink" title="2) 开启错误日志审计功能"></a>2) 开启错误日志审计功能</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 错误日志包括数据库运行和停止过程中的一系列活动信息，有助于分析数据库运行过程中的一些异常活动</span></span><br><span class="line"><span class="comment"># 一般情况下需要开启错误日志记录功能，使用如下命令查询：</span></span><br><span class="line"></span><br><span class="line">SHOW variables LIKE <span class="string">&#x27;log_error&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保返回结果为非空，如果为空，需要在mysql数据库配置文件中增加相关配置</span></span><br><span class="line"><span class="comment"># &gt;&gt;&gt; log_error	D:\phpstudy_pro\Extensions\MySQL8.0.12\data.err</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-确保日志存放在非系统区域"><a href="#3-确保日志存放在非系统区域" class="headerlink" title="3) 确保日志存放在非系统区域"></a>3) 确保日志存放在非系统区域</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 日志文件随着数据库的运行会不断增加，如果存放在系统区域，则会影响系统的正常运行，使用如下命令进行查询：</span></span><br><span class="line"></span><br><span class="line">SELECT @@global.log_bin_basename;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保返回结果不是如下路径：/、/var、/usr</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="4-关闭原始日志功能"><a href="#4-关闭原始日志功能" class="headerlink" title="4) 关闭原始日志功能"></a>4) 关闭原始日志功能</h6><blockquote>
+<p>当 <code>log-raw</code> 记录启用时，有权访问日志文件的人可能会看到纯文本密码。</p>
+<p>编辑 MySQL 配置文件 <code>/etc/my.cnf</code> ，删除 <code>log-raw</code> 参数，并重启 <code>mysql</code> 服务</p>
+<blockquote>
+<p>上述与下面的操作好像有点冲突，以实际情况为准。待探索……</p>
+</blockquote>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 原始日志选项会决定一些敏感信息是否会被明文写进日志中，例如查询日志、慢查询日志、二进制日志</span></span><br><span class="line"><span class="comment"># 确保数据库配置文件中存在如下配置项：</span></span><br><span class="line"></span><br><span class="line">log-raw = OFF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如无，配置并重启</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="核查日志保存时间"><a href="#核查日志保存时间" class="headerlink" title="核查日志保存时间"></a>核查日志保存时间</h4><blockquote>
+<p>set global expire_logs_days&#x3D;365</p>
+<p>&gt; 3683 - The option expire_logs_days and binlog_expire_logs_seconds cannot be used together. Please use binlog_expire_logs_seconds to set the expire time (expire_logs_days is deprecated)</p>
+</blockquote>
+<h5 id="核查方式-10"><a href="#核查方式-10" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li>查看日志时间（已废弃）：<code>show variables like &#39;%logs_days%&#39;;</code></li>
+<li>查看日志时间：<code>show variables like &#39;binlog_expire_logs_seconds&#39;;</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213100143478.png" alt="image-20221213100143478"></p>
+<h5 id="加固方式-10"><a href="#加固方式-10" class="headerlink" title="加固方式"></a>加固方式</h5><ul>
+<li><code>set global binlog_expire_logs_seconds=2596096;</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213100323167.png" alt="image-20221213100323167"></p>
+<h4 id="核查日志文件权限信息"><a href="#核查日志文件权限信息" class="headerlink" title="核查日志文件权限信息"></a>核查日志文件权限信息</h4><h5 id="1-控制二进制日志文件的权限"><a href="#1-控制二进制日志文件的权限" class="headerlink" title="1) 控制二进制日志文件的权限"></a>1) 控制二进制日志文件的权限</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mysql的运行会产生很多日志，例如二进制日志、错误日志、慢查询日志等等，Mysql命令行下执行如下命令：</span></span><br><span class="line">show variables like <span class="string">&#x27;log_bin_basename&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在终端命令行执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> &lt;log_bin_basename&gt;.*</span><br><span class="line"><span class="comment"># 对于发现的每一个文件，执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> -l &lt;log_bin_basename.nnnnn&gt; | egrep <span class="string">&quot;^-[r|w]&#123;2&#125;-[r|w]&#123;2&#125;----\s*.*$&quot;</span> </span><br><span class="line"><span class="comment"># 根据输出确认日志文件的权限设置是否存在问题。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对于每个日志文件，修改其权限和属组如下：</span></span><br><span class="line"><span class="built_in">chmod</span> 660 &lt;<span class="built_in">log</span> file&gt;</span><br><span class="line"><span class="built_in">chown</span> mysql:mysql &lt;<span class="built_in">log</span> file&gt; </span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="2-控制数据目录、基准目录的访问权限"><a href="#2-控制数据目录、基准目录的访问权限" class="headerlink" title="2) 控制数据目录、基准目录的访问权限"></a>2) 控制数据目录、基准目录的访问权限</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 数据目录是mysql数据库存放的位置，在mysql命令行界面下执行如下命令：</span></span><br><span class="line">show variables <span class="built_in">where</span> variable_name = <span class="string">&#x27;datadir&#x27;</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment"># 在终端命令行下执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> -l &lt;datadir&gt;/.. | egrep <span class="string">&quot;^d[r|w|x]&#123;3&#125;------\s*.\s*mysql\s*mysql\s*\d*.*mysql&quot;</span></span><br><span class="line"><span class="comment"># 其中&lt;datadir&gt;是第一条命令的执行结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果存在问题，linux环境下在终端执行如下命令进行加固：</span></span><br><span class="line"><span class="built_in">chmod</span> 700 &lt;datadir&gt; <span class="comment">#仅MySQL数据库用户有读写权限</span></span><br><span class="line"><span class="built_in">chown</span> mysql:mysql &lt;datadir&gt; </span><br><span class="line"><span class="comment"># 同理控制基准目录权限 &lt;basedir&gt;，仅DBA和数据库用户可访问</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="3-控制错误日志文件的权限"><a href="#3-控制错误日志文件的权限" class="headerlink" title="3) 控制错误日志文件的权限"></a>3) 控制错误日志文件的权限</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 控制错误日志文件的权限</span></span><br><span class="line"><span class="comment"># Mysql命令行下执行如下命令：</span></span><br><span class="line">show variables like <span class="string">&#x27;log_error&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在终端命令行执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> &lt;log_error&gt;.*</span><br><span class="line"><span class="comment"># 对于发现的每一个文件，执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> -l &lt;log_error&gt; | egrep <span class="string">&quot;^-[r|w]&#123;2&#125;-[r|w]&#123;2&#125;----\s*.*$&quot;</span> </span><br><span class="line"><span class="comment"># 根据输出确认日志文件的权限设置是否存在问题。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对于每个日志文件，修改其权限和属组如下：</span></span><br><span class="line"><span class="built_in">chmod</span> 660 &lt;<span class="built_in">log</span> file&gt;</span><br><span class="line"><span class="built_in">chown</span> mysql:mysql &lt;<span class="built_in">log</span> file&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="4-控制慢查询日志文件的权限"><a href="#4-控制慢查询日志文件的权限" class="headerlink" title="4) 控制慢查询日志文件的权限"></a>4) 控制慢查询日志文件的权限</h5><p>MySQL的慢查询日志是MySQL提供的一种日志记录，它用来记录MySQL中查询时间超过（大于）设置阈值（long_query_time）的语句，记录到慢查询日志中。</p>
+<p><strong>默认情况下，MySQL没有开启慢查询日志</strong>。需要手动打开，如果不是调优需要的话，不建议开启，因为开启会带来一定的性能影响，慢查询日志支持将日志记录写入文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 开启慢查询日志，只对当前数据库生效，并且重启数据库后失效</span><br><span class="line">set global slow_query_log = 1;</span><br></pre></td></tr></table></figure>
+
+<p><strong>慢查询日志文件权限控制查看与设置：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Mysql命令行下执行如下命令：</span></span><br><span class="line">show variables like <span class="string">&#x27;slow_query_log%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在终端命令行执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> &lt;slow_query_log_file&gt;.*</span><br><span class="line"><span class="comment"># 对于发现的每一个文件，执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> -l &lt;slow_query_log_file&gt; | egrep <span class="string">&quot;^-[r|w]&#123;2&#125;-[r|w]&#123;2&#125;----\s*.*$&quot;</span> </span><br><span class="line"><span class="comment"># 根据输出确认日志文件的权限设置是否存在问题。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对于每个日志文件，修改其权限和属组如下：</span></span><br><span class="line"><span class="built_in">chmod</span> 660 &lt;<span class="built_in">log</span> file&gt;</span><br><span class="line"><span class="built_in">chown</span> mysql:mysql &lt;<span class="built_in">log</span> file&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="5-控制通用日志文件的权限"><a href="#5-控制通用日志文件的权限" class="headerlink" title="5) 控制通用日志文件的权限"></a>5) 控制通用日志文件的权限</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Mysql命令行下执行如下命令：</span></span><br><span class="line">show variables like <span class="string">&#x27;general_log_file&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在终端命令行执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> &lt;general_log_file&gt;.*</span><br><span class="line"><span class="comment"># 对于发现的每一个文件，执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> -l &lt;general_log_file&gt; | egrep <span class="string">&quot;^-[r|w]&#123;2&#125;-[r|w]&#123;2&#125;----\s*.*$&quot;</span> </span><br><span class="line"><span class="comment"># 根据输出确认日志文件的权限设置是否存在问题。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对于每个日志文件，修改其权限和属组如下：</span></span><br><span class="line"><span class="built_in">chmod</span> 660 &lt;<span class="built_in">log</span> file&gt;</span><br><span class="line"><span class="built_in">chown</span> mysql:mysql &lt;<span class="built_in">log</span> file&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="6-控制审计日志文件的权限"><a href="#6-控制审计日志文件的权限" class="headerlink" title="6) 控制审计日志文件的权限"></a>6) 控制审计日志文件的权限</h5><blockquote>
+<h5 id="Naming-Conventions-for-Audit-Log-Files"><a href="#Naming-Conventions-for-Audit-Log-Files" class="headerlink" title="Naming Conventions for Audit Log Files"></a>Naming Conventions for Audit Log Files</h5><p>To configure the audit log file name, set the <a href="https://dev.mysql.com/doc/refman/8.0/en/audit-log-reference.html#sysvar_audit_log_file"><code>audit_log_file</code></a> system variable at server startup. The default name is <code>audit.log</code> in the server data directory. For best security, write the audit log to a directory accessible only to the MySQL server and to users with a legitimate reason to view the log.</p>
+<p>[MySQL :: MySQL 8.0 Reference Manual :: 6.4.5.5 Configuring Audit Logging Characteristics](<a href="https://dev.mysql.com/doc/refman/8.0/en/audit-log-logging-configuration.html#:~:text=To">https://dev.mysql.com/doc/refman/8.0/en/audit-log-logging-configuration.html#:~:text=To</a> configure the audit log file name%2C set,with a legitimate reason to view the log.)</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Mysql命令行下执行如下命令：</span></span><br><span class="line">show global variables <span class="built_in">where</span> variable_name =  <span class="string">&#x27;audit_log_file&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在终端执行如下命令：</span></span><br><span class="line"><span class="built_in">ls</span> -l &lt;audit_log_file&gt; | egrep <span class="string">&quot;^-rw[-x]rw[-x][-r][-w][-x][ \t]*[0-9][ \t]*mysql[\t]*mysql.*$&quot;</span></span><br><span class="line"><span class="comment"># 根据输出确认日志文件的权限设置是否存在问题。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对于每个日志文件，修改其权限和属组如下：</span></span><br><span class="line"><span class="built_in">chmod</span> 660 &lt;audit_log_file&gt;</span><br><span class="line"><span class="built_in">chown</span> mysql:mysql &lt;audit_log_file&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="8-1-4-4-入侵防范"><a href="#8-1-4-4-入侵防范" class="headerlink" title="8.1.4.4 入侵防范"></a><strong>8.1.4.4 入侵防范</strong></h3><p>本项要求包括：</p>
+<p>a) 应遵循最小安装的原则，仅安装需要的组件和应用程序；</p>
+<ul>
+<li>核查测试数据库以及空账号</li>
+</ul>
+<p>b) 应关闭不需要的系统服务、默认共享和高危端口；</p>
+<p>c) 应通过设定终端接入方式或网络地址范围对通过网络进行管理的管理终端进行限制；</p>
+<ul>
+<li>核查是否限制源IP访问</li>
+</ul>
+<p>d) 应提供数据有效性检验功能，保证通过人机接口输入或通过通信接口输入的内容符合系统设定要求；</p>
+<p>e) 应能发现可能存在的已知漏洞，并在经过充分测试评估后，及时修补漏洞；</p>
+<ul>
+<li><del>核查是否及时打补丁</del></li>
+</ul>
+<p>f) 应能够检测到对重要节点进行入侵的行为，并在发生严重入侵事件时提供报警。</p>
+<h4 id="核查测试数据库以及空账号"><a href="#核查测试数据库以及空账号" class="headerlink" title="核查测试数据库以及空账号"></a>核查测试数据库以及空账号</h4><h5 id="核查方式-11"><a href="#核查方式-11" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li>查询数据库：<code>show DATABASES;</code></li>
+<li>使用该命令查询是否存在空账号：<code>SELECT user,host FROM mysql.user WHERE user = &#39;&#39;; </code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213101248151.png" alt="查询空用户名用户"></p>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213101419440.png" alt="查询数据库"></p>
+<h5 id="加固方式-11"><a href="#加固方式-11" class="headerlink" title="加固方式"></a>加固方式</h5><p>删除测试数据库以及空账号</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除冗余数据库, 如 test</span></span><br><span class="line">drop database <span class="keyword">if</span> exists <span class="variable">$&#123;dbname&#125;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除无用用户（没有用户名的用户）</span></span><br><span class="line">drop user <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213101612486.png" alt="image-20221213101612486"></p>
+<h4 id="核查是否限制源IP访问"><a href="#核查是否限制源IP访问" class="headerlink" title="核查是否限制源IP访问"></a>核查是否限制源IP访问</h4><blockquote>
+<p>默认需要所有账号进行限制，不能存在 “<code>%</code> “ 任意源 <code>IP</code> 设置。</p>
+</blockquote>
+<h5 id="核查方式-12"><a href="#核查方式-12" class="headerlink" title="核查方式"></a>核查方式</h5><ul>
+<li><code>SELECT user, host FROM mysql.user</code></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213000354563.png" alt="image-20221213000354563"></p>
+<h5 id="加固方式-12"><a href="#加固方式-12" class="headerlink" title="加固方式"></a>加固方式</h5><ul>
+<li><p>设置 <code>$&#123;账号&#125;</code> 指定源IP登录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># update user set host=&#x27;$&#123;IP&#125;&#x27; where user=&#x27;root&#x27; and host=&#x27;%&#x27;;</span><br><span class="line"># 设置 root 用户只允许本地登录</span><br><span class="line">use mysql;</span><br><span class="line">update user set host=&#x27;localhost&#x27; where user=&#x27;root&#x27; and host=&#x27;%&#x27;;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img data-src="/../images/harden-mysql/knowledge-baseimage-20221213000524679.png" alt="image-20221213000524679"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><h3 id="安全标准"><a href="#安全标准" class="headerlink" title="安全标准"></a>安全标准</h3><ul>
+<li><a href="http://c.gb688.cn/bzgk/gb/showGb?type=online&hcno=BAFB47E8874764186BDB7865E8344DAF"><strong>《信息安全技术  网络安全等级保护基本要求》</strong></a></li>
+</ul>
+<h3 id="产品文档"><a href="#产品文档" class="headerlink" title="产品文档"></a>产品文档</h3><ul>
+<li><a href="https://dev.mysql.com/doc/">MySQL :: MySQL Documentation</a></li>
+</ul>
+<h3 id="博客文章"><a href="#博客文章" class="headerlink" title="博客文章"></a>博客文章</h3><ul>
+<li><a href="https://blog.csdn.net/Lee_Natuo/article/details/83995418">(100条消息) MySQL数据库安全加固方法_Lee_Natuo的博客-CSDN博客</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/2115190">MySQL8.0正确修改密码的姿势- 腾讯云开发者社区-腾讯云 (tencent.com)</a></li>
+<li><a href="https://blog.csdn.net/liliuqing/article/details/88723409">(100条消息) mysql8.0.15用户root登录开启远程访问权限_藤叶香来的博客-CSDN博客</a></li>
+<li><a href="https://blog.csdn.net/qq_40147863/article/details/86485439">(100条消息) MySQL 8.0 版本授权 root 远程连接，修改权限，更改加密方式_肖朋伟的博客-CSDN博客_mysql8.0更改root 权限</a></li>
+<li>[(100条消息) Linux系统中，Mysql 8的安装、修改root密码及允许root远程登录_时栈的博客-CSDN博客_mysql8允许root远程连接](<a href="https://blog.csdn.net/qq_44667259/article/details/123228144#:~:text=%E4%B8%80%E3%80%81CentOS%E7%B3%BB%E7%BB%9F%E4%B8%ADMysql">https://blog.csdn.net/qq_44667259/article/details/123228144#:~:text=一、CentOS系统中Mysql</a> 8的安装 1 1.安装 sudo yum install mysql-,user from user where user%3D’root’%3B %2F%2F 查看 )</li>
+<li><a href="https://blog.csdn.net/weixin_35067439/article/details/113159734">(100条消息) mysql8.0 删除用户_MYSQL8 创建、删除用户和授权、消权操作_番茄君小弟的博客-CSDN博客</a></li>
+<li><a href="https://blog.csdn.net/qq_23859799/article/details/85862821">(100条消息) mysql8.0数据库添加用户和授权_liuzh2443的博客-CSDN博客_mysql8用户授权</a></li>
+<li><a href="https://blog.csdn.net/weixin_27017211/article/details/113113357">(100条消息) mysql8.0 新增用户_MySQL8.0添加创建用户、删除用户与授权(create user，delete user)_故事档案局的博客-CSDN博客</a></li>
+<li><a href="https://blog.csdn.net/weixin_35750747/article/details/113155504">(100条消息) mysql connect 超时_MySQL修改connect_timeout（连接超时）全局变量_半清斋的博客-CSDN博客</a></li>
+<li><a href="https://www.jianshu.com/p/d14377a57d3a">MySQL修改connect_timeout（连接超时）全局变量 - 简书 (jianshu.com)</a></li>
+<li>[(100条消息) mysql 5.7 连接超时参数设置_大龄奋斗程序猿的博客-CSDN博客_mysql 5.7配置超时](<a href="https://blog.csdn.net/aichogn/article/details/118113114#:~:text=connect_timeout%E6%8C%87%E7%9A%84%E6%98%AF%E8%BF%9E%E6%8E%A5%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%8F%A1%E6%89%8B%E7%9A%84%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4%2C%E5%9C%A8">https://blog.csdn.net/aichogn/article/details/118113114#:~:text=connect_timeout指的是连接过程中握手的超时时间%2C在</a> 5.0.52 以后默认为,10 秒，之前版本默认是 5 秒。)</li>
+<li><a href="https://blog.csdn.net/weixin_42586723/article/details/121057330">(100条消息) MySQL学习之三级等保整改_Charles Yan的博客-CSDN博客_mysql 等保</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1173009">设置Mysql的连接超时参数wait_timeout、interactive_timeout - 腾讯云开发者社区-腾讯云 (tencent.com)</a></li>
+<li><a href="https://blog.csdn.net/xtaypyvi123456/article/details/125274821">(100条消息) Linux MySQL5.7等保问题整改：数据库未配置登录失败处理功能，未配置非法登录策略和登录超时自动退出功能。_可爱的小张666的博客-CSDN博客_mysql超时自动退出功能。</a></li>
+<li><a href="https://blog.csdn.net/weixin_33622153/article/details/115906282">(100条消息) mysql多次登录失败控制,Mysql登录失败多次锁定配置_Luna Li的博客-CSDN博客</a></li>
+<li><a href="https://www.cnblogs.com/windysai/p/15996858.html">mysql密码策略和登录失败处理 - windysai - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://blog.csdn.net/weixin_39762666/article/details/113627025">(100条消息) mysql 修改登录失败处理功能参数_等保测评2.0：MySQL身份鉴别_weixin_39762666的博客-CSDN博客</a></li>
+<li><a href="https://www.cnblogs.com/mysqljs/p/14246130.html">MySQL密码复杂度与密码过期策略介绍 - MySQL技术 - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://www.jianshu.com/p/4ac3cb49d208">mysql查看密码自动过期时间 - 简书 (jianshu.com)</a></li>
+<li><a href="https://blog.csdn.net/andyguan01_2/article/details/88966432">(100条消息) MySQL关闭SSL的方法_andyguan01_2的博客-CSDN博客_mysql关闭openssl</a></li>
+<li><a href="https://www.jianshu.com/p/63ba67e133ce">配置MySQL支持ssl - 简书 (jianshu.com)</a></li>
+<li><a href="https://blog.csdn.net/qq_39572257/article/details/116227265">(100条消息) MySQL配置SSL加密连接_guan-qing的博客-CSDN博客_navicate ssl连接</a></li>
+<li><a href="https://blog.csdn.net/Lee_Natuo/article/details/84856377">(100条消息) MySQL数据库安全基线（加固方法）_Lee_Natuo的博客-CSDN博客</a></li>
+<li><a href="https://blog.csdn.net/weixin_36340926/article/details/113256066">(106条消息) mysql永久修改变量_MySQL 8.0 新特性之持久化全局变量的修改_实在知道什么的博客-CSDN博客</a></li>
+</ul>
+<h3 id="持久化全局变量"><a href="#持久化全局变量" class="headerlink" title="持久化全局变量"></a>持久化全局变量</h3><p>全局变量的持久化命令</p>
+<p>1） <code>SET PERSIST</code> </p>
+<ul>
+<li>修改内存值，将全局变量的修改持久化到配置文件中</li>
+<li>只需要 <code>SYSTEM_VARIABLES_ADMIN</code></li>
+</ul>
+<p>2）<code>SET PERSIST_ONLY</code></p>
+<ul>
+<li>只持久化全局变量，而不修改其内存值</li>
+<li>需要 <code>SYSTEM_VARIABLES_ADMIN</code> 和 <code>PERSIST_RO_VARIABLES_ADMIN</code> 权限</li>
+</ul>
+<p>3）<code>set persist max_connections=default;</code></p>
+<ul>
+<li><p>将全局变量持久化为默认值。注意，是默认值，而不是修改前的值。</p>
+</li>
+<li><p>这个命令同 <code>set global max_connections=default</code> 类似，都会将变量的值设置为默认值，只不过前者还会将默认值持久化到配置文件中。</p>
+</li>
+</ul>
+<p>清除持久化变量命令</p>
+<p>1）<code>RESET PERSIST</code> </p>
+<ul>
+<li>注意，其只是清空 <code>mysqld-auto.cnf</code> 和 <code>performance_schema.persisted_variables</code> 中的内容，对于已经修改了的变量的值，不会产生任何影响。</li>
+</ul>
+<h3 id="执行脚本"><a href="#执行脚本" class="headerlink" title="执行脚本"></a>执行脚本</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 核查是否开启加密通信</span><br><span class="line">show variables like &#x27;have_openssl&#x27;;</span><br><span class="line">SHOW VARIABLES LIKE &#x27;%ssl%&#x27;;</span><br><span class="line"></span><br><span class="line"># 设置为0，即表示密码永不过期</span><br><span class="line">SHOW VARIABLES LIKE &#x27;%default_password_lifetime%&#x27;; </span><br><span class="line">SET GLOBAL default_password_lifetime = 90;</span><br><span class="line"></span><br><span class="line">show variables like &#x27;validate%&#x27;; </span><br><span class="line">INSTALL PLUGIN validate_password SONAME &#x27;validate_password.dll&#x27;;</span><br><span class="line">set global validate_password_length = 16;</span><br><span class="line"></span><br><span class="line">show variables like &#x27;%connection_control%&#x27;;</span><br><span class="line">install plugin CONNECTION_CONTROL soname &#x27;connection_control.dll&#x27;;</span><br><span class="line">install plugin CONNECTION_CONTROL_FAILED_LOGIN_ATTEMPTS soname &#x27;connection_control.dll&#x27;;</span><br><span class="line">SET GLOBAL connection_control_failed_connections_threshold = 5;</span><br><span class="line">SET GLOBAL connection_control_min_connection_delay = 900000;</span><br><span class="line"></span><br><span class="line"># 查看已安装插件</span><br><span class="line">show plugins;</span><br><span class="line"></span><br><span class="line">show global variables like &#x27;%timeout%&#x27;;</span><br><span class="line">set global connect_timeout = 43200;</span><br><span class="line">set global wait_timeout=28800;</span><br><span class="line">set global interactive_timeout=28800;</span><br><span class="line"></span><br><span class="line">SELECT user, host FROM mysql.user;</span><br><span class="line">create user &#x27;dev&#x27;@&#x27;localhost&#x27; identified by &#x27;Haiyisec@123&#x27;; </span><br><span class="line">create user &#x27;test&#x27;@&#x27;localhost&#x27; identified by &#x27;Haiyisec@123&#x27;; </span><br><span class="line">drop user &#x27;test&#x27;@&#x27;localhost&#x27;;</span><br><span class="line">drop user &#x27;dev&#x27;@&#x27;localhost&#x27;;</span><br><span class="line"></span><br><span class="line"># 设置只允许root用户本地登录</span><br><span class="line">use mysql;</span><br><span class="line">update user set host=&#x27;localhost&#x27; where user=&#x27;root&#x27; and host=&#x27;%&#x27;;</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line"># 重命名账号</span><br><span class="line">update user set user=&#x27;haiyi_root&#x27; where user=&#x27;root&#x27; and host=&#x27;localhost&#x27;;</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line">SELECT user, host FROM mysql.user;</span><br><span class="line"></span><br><span class="line"># 实验时出现问题，更新后无法登录，谨慎操作</span><br><span class="line">UPDATE user SET authentication_string=&quot;123456&quot; WHERE user=&quot;root&quot;;</span><br><span class="line">FLUSH privileges;</span><br><span class="line"></span><br><span class="line">show variables like &#x27;%log%&#x27;;</span><br><span class="line">show variables like &#x27;slow_query_log%&#x27;;</span><br><span class="line">SHOW variables LIKE &#x27;log_error&#x27;;</span><br><span class="line">SELECT @@global.log_bin_basename;</span><br><span class="line">set global general_log=on;</span><br><span class="line"></span><br><span class="line">set global binlog_expire_logs_seconds=2596096;</span><br><span class="line">show variables like &#x27;binlog_expire_logs_seconds&#x27;;</span><br><span class="line">show variables where variable_name = &#x27;datadir&#x27;; </span><br><span class="line"></span><br><span class="line">SELECT user,host FROM mysql.user WHERE user = &#x27;&#x27;;</span><br><span class="line">CREATE DATABASE test;</span><br><span class="line">DROP DATABASE if EXISTS test;</span><br><span class="line">show DATABASES;</span><br><span class="line"></span><br><span class="line"># 查看指定用户权限</span><br><span class="line">SHOW GRANTS FOR &#x27;root&#x27;@&#x27;localhost&#x27;;</span><br><span class="line"># 查看所有用户详细信息</span><br><span class="line">SELECT * FROM mysql.user;</span><br><span class="line"># 查看所有数据库详细</span><br><span class="line">SELECT * FROM mysql.Db;</span><br><span class="line"></span><br><span class="line"># 如下语句查询是否有用户不需要密码即可登录：</span><br><span class="line">select * from mysql.user where length(authentication_string)=0 or authentication_string is null;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>基线核查与加固</category>
+      </categories>
+      <tags>
+        <tag>基线核查与加固</tag>
+        <tag>mysql</tag>
+        <tag>网络安全等级保护基本要求</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>反弹 Shell</title>
+    <url>/2023/09/02/oneline-shell/</url>
+    <content><![CDATA[<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://www.anquanke.com/post/id/87017">【技术分享】linux各种一句话反弹shell总结</a></li>
+<li><a href="https://xz.aliyun.com/t/9488">反弹Shell，看这一篇就够了</a></li>
+<li><a href="https://www.cnblogs.com/sdgfsdgfsd/p/13305556.html">常用的一句话反弹shell总结</a></li>
+<li><a href="https://www.wangan.com/wenda/2047">内网一句话反弹 shell 都有哪些</a></li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/04/11/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br><span class="line"></span><br><span class="line"><span class="comment"># custom</span></span><br><span class="line"><span class="comment"># alias hexod=&quot;cd /home/xxx/Documents/hexo_docs &amp;&amp; hexo clean &amp;&amp; hexo deploy&quot;</span></span><br><span class="line">$ hexod</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hello</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PyPI 镜像使用帮助</title>
+    <url>/2023/10/29/pypi/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a></p>
+<ul>
+<li><a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">PYPI</a></li>
+</ul>
+</blockquote>
+<p>PyPI 镜像在每次同步成功后间隔 5 分钟同步一次。</p>
+<h2 id="临时使用"><a href="#临时使用" class="headerlink" title="临时使用"></a>临时使用</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package</span><br></pre></td></tr></table></figure>
+
+<p>注意，<code>simple</code> 不能少, 是 <code>https</code> 而不是 <code>http</code></p>
+<span id="more"></span>
+
+<h2 id="设为默认"><a href="#设为默认" class="headerlink" title="设为默认"></a>设为默认</h2><p>升级 pip 到最新的版本 (&gt;&#x3D;10.0.0) 后进行配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python -m pip install --upgrade pip</span><br><span class="line">pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+
+<p>如果您到 pip 默认源的网络连接较差，临时使用本镜像站来升级 pip：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置多个镜像源"><a href="#配置多个镜像源" class="headerlink" title="配置多个镜像源"></a>配置多个镜像源</h2><p>如果您想配置多个镜像源平衡负载，可在已经替换 <code>index-url</code> 的情况下通过以下方式继续增加源站：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip config set global.extra-index-url &quot;&lt;url1&gt; &lt;url2&gt;...&quot;</span><br></pre></td></tr></table></figure>
+
+<p>请自行替换引号内的内容，源地址之间需要有空格</p>
+<p>可用的 <code>pypi</code> 源列表（校园网联合镜像站）：<a href="https://mirrors.cernet.edu.cn/list/pypi">https://mirrors.cernet.edu.cn/list/pypi</a></p>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>清华源</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 JDK</title>
+    <url>/2023/09/01/setup-jdk/</url>
+    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>jdk</tag>
+        <tag>pyspark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下部署 PySpark 开发环境</title>
+    <url>/2023/09/02/setup-pyspark/</url>
+    <content><![CDATA[<h1 id="一、下载预编译包"><a href="#一、下载预编译包" class="headerlink" title="一、下载预编译包"></a>一、下载预编译包</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载页面</span></span><br><span class="line">https://spark.apache.org/downloads.html</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载地址</span></span><br><span class="line">https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz</span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark Standalone Mode</span></span><br><span class="line">https://spark.apache.org/docs/latest/spark-standalone.html</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、配置环境变量"><a href="#二、配置环境变量" class="headerlink" title="二、配置环境变量"></a>二、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 spark 的 sbin 目录下的 spark-config.sh 中添加JDK的路径</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免报错：</span></span><br><span class="line"><span class="comment"># localhost:   JAVA_HOME is not set</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="三、开放端口"><a href="#三、开放端口" class="headerlink" title="三、开放端口"></a>三、开放端口</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=4040/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8081/tcp --permanent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载规则</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、启动"><a href="#四、启动" class="headerlink" title="四、启动"></a>四、启动</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./start-all.sh</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 Spark 的 bin 目录下执行：</span></span><br><span class="line">./run-example SparkPi 10 | grep <span class="string">&quot;Pi is roughly&quot;</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 部署 OpenVPN</title>
+    <url>/2023/10/29/setup-openvpn/</url>
+    <content><![CDATA[<h2 id="0x01-环境安装"><a href="#0x01-环境安装" class="headerlink" title="0x01. 环境安装"></a>0x01. 环境安装</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 更新 CentOS 软件包</span></span><br><span class="line">yum -y update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 OpenVPN 和 EasyRSA</span></span><br><span class="line">yum -y install openvpn easy-rsa firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果未能成功安装 OpenVPN，则可能需要先安装一下 Epel 库</span></span><br><span class="line">yum install epel-release -y</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="0x02-证书生成"><a href="#0x02-证书生成" class="headerlink" title="0x02. 证书生成"></a>0x02. 证书生成</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 首先需要初始化 PKI ，会在当前目录生成 pki 目录</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa init-pki</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来是生成 CA 证书，其中 nopass 表示不加密私钥，主要是方便后面导出公钥与颁发服务器证书</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-ca nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再来是生成交互密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa gen-dh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始生成服务端密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-server-full server nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来生成客户端密钥，如果未开启同证书允许多人登陆，则需要多次执行生成对应的客户端密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-client-full client nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最后是生成证书交互列表，如果不需要 crl-verify 则可以跳过</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa gen-crl</span><br><span class="line"></span><br><span class="line"><span class="comment"># 其实到这一步需要的证书都以及生成好了，如果你开启了 tls-auth 则还需要生成共享密钥</span></span><br><span class="line">openvpn --genkey --secret pki/ta.key</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在上面所有证书都生成完毕之后</span></span><br><span class="line"><span class="comment"># 创建目录存放所有相关证书文件，方便后期管理（备份与恢复）</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 服务端配置所需证书文件</span></span><br><span class="line"><span class="built_in">mkdir</span> -p openvpn/server</span><br><span class="line"><span class="built_in">cp</span> pki/ca.crt openvpn/server/ca.crt</span><br><span class="line"><span class="built_in">cp</span> pki/dh.pem openvpn/server/dh.pem</span><br><span class="line"><span class="built_in">cp</span> pki/issued/server.crt openvpn/server/server.crt</span><br><span class="line"><span class="built_in">cp</span> pki/private/server.key openvpn/server/server.key</span><br><span class="line"><span class="built_in">cp</span> pki/ta.key openvpn/server/ta.key</span><br><span class="line"><span class="built_in">cp</span> pki/crl.pem openvpn/server/crl.pem</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 客户端配置所需证书文件</span></span><br><span class="line"><span class="built_in">mkdir</span> -p openvpn/client</span><br><span class="line"><span class="built_in">cp</span> pki/ca.crt openvpn/client/ca.crt</span><br><span class="line"><span class="built_in">cp</span> pki/issued/client.crt openvpn/client/client.crt</span><br><span class="line"><span class="built_in">cp</span> pki/private/client.key openvpn/client/client.key</span><br><span class="line"><span class="built_in">cp</span> pki/ta.key openvpn/client/ta.key</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x03-服务端配置"><a href="#0x03-服务端配置" class="headerlink" title="0x03. 服务端配置"></a>0x03. 服务端配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 复制官方服务端配置样例</span></span><br><span class="line"><span class="built_in">cp</span> /usr/share/doc/openvpn-2.4.12/sample/sample-config-files/server.conf openvpn/server/server.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># 以下为修改配置文件内容</span></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SSL/TLS root certificate (ca), certificate</span></span><br><span class="line"><span class="comment"># (cert), and private key (key).  Each client</span></span><br><span class="line"><span class="comment"># and the server must have their own cert and</span></span><br><span class="line"><span class="comment"># key file.  The server and all clients will</span></span><br><span class="line"><span class="comment"># use the same ca file.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># See the &quot;easy-rsa&quot; directory for a series</span></span><br><span class="line"><span class="comment"># of scripts for generating RSA certificates</span></span><br><span class="line"><span class="comment"># and private keys.  Remember to use</span></span><br><span class="line"><span class="comment"># a unique Common Name for the server</span></span><br><span class="line"><span class="comment"># and each of the client certificates.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Any X509 key management system can be used.</span></span><br><span class="line"><span class="comment"># OpenVPN can also use a PKCS #12 formatted key file</span></span><br><span class="line"><span class="comment"># (see &quot;pkcs12&quot; directive in man page).</span></span><br><span class="line">ca ca.crt</span><br><span class="line">cert server.crt</span><br><span class="line">key server.key  <span class="comment"># This file should be kept secret</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Diffie hellman parameters.</span></span><br><span class="line"><span class="comment"># Generate your own with:</span></span><br><span class="line"><span class="comment">#   openssl dhparam -out dh2048.pem 2048</span></span><br><span class="line">dh dh.pem	</span><br><span class="line"><span class="comment"># 以上配置内容修改为证书生成所对应的文件名及路径，服务端识别的相对路径为 `/etc/openvpn`</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Push routes to the client to allow it</span></span><br><span class="line"><span class="comment"># to reach other private subnets behind</span></span><br><span class="line"><span class="comment"># the server.  Remember that these</span></span><br><span class="line"><span class="comment"># private subnets will also need</span></span><br><span class="line"><span class="comment"># to know to route the OpenVPN client</span></span><br><span class="line"><span class="comment"># address pool (10.8.0.0/255.255.255.0)</span></span><br><span class="line"><span class="comment"># back to the OpenVPN server.</span></span><br><span class="line">push <span class="string">&quot;route 172.16.1.0 255.255.255.0&quot;</span></span><br><span class="line">push <span class="string">&quot;route 192.168.1.0 255.255.255.0&quot;</span></span><br><span class="line"><span class="comment"># 推送路由信息给客户端以找到 VPN 背后的子网</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Select a cryptographic cipher.</span></span><br><span class="line"><span class="comment"># This config item must be copied to</span></span><br><span class="line"><span class="comment"># the client config file as well.</span></span><br><span class="line"><span class="comment"># Note that v2.4 client/server will automatically</span></span><br><span class="line"><span class="comment"># negotiate AES-256-GCM in TLS mode.</span></span><br><span class="line"><span class="comment"># See also the ncp-cipher option in the manpage</span></span><br><span class="line">cipher AES-256-GCM	<span class="comment"># 原：AES-256-CBC</span></span><br><span class="line"><span class="comment"># 修改为安全性更高的加密方式</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最后追加（可选）</span></span><br><span class="line">crl-verify crl.pem</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x04-客户端配置"><a href="#0x04-客户端配置" class="headerlink" title="0x04. 客户端配置"></a>0x04. 客户端配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 复杂官方客户端配置样例</span></span><br><span class="line"><span class="built_in">cp</span> /usr/share/doc/openvpn-2.4.12/sample/sample-config-files/client.conf openvpn/client/client.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># 以下为修改配置文件内容</span></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># The hostname/IP and port of the server.</span></span><br><span class="line"><span class="comment"># You can have multiple remote entries</span></span><br><span class="line"><span class="comment"># to load balance between the servers.</span></span><br><span class="line">remote my-server-1 1194</span><br><span class="line">;remote my-server-2 1194</span><br><span class="line"><span class="comment"># 修改服务器监听地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SSL/TLS parms.</span></span><br><span class="line"><span class="comment"># See the server config file for more</span></span><br><span class="line"><span class="comment"># description.  It&#x27;s best to use</span></span><br><span class="line"><span class="comment"># a separate .crt/.key file pair</span></span><br><span class="line"><span class="comment"># for each client.  A single ca</span></span><br><span class="line"><span class="comment"># file can be used for all clients.</span></span><br><span class="line">ca ca.crt</span><br><span class="line">cert client.crt</span><br><span class="line">key client.key</span><br><span class="line"></span><br><span class="line"><span class="comment"># If a tls-auth key is used on the server</span></span><br><span class="line"><span class="comment"># then every client must also have the key.</span></span><br><span class="line">tls-auth ta.key 1</span><br><span class="line"><span class="comment"># 以上配置内容修改为文件所对应路径，证书文件与配置文件在同一目录下即可</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Select a cryptographic cipher.</span></span><br><span class="line"><span class="comment"># If the cipher option is used on the server</span></span><br><span class="line"><span class="comment"># then you must also specify it here.</span></span><br><span class="line"><span class="comment"># Note that v2.4 client/server will automatically</span></span><br><span class="line"><span class="comment"># negotiate AES-256-GCM in TLS mode.</span></span><br><span class="line"><span class="comment"># See also the ncp-cipher option in the manpage</span></span><br><span class="line">cipher AES-256-GCM</span><br><span class="line"><span class="comment"># 修改加密方式</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x05-启动服务端并让其开机自动启动"><a href="#0x05-启动服务端并让其开机自动启动" class="headerlink" title="0x05. 启动服务端并让其开机自动启动"></a>0x05. 启动服务端并让其开机自动启动</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start openvpn@server</span><br><span class="line">systemctl <span class="built_in">enable</span> openvpn@server</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x06-配置防火墙与流量转发"><a href="#0x06-配置防火墙与流量转发" class="headerlink" title="0x06. 配置防火墙与流量转发"></a>0x06. 配置防火墙与流量转发</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置防火墙与流量转发</span></span><br><span class="line">firewall-cmd --permanent --add-service openvpn</span><br><span class="line">firewall-cmd --permanent --add-masquerade</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否开启流量转发</span></span><br><span class="line">sysctl -a | grep net.ipv4.ip_forward</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保net.ipv4.ip_forward 等于 1，如果不是，则需要修改一下</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;net.ipv4.ip_forward = 1&quot;</span> &gt;&gt; /etc/sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x07-合并证书到配置文件中"><a href="#0x07-合并证书到配置文件中" class="headerlink" title="0x07. 合并证书到配置文件中"></a>0x07. 合并证书到配置文件中</h2><p>编辑client.ovpn客户端配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim client.ovpn</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除或者注释以下几行内容：</span></span><br><span class="line">ca ca.crt　　			改为：<span class="comment">#ca ca.crt</span></span><br><span class="line">cert client.crt　　	改为：<span class="comment">#cert client.crt</span></span><br><span class="line">key client.key　　	改为：<span class="comment">#key client.key</span></span><br><span class="line">tls-auth ta.key 1　　	改为：<span class="comment">#tls-auth ta.key 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在最后面添加以下内容：</span></span><br><span class="line">&lt;ca&gt;</span><br><span class="line"><span class="comment"># ca.crt 文件内容</span></span><br><span class="line">&lt;/ca&gt;</span><br><span class="line">&lt;cert&gt;</span><br><span class="line"><span class="comment"># client.crt 文件内容</span></span><br><span class="line">&lt;/cert&gt;</span><br><span class="line">&lt;key&gt;</span><br><span class="line"><span class="comment"># client.key 文件内容</span></span><br><span class="line">&lt;/key&gt;</span><br><span class="line">key-direction 1</span><br><span class="line">&lt;tls-auth&gt;</span><br><span class="line"><span class="comment"># ta.key 文件内容</span></span><br><span class="line">&lt;/tls-auth&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制各文件里的内容到相应的位置即可！保存退出！！</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x08-故障修复"><a href="#0x08-故障修复" class="headerlink" title="0x08. 故障修复"></a>0x08. 故障修复</h2><h3 id="TLS密钥协商在60秒内失败"><a href="#TLS密钥协商在60秒内失败" class="headerlink" title="TLS密钥协商在60秒内失败"></a>TLS密钥协商在60秒内失败</h3><blockquote>
+<p>TLS错误：TLS密钥协商在60秒内失败（检查您的网络连接）</p>
+</blockquote>
+<p>设置OpenVPN时最常见的问题之一是，连接两端的两个OpenVPN守护程序都无法彼此建立TCP或UDP连接。</p>
+<p>这几乎是由于以下原因造成的：</p>
+<ul>
+<li><p>服务器网络上的外围防火墙正在过滤传入的OpenVPN数据包（默认情况下，OpenVPN使用UDP或TCP端口号1194）。</p>
+</li>
+<li><p>在OpenVPN服务器计算机上运行的软件防火墙本身正在过滤端口1194上的传入连接。请注意，除非另有配置，否则许多操作系统默认情况下会阻止传入连接。</p>
+</li>
+<li><p>服务器网络上的NAT网关没有TCP &#x2F; UDP 1194到OpenVPN服务器计算机内部地址的端口转发规则。<br>OpenVPN客户端配置在其配置文件中没有正确的服务器地址。客户端配置文件中的remote指令必须指向服务器本身或服务器网络网关的公共IP地址。</p>
+</li>
+<li><p>另一个可能的原因是Windows防火墙阻止了对openvpn.exe二进制文件的访问。您可能需要将其列入白名单（添加到“例外”列表中），OpenVPN才能正常工作。</p>
+</li>
+</ul>
+<p>在您的情况下，任何这些也很可能导致相同的问题。因此，只需逐一浏览。</p>
+<h3 id="Failed-to-start-OpenVPN-Robust"><a href="#Failed-to-start-OpenVPN-Robust" class="headerlink" title="Failed to start OpenVPN Robust"></a>Failed to start OpenVPN Robust</h3><p>Failed to start OpenVPN Robust And Highly Flexible Tunneling Application</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这次出现这个故障的原因是SELinux，因为从Windows系统上传配置文件到Linux系统，造成selinux的权限设置有问题</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="0x09-参考文章"><a href="#0x09-参考文章" class="headerlink" title="0x09. 参考文章"></a>0x09. 参考文章</h2><ul>
+<li><a href="https://cloud.tencent.com/developer/article/1871073">Centos7安装与配置OpenVPN服务器 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></li>
+<li><a href="https://chanjarster.github.io/post/network/ip-forwarding-masq-nat/">IP Forwarding, Masquerading 和 NAT</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>安全运维</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>openvpn</tag>
+        <tag>security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 Jupyter</title>
+    <url>/2023/09/02/setup-jupyter/</url>
+    <content><![CDATA[<h1 id="JupyterLab"><a href="#JupyterLab" class="headerlink" title="JupyterLab"></a>JupyterLab</h1><p>Install JupyterLab with pip:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install jupyterlab</span><br></pre></td></tr></table></figure>
+
+<p>Once installed, launch JupyterLab with:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter lab</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="Jupyter-Notebook"><a href="#Jupyter-Notebook" class="headerlink" title="Jupyter Notebook"></a>Jupyter Notebook</h1><p>Install the classic Jupyter Notebook with:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install notebook</span><br></pre></td></tr></table></figure>
+
+<p>To run the notebook:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. generate config</span></span><br><span class="line">jupyter lab --generate-config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. change settings</span></span><br><span class="line">c.ServerApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.ServerApp.open_browser = False</span><br><span class="line">c.ServerApp.allow_remote_access = True</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. open port</span></span><br><span class="line">firewall-cmd --zone=public --add-port=8888/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
+        <tag>jupyterlab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 Python3.8.5</title>
+    <url>/2023/09/02/setup-python3-8-5/</url>
+    <content><![CDATA[<h1 id="一、前置条件"><a href="#一、前置条件" class="headerlink" title="一、前置条件"></a>一、前置条件</h1><h2 id="1）安装依赖"><a href="#1）安装依赖" class="headerlink" title="1）安装依赖"></a>1）安装依赖</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install libffi-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make</span><br></pre></td></tr></table></figure>
+
+<h2 id="2）更新-openssl"><a href="#2）更新-openssl" class="headerlink" title="2）更新 openssl"></a>2）更新 openssl</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget --no-check-certificate   https://www.openssl.org/source/openssl-1.1.1t.tar.gz</span><br><span class="line">tar -zxvf openssl-1.1.1t.tar.gz</span><br><span class="line"><span class="built_in">cd</span> openssl-1.1.1t/</span><br><span class="line">./config --prefix=/usr/local/my_openssl</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"><span class="built_in">mv</span> /usr/bin/openssl /usr/bin/oldopenssl</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/bin/openssl /usr/bin/openssl</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/lib/libssl.so.1.1 /usr/lib64/</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/lib/libcrypto.so.1.1  /usr/lib64/</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://mirrors.huaweicloud.com/python/3.8.5/Python-3.8.5.tgz</span><br><span class="line"></span><br><span class="line">tar -zxvf Python-3.8.5.tgz</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、编译安装"><a href="#三、编译安装" class="headerlink" title="三、编译安装"></a>三、编译安装</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> Python-3.8.5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到新版本OpenSSL</span></span><br><span class="line">./configure --with-openssl=/usr/local/my_openssl  --prefix=/usr/local/python3</span><br><span class="line"></span><br><span class="line">make clean &amp;&amp; make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、配置环境变量并创建软连接"><a href="#四、配置环境变量并创建软连接" class="headerlink" title="四、配置环境变量并创建软连接"></a>四、配置环境变量并创建软连接</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PYTHON_HOME=/usr/local/python3</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PYTHON_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建软连接</span></span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/python3/bin/python3.8 /usr/bin/python3</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/python3/bin/pip3.8 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、配置清华源"><a href="#五、配置清华源" class="headerlink" title="五、配置清华源"></a>五、配置清华源</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip3 config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+
+<h1 id="六、测试"><a href="#六、测试" class="headerlink" title="六、测试"></a>六、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看 python 版本</span></span><br><span class="line">python3 -V</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 pip 版本</span></span><br><span class="line">pip3 -V</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 python 环境变量</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PYTHON_HOME</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
+        <tag>python3</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>域名缓存侦测技术</title>
+    <url>/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/</url>
+    <content><![CDATA[<h1 id="技术说明"><a href="#技术说明" class="headerlink" title="技术说明"></a>技术说明</h1><p>域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。</p>
+<span id="more"></span>
+
+<p>例如，测试人员可以提交某安全软件更新所使用的域名，如果有记录，说明该网络使用该种安全软件。</p>
+<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> dns.message</span><br><span class="line"><span class="keyword">import</span> dns.rdatatype</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DNSCacheSnooping</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.dns_server = <span class="string">&#x27;8.8.8.8&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">set_dns_server</span>(<span class="params">self, nameserver=<span class="string">&#x27;8.8.8.8&#x27;</span></span>):</span><br><span class="line">        self.dns_server = nameserver</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">detect</span>(<span class="params">self, domain</span>):</span><br><span class="line">        <span class="comment"># 创建 UDP 套接字</span></span><br><span class="line">        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置超时时间</span></span><br><span class="line">        sock.settimeout(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 构造 DNS 请求数据包</span></span><br><span class="line">        query = dns.message.make_query(domain, dns.rdatatype.A, dns.rdataclass.IN)</span><br><span class="line">        query.flags &amp;= ~dns.flags.RD</span><br><span class="line">        <span class="comment"># query.flags |= dns.flags.RD</span></span><br><span class="line"></span><br><span class="line">        sock.sendto(query.to_wire(), (self.dns_server, <span class="number">53</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 接收 DNS 响应数据包</span></span><br><span class="line">            data, _ = sock.recvfrom(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 解析 DNS 响应数据包</span></span><br><span class="line">            response = dns.message.from_wire(data)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 获取解析结果</span></span><br><span class="line">            answers = response.answer</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(answers) == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&#x27;No Cache for [<span class="subst">&#123;domain&#125;</span>] in [<span class="subst">&#123;self.dns_server&#125;</span>]&#x27;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">for</span> ans <span class="keyword">in</span> answers:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&#x27;Find Cache: [<span class="subst">&#123;ans&#125;</span>] in [<span class="subst">&#123;self.dns_server&#125;</span>]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> socket.timeout:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;DNS query timeout&quot;</span>)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="comment"># 关闭套接字</span></span><br><span class="line">            sock.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    parser = argparse.ArgumentParser(description=<span class="string">&#x27;A simple command-line tool&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-f&#x27;</span>, <span class="string">&#x27;--domain-file&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;domains in file&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-d&#x27;</span>, <span class="string">&#x27;--domain&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;single domain&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-s&#x27;</span>, <span class="string">&#x27;--dns-server&#x27;</span>, default=<span class="string">&#x27;8.8.8.8&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;A dns server&#x27;</span>)</span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    detector = DNSCacheSnooping()</span><br><span class="line">    <span class="keyword">if</span> args.dns_server:</span><br><span class="line">        detector.set_dns_server(args.dns_server)</span><br><span class="line">    <span class="keyword">if</span> args.domain:</span><br><span class="line">        detector.detect(domain=args.domain)</span><br><span class="line">    <span class="keyword">if</span> args.domain_file:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(args.domain_file):</span><br><span class="line">            args.domain_file = os.path.join(os.getcwd(), args.domain_file)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(args.domain_file) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> domain <span class="keyword">in</span> <span class="built_in">list</span>(f):</span><br><span class="line">                <span class="keyword">if</span> domain.strip() != <span class="string">&quot;&quot;</span>:</span><br><span class="line">                    detector.detect(domain=domain.strip())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="单域名测试"><a href="#单域名测试" class="headerlink" title="单域名测试"></a>单域名测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(venv) ➜  info-tools git:(main) ✗ python test_DNS_Cache_Snooping.py -d example.com -s 114.114.114.114</span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="多域名文件测试"><a href="#多域名文件测试" class="headerlink" title="多域名文件测试"></a>多域名文件测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># domains.txt</span></span><br><span class="line"><span class="comment"># 每行一个域名</span></span><br><span class="line">example.com</span><br><span class="line">baidu.com</span><br><span class="line">google.com</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(venv) ➜  info-tools git:(main) ✗ python test_DNS_Cache_Snooping.py -f domains.txt -s 114.114.114.114</span><br><span class="line">No Cache <span class="keyword">for</span> [example.com] <span class="keyword">in</span> [114.114.114.114]</span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>信息收集</category>
+      </categories>
+      <tags>
+        <tag>DNS</tag>
+        <tag>domain</tag>
+      </tags>
+  </entry>
+</search>
