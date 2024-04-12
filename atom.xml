@@ -230,9 +230,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
     
   </entry>
   

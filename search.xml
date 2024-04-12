@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>开发环境依赖组件备忘 docker-compose</title>
+    <url>/2023/08/20/docker-compose4dev/</url>
+    <content><![CDATA[<p>为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 <code>docker-compose</code> 用于快速部署依赖组件环境</p>
+<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><ul>
+<li>elasticsearch:8.8.0</li>
+<li>kibana:8.8.0</li>
+<li>redis:7.0.11</li>
+<li>mysql:8</li>
+</ul>
+<p>​	</p>
+<span id="more"></span>
+
+
+
+<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/elasticsearch/elasticsearch:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">elasticsearch</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ELASTIC_PASSWORD=&lt;Your_ELASTIC_PASSWORD&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9200:9200&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">esdata:/usr/share/elasticsearch/data</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">kibana:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/kibana/kibana:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kibana</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SERVER_NAME=kibana</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">XPACK_SECURITY_ENABLED=true</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5601:5601&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kibanadata:/usr/share/kibana/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:7.0.11</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="comment"># 修改密码以及绑定地址</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">--requirepass</span> <span class="string">&quot;&lt;your_redis_pass&gt;&quot;</span> <span class="string">--bind</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6379:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redisdata:/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">--default-authentication-plugin=caching_sha2_password</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&lt;root_pass&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">&lt;your_db&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">&lt;your_user&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">&lt;your_pass&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">esdata:</span></span><br><span class="line">  <span class="attr">kibanadata:</span></span><br><span class="line">  <span class="attr">redisdata:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>docker-compose</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ARP协议</title>
     <url>/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/</url>
     <content><![CDATA[<h2 id="协议解析"><a href="#协议解析" class="headerlink" title="协议解析"></a>协议解析</h2><p>ARP（Address Resolution Protocol）协议是一种用于在计算机网络中解析网络层地址（如IP地址）与物理地址（如MAC地址）之间映射关系的协议。在数据包从源主机发送到目标主机的过程中，需要将目标主机的网络层地址转换为物理地址，才能在链路层上进行数据传输。</p>
@@ -27,32 +53,6 @@
         <tag>socket</tag>
         <tag>chatgpt</tag>
         <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>开发环境依赖组件备忘 docker-compose</title>
-    <url>/2023/08/20/docker-compose4dev/</url>
-    <content><![CDATA[<p>为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 <code>docker-compose</code> 用于快速部署依赖组件环境</p>
-<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><ul>
-<li>elasticsearch:8.8.0</li>
-<li>kibana:8.8.0</li>
-<li>redis:7.0.11</li>
-<li>mysql:8</li>
-</ul>
-<p>​	</p>
-<span id="more"></span>
-
-
-
-<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/elasticsearch/elasticsearch:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">elasticsearch</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ELASTIC_PASSWORD=&lt;Your_ELASTIC_PASSWORD&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9200:9200&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">esdata:/usr/share/elasticsearch/data</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">kibana:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/kibana/kibana:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kibana</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SERVER_NAME=kibana</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">XPACK_SECURITY_ENABLED=true</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5601:5601&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kibanadata:/usr/share/kibana/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:7.0.11</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="comment"># 修改密码以及绑定地址</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">--requirepass</span> <span class="string">&quot;&lt;your_redis_pass&gt;&quot;</span> <span class="string">--bind</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6379:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redisdata:/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">--default-authentication-plugin=caching_sha2_password</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&lt;root_pass&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">&lt;your_db&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">&lt;your_user&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">&lt;your_pass&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">esdata:</span></span><br><span class="line">  <span class="attr">kibanadata:</span></span><br><span class="line">  <span class="attr">redisdata:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-        <tag>docker-compose</tag>
       </tags>
   </entry>
   <entry>
@@ -456,29 +456,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CentOS7 下安装 JDK</title>
-    <url>/2023/09/01/setup-jdk/</url>
-    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
-
-<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>jdk</tag>
-        <tag>pyspark</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2024/04/11/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -528,6 +505,40 @@
       </tags>
   </entry>
   <entry>
+    <title>反弹 Shell</title>
+    <url>/2023/09/02/oneline-shell/</url>
+    <content><![CDATA[<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://www.anquanke.com/post/id/87017">【技术分享】linux各种一句话反弹shell总结</a></li>
+<li><a href="https://xz.aliyun.com/t/9488">反弹Shell，看这一篇就够了</a></li>
+<li><a href="https://www.cnblogs.com/sdgfsdgfsd/p/13305556.html">常用的一句话反弹shell总结</a></li>
+<li><a href="https://www.wangan.com/wenda/2047">内网一句话反弹 shell 都有哪些</a></li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 JDK</title>
+    <url>/2023/09/01/setup-jdk/</url>
+    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
+        <tag>jdk</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PyPI 镜像使用帮助</title>
     <url>/2023/10/29/pypi/</url>
     <content><![CDATA[<blockquote>
@@ -560,103 +571,6 @@
       <tags>
         <tag>python</tag>
         <tag>清华源</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 下安装 Jupyter</title>
-    <url>/2023/09/02/setup-jupyter/</url>
-    <content><![CDATA[<h1 id="JupyterLab"><a href="#JupyterLab" class="headerlink" title="JupyterLab"></a>JupyterLab</h1><p>Install JupyterLab with pip:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install jupyterlab</span><br></pre></td></tr></table></figure>
-
-<p>Once installed, launch JupyterLab with:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter lab</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="Jupyter-Notebook"><a href="#Jupyter-Notebook" class="headerlink" title="Jupyter Notebook"></a>Jupyter Notebook</h1><p>Install the classic Jupyter Notebook with:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install notebook</span><br></pre></td></tr></table></figure>
-
-<p>To run the notebook:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
-
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. generate config</span></span><br><span class="line">jupyter lab --generate-config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. change settings</span></span><br><span class="line">c.ServerApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.ServerApp.open_browser = False</span><br><span class="line">c.ServerApp.allow_remote_access = True</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. open port</span></span><br><span class="line">firewall-cmd --zone=public --add-port=8888/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>pyspark</tag>
-        <tag>jupyterlab</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>反弹 Shell</title>
-    <url>/2023/09/02/oneline-shell/</url>
-    <content><![CDATA[<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><a href="https://www.anquanke.com/post/id/87017">【技术分享】linux各种一句话反弹shell总结</a></li>
-<li><a href="https://xz.aliyun.com/t/9488">反弹Shell，看这一篇就够了</a></li>
-<li><a href="https://www.cnblogs.com/sdgfsdgfsd/p/13305556.html">常用的一句话反弹shell总结</a></li>
-<li><a href="https://www.wangan.com/wenda/2047">内网一句话反弹 shell 都有哪些</a></li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>域名缓存侦测技术</title>
-    <url>/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/</url>
-    <content><![CDATA[<h1 id="技术说明"><a href="#技术说明" class="headerlink" title="技术说明"></a>技术说明</h1><p>域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。</p>
-<span id="more"></span>
-
-<p>例如，测试人员可以提交某安全软件更新所使用的域名，如果有记录，说明该网络使用该种安全软件。</p>
-<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> dns.message</span><br><span class="line"><span class="keyword">import</span> dns.rdatatype</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DNSCacheSnooping</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.dns_server = <span class="string">&#x27;8.8.8.8&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">set_dns_server</span>(<span class="params">self, nameserver=<span class="string">&#x27;8.8.8.8&#x27;</span></span>):</span><br><span class="line">        self.dns_server = nameserver</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">detect</span>(<span class="params">self, domain</span>):</span><br><span class="line">        <span class="comment"># 创建 UDP 套接字</span></span><br><span class="line">        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置超时时间</span></span><br><span class="line">        sock.settimeout(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 构造 DNS 请求数据包</span></span><br><span class="line">        query = dns.message.make_query(domain, dns.rdatatype.A, dns.rdataclass.IN)</span><br><span class="line">        query.flags &amp;= ~dns.flags.RD</span><br><span class="line">        <span class="comment"># query.flags |= dns.flags.RD</span></span><br><span class="line"></span><br><span class="line">        sock.sendto(query.to_wire(), (self.dns_server, <span class="number">53</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 接收 DNS 响应数据包</span></span><br><span class="line">            data, _ = sock.recvfrom(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 解析 DNS 响应数据包</span></span><br><span class="line">            response = dns.message.from_wire(data)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 获取解析结果</span></span><br><span class="line">            answers = response.answer</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(answers) == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&#x27;No Cache for [<span class="subst">&#123;domain&#125;</span>] in [<span class="subst">&#123;self.dns_server&#125;</span>]&#x27;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">for</span> ans <span class="keyword">in</span> answers:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&#x27;Find Cache: [<span class="subst">&#123;ans&#125;</span>] in [<span class="subst">&#123;self.dns_server&#125;</span>]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> socket.timeout:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;DNS query timeout&quot;</span>)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="comment"># 关闭套接字</span></span><br><span class="line">            sock.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    parser = argparse.ArgumentParser(description=<span class="string">&#x27;A simple command-line tool&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-f&#x27;</span>, <span class="string">&#x27;--domain-file&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;domains in file&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-d&#x27;</span>, <span class="string">&#x27;--domain&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;single domain&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-s&#x27;</span>, <span class="string">&#x27;--dns-server&#x27;</span>, default=<span class="string">&#x27;8.8.8.8&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;A dns server&#x27;</span>)</span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    detector = DNSCacheSnooping()</span><br><span class="line">    <span class="keyword">if</span> args.dns_server:</span><br><span class="line">        detector.set_dns_server(args.dns_server)</span><br><span class="line">    <span class="keyword">if</span> args.domain:</span><br><span class="line">        detector.detect(domain=args.domain)</span><br><span class="line">    <span class="keyword">if</span> args.domain_file:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(args.domain_file):</span><br><span class="line">            args.domain_file = os.path.join(os.getcwd(), args.domain_file)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(args.domain_file) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> domain <span class="keyword">in</span> <span class="built_in">list</span>(f):</span><br><span class="line">                <span class="keyword">if</span> domain.strip() != <span class="string">&quot;&quot;</span>:</span><br><span class="line">                    detector.detect(domain=domain.strip())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="单域名测试"><a href="#单域名测试" class="headerlink" title="单域名测试"></a>单域名测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(venv) ➜  info-tools git:(main) ✗ python test_DNS_Cache_Snooping.py -d example.com -s 114.114.114.114</span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="多域名文件测试"><a href="#多域名文件测试" class="headerlink" title="多域名文件测试"></a>多域名文件测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># domains.txt</span></span><br><span class="line"><span class="comment"># 每行一个域名</span></span><br><span class="line">example.com</span><br><span class="line">baidu.com</span><br><span class="line">google.com</span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(venv) ➜  info-tools git:(main) ✗ python test_DNS_Cache_Snooping.py -f domains.txt -s 114.114.114.114</span><br><span class="line">No Cache <span class="keyword">for</span> [example.com] <span class="keyword">in</span> [114.114.114.114]</span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>信息收集</category>
-      </categories>
-      <tags>
-        <tag>DNS</tag>
-        <tag>domain</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 下安装 Python3.8.5</title>
-    <url>/2023/09/02/setup-python3-8-5/</url>
-    <content><![CDATA[<h1 id="一、前置条件"><a href="#一、前置条件" class="headerlink" title="一、前置条件"></a>一、前置条件</h1><h2 id="1）安装依赖"><a href="#1）安装依赖" class="headerlink" title="1）安装依赖"></a>1）安装依赖</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install libffi-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make</span><br></pre></td></tr></table></figure>
-
-<h2 id="2）更新-openssl"><a href="#2）更新-openssl" class="headerlink" title="2）更新 openssl"></a>2）更新 openssl</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget --no-check-certificate   https://www.openssl.org/source/openssl-1.1.1t.tar.gz</span><br><span class="line">tar -zxvf openssl-1.1.1t.tar.gz</span><br><span class="line"><span class="built_in">cd</span> openssl-1.1.1t/</span><br><span class="line">./config --prefix=/usr/local/my_openssl</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"><span class="built_in">mv</span> /usr/bin/openssl /usr/bin/oldopenssl</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/bin/openssl /usr/bin/openssl</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/lib/libssl.so.1.1 /usr/lib64/</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/lib/libcrypto.so.1.1  /usr/lib64/</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://mirrors.huaweicloud.com/python/3.8.5/Python-3.8.5.tgz</span><br><span class="line"></span><br><span class="line">tar -zxvf Python-3.8.5.tgz</span><br></pre></td></tr></table></figure>
-
-<h1 id="三、编译安装"><a href="#三、编译安装" class="headerlink" title="三、编译安装"></a>三、编译安装</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> Python-3.8.5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到新版本OpenSSL</span></span><br><span class="line">./configure --with-openssl=/usr/local/my_openssl  --prefix=/usr/local/python3</span><br><span class="line"></span><br><span class="line">make clean &amp;&amp; make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、配置环境变量并创建软连接"><a href="#四、配置环境变量并创建软连接" class="headerlink" title="四、配置环境变量并创建软连接"></a>四、配置环境变量并创建软连接</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PYTHON_HOME=/usr/local/python3</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PYTHON_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建软连接</span></span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/python3/bin/python3.8 /usr/bin/python3</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/python3/bin/pip3.8 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
-
-<h1 id="五、配置清华源"><a href="#五、配置清华源" class="headerlink" title="五、配置清华源"></a>五、配置清华源</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip3 config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
-
-<h1 id="六、测试"><a href="#六、测试" class="headerlink" title="六、测试"></a>六、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看 python 版本</span></span><br><span class="line">python3 -V</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 pip 版本</span></span><br><span class="line">pip3 -V</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 python 环境变量</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PYTHON_HOME</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>pyspark</tag>
-        <tag>python3</tag>
       </tags>
   </entry>
   <entry>
@@ -728,6 +642,92 @@
         <tag>centos7</tag>
         <tag>openvpn</tag>
         <tag>security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 Jupyter</title>
+    <url>/2023/09/02/setup-jupyter/</url>
+    <content><![CDATA[<h1 id="JupyterLab"><a href="#JupyterLab" class="headerlink" title="JupyterLab"></a>JupyterLab</h1><p>Install JupyterLab with pip:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install jupyterlab</span><br></pre></td></tr></table></figure>
+
+<p>Once installed, launch JupyterLab with:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter lab</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="Jupyter-Notebook"><a href="#Jupyter-Notebook" class="headerlink" title="Jupyter Notebook"></a>Jupyter Notebook</h1><p>Install the classic Jupyter Notebook with:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install notebook</span><br></pre></td></tr></table></figure>
+
+<p>To run the notebook:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. generate config</span></span><br><span class="line">jupyter lab --generate-config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. change settings</span></span><br><span class="line">c.ServerApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.ServerApp.open_browser = False</span><br><span class="line">c.ServerApp.allow_remote_access = True</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. open port</span></span><br><span class="line">firewall-cmd --zone=public --add-port=8888/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
+        <tag>jupyterlab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>域名缓存侦测技术</title>
+    <url>/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/</url>
+    <content><![CDATA[<h1 id="技术说明"><a href="#技术说明" class="headerlink" title="技术说明"></a>技术说明</h1><p>域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。</p>
+<span id="more"></span>
+
+<p>例如，测试人员可以提交某安全软件更新所使用的域名，如果有记录，说明该网络使用该种安全软件。</p>
+<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> dns.message</span><br><span class="line"><span class="keyword">import</span> dns.rdatatype</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DNSCacheSnooping</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.dns_server = <span class="string">&#x27;8.8.8.8&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">set_dns_server</span>(<span class="params">self, nameserver=<span class="string">&#x27;8.8.8.8&#x27;</span></span>):</span><br><span class="line">        self.dns_server = nameserver</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">detect</span>(<span class="params">self, domain</span>):</span><br><span class="line">        <span class="comment"># 创建 UDP 套接字</span></span><br><span class="line">        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置超时时间</span></span><br><span class="line">        sock.settimeout(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 构造 DNS 请求数据包</span></span><br><span class="line">        query = dns.message.make_query(domain, dns.rdatatype.A, dns.rdataclass.IN)</span><br><span class="line">        query.flags &amp;= ~dns.flags.RD</span><br><span class="line">        <span class="comment"># query.flags |= dns.flags.RD</span></span><br><span class="line"></span><br><span class="line">        sock.sendto(query.to_wire(), (self.dns_server, <span class="number">53</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 接收 DNS 响应数据包</span></span><br><span class="line">            data, _ = sock.recvfrom(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 解析 DNS 响应数据包</span></span><br><span class="line">            response = dns.message.from_wire(data)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 获取解析结果</span></span><br><span class="line">            answers = response.answer</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(answers) == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&#x27;No Cache for [<span class="subst">&#123;domain&#125;</span>] in [<span class="subst">&#123;self.dns_server&#125;</span>]&#x27;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">for</span> ans <span class="keyword">in</span> answers:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&#x27;Find Cache: [<span class="subst">&#123;ans&#125;</span>] in [<span class="subst">&#123;self.dns_server&#125;</span>]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> socket.timeout:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;DNS query timeout&quot;</span>)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="comment"># 关闭套接字</span></span><br><span class="line">            sock.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    parser = argparse.ArgumentParser(description=<span class="string">&#x27;A simple command-line tool&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-f&#x27;</span>, <span class="string">&#x27;--domain-file&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;domains in file&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-d&#x27;</span>, <span class="string">&#x27;--domain&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;single domain&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-s&#x27;</span>, <span class="string">&#x27;--dns-server&#x27;</span>, default=<span class="string">&#x27;8.8.8.8&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;A dns server&#x27;</span>)</span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    detector = DNSCacheSnooping()</span><br><span class="line">    <span class="keyword">if</span> args.dns_server:</span><br><span class="line">        detector.set_dns_server(args.dns_server)</span><br><span class="line">    <span class="keyword">if</span> args.domain:</span><br><span class="line">        detector.detect(domain=args.domain)</span><br><span class="line">    <span class="keyword">if</span> args.domain_file:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(args.domain_file):</span><br><span class="line">            args.domain_file = os.path.join(os.getcwd(), args.domain_file)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(args.domain_file) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> domain <span class="keyword">in</span> <span class="built_in">list</span>(f):</span><br><span class="line">                <span class="keyword">if</span> domain.strip() != <span class="string">&quot;&quot;</span>:</span><br><span class="line">                    detector.detect(domain=domain.strip())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="单域名测试"><a href="#单域名测试" class="headerlink" title="单域名测试"></a>单域名测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(venv) ➜  info-tools git:(main) ✗ python test_DNS_Cache_Snooping.py -d example.com -s 114.114.114.114</span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="多域名文件测试"><a href="#多域名文件测试" class="headerlink" title="多域名文件测试"></a>多域名文件测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># domains.txt</span></span><br><span class="line"><span class="comment"># 每行一个域名</span></span><br><span class="line">example.com</span><br><span class="line">baidu.com</span><br><span class="line">google.com</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(venv) ➜  info-tools git:(main) ✗ python test_DNS_Cache_Snooping.py -f domains.txt -s 114.114.114.114</span><br><span class="line">No Cache <span class="keyword">for</span> [example.com] <span class="keyword">in</span> [114.114.114.114]</span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br><span class="line">DNS query <span class="built_in">timeout</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>信息收集</category>
+      </categories>
+      <tags>
+        <tag>DNS</tag>
+        <tag>domain</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 Python3.8.5</title>
+    <url>/2023/09/02/setup-python3-8-5/</url>
+    <content><![CDATA[<h1 id="一、前置条件"><a href="#一、前置条件" class="headerlink" title="一、前置条件"></a>一、前置条件</h1><h2 id="1）安装依赖"><a href="#1）安装依赖" class="headerlink" title="1）安装依赖"></a>1）安装依赖</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install libffi-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make</span><br></pre></td></tr></table></figure>
+
+<h2 id="2）更新-openssl"><a href="#2）更新-openssl" class="headerlink" title="2）更新 openssl"></a>2）更新 openssl</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget --no-check-certificate   https://www.openssl.org/source/openssl-1.1.1t.tar.gz</span><br><span class="line">tar -zxvf openssl-1.1.1t.tar.gz</span><br><span class="line"><span class="built_in">cd</span> openssl-1.1.1t/</span><br><span class="line">./config --prefix=/usr/local/my_openssl</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"><span class="built_in">mv</span> /usr/bin/openssl /usr/bin/oldopenssl</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/bin/openssl /usr/bin/openssl</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/lib/libssl.so.1.1 /usr/lib64/</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/my_openssl/lib/libcrypto.so.1.1  /usr/lib64/</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://mirrors.huaweicloud.com/python/3.8.5/Python-3.8.5.tgz</span><br><span class="line"></span><br><span class="line">tar -zxvf Python-3.8.5.tgz</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、编译安装"><a href="#三、编译安装" class="headerlink" title="三、编译安装"></a>三、编译安装</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> Python-3.8.5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到新版本OpenSSL</span></span><br><span class="line">./configure --with-openssl=/usr/local/my_openssl  --prefix=/usr/local/python3</span><br><span class="line"></span><br><span class="line">make clean &amp;&amp; make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、配置环境变量并创建软连接"><a href="#四、配置环境变量并创建软连接" class="headerlink" title="四、配置环境变量并创建软连接"></a>四、配置环境变量并创建软连接</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PYTHON_HOME=/usr/local/python3</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PYTHON_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建软连接</span></span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/python3/bin/python3.8 /usr/bin/python3</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/python3/bin/pip3.8 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、配置清华源"><a href="#五、配置清华源" class="headerlink" title="五、配置清华源"></a>五、配置清华源</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip3 config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+
+<h1 id="六、测试"><a href="#六、测试" class="headerlink" title="六、测试"></a>六、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看 python 版本</span></span><br><span class="line">python3 -V</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 pip 版本</span></span><br><span class="line">pip3 -V</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 python 环境变量</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PYTHON_HOME</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
+        <tag>python3</tag>
       </tags>
   </entry>
 </search>
