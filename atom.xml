@@ -241,7 +241,7 @@
     <link href="http://example.com/2023/08/20/docker-compose4dev/"/>
     <id>http://example.com/2023/08/20/docker-compose4dev/</id>
     <published>2023-08-20T04:05:26.000Z</published>
-    <updated>2024-04-23T07:54:27.316Z</updated>
+    <updated>2024-04-24T01:13:42.523Z</updated>
     
     
     <summary type="html">&lt;p&gt;为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 &lt;code&gt;docker-compose&lt;/code&gt; 用于快速部署依赖组件环境&lt;/p&gt;
