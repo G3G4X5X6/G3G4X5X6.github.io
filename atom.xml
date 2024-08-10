@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>勾三股四弦五小六</title>
   <icon>http://example.com/icon.png</icon>
-  <subtitle>身在黑暗，心向光明</subtitle>
+  <subtitle>路漫漫其修远兮，吾将上下而求索</subtitle>
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
@@ -70,14 +70,14 @@
     <link href="http://example.com/2023/10/29/setup-openvpn/"/>
     <id>http://example.com/2023/10/29/setup-openvpn/</id>
     <published>2023-10-29T01:51:39.000Z</published>
-    <updated>2024-08-10T00:04:41.210Z</updated>
+    <updated>2024-08-10T11:45:14.647Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;0x01-环境安装&quot;&gt;&lt;a href=&quot;#0x01-环境安装&quot; class=&quot;headerlink&quot; title=&quot;0x01. 环境安装&quot;&gt;&lt;/a&gt;0x01. 环境安装&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 更新 CentOS 软件包&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum -y update&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 安装 OpenVPN 和 EasyRSA&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum -y install openvpn easy-rsa firewalld&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 如果未能成功安装 OpenVPN，则可能需要先安装一下 Epel 库&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum install epel-release -y&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
     
     
     
-    <category term="安全运维" scheme="http://example.com/categories/%E5%AE%89%E5%85%A8%E8%BF%90%E7%BB%B4/"/>
+    <category term="自建服务" scheme="http://example.com/categories/%E8%87%AA%E5%BB%BA%E6%9C%8D%E5%8A%A1/"/>
     
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
@@ -85,6 +85,8 @@
     <category term="openvpn" scheme="http://example.com/tags/openvpn/"/>
     
     <category term="security" scheme="http://example.com/tags/security/"/>
+    
+    <category term="self-hosted" scheme="http://example.com/tags/self-hosted/"/>
     
   </entry>
   
