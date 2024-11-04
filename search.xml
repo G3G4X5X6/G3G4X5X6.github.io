@@ -1,60 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>开发环境依赖组件容器化配置参考</title>
-    <url>/2023/08/20/docker-compose4dev/</url>
-    <content><![CDATA[<p>为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 <code>docker-compose</code> 用于快速部署依赖组件环境</p>
-<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><ul>
-<li>elasticsearch:8.8.0</li>
-<li>kibana:8.8.0</li>
-<li>redis:7.0.11</li>
-<li>mysql:8</li>
-<li>postgres:15</li>
-<li>grafana-enterprise</li>
-</ul>
-<p>​	</p>
-<span id="more"></span>
-
-
-
-<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/elasticsearch/elasticsearch:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">elasticsearch8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ELASTIC_PASSWORD=&lt;Your_ELASTIC_PASSWORD&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9200:9200&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">esdata:/usr/share/elasticsearch/data</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">kibana:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/kibana/kibana:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kibana8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SERVER_NAME=kibana</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">XPACK_SECURITY_ENABLED=true</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5601:5601&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kibanadata:/usr/share/kibana/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:7.0.11</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis7</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="comment"># 修改密码以及绑定地址</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">--requirepass</span> <span class="string">&quot;&lt;your_redis_pass&gt;&quot;</span> <span class="string">--bind</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6379:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redisdata:/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">--default-authentication-plugin=caching_sha2_password</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&lt;root_pass&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">&lt;your_db&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">&lt;your_user&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">&lt;your_pass&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line">      </span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:15</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">postgres15</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">POSTGRES_DB:</span> <span class="string">database</span>       				<span class="comment"># 设置数据库名称</span></span><br><span class="line">      <span class="attr">POSTGRES_USER:</span> <span class="string">user</span>   					<span class="comment"># 设置数据库用户</span></span><br><span class="line">      <span class="attr">POSTGRES_PASSWORD:</span> <span class="string">PasswOrd</span>				<span class="comment"># 设置数据库密码</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgres_data:/var/lib/postgresql/data</span> 	<span class="comment"># 数据持久化存储的路径</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5432:5432&quot;</span> 	<span class="comment"># 将容器的 5432 端口映射到宿主机的 5432 端口</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">grafana:</span> 	<span class="comment"># 默认账号密码: admin/admin</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">grafana/grafana-enterprise</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">GF_INSTALL_PLUGINS=grafana-clock-panel</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;3000:3000&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">grafana-storage:/var/lib/grafana</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">esdata:</span></span><br><span class="line">  <span class="attr">kibanadata:</span></span><br><span class="line">  <span class="attr">redisdata:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br><span class="line">  <span class="attr">postgres_data:</span></span><br><span class="line">  <span class="attr">grafana-storage:</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-        <tag>docker-compose</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2024/04/11/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清除旧的文件</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署GitPage</span></span><br><span class="line">hexo deploy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hello</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ARP协议</title>
     <url>/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/</url>
     <content><![CDATA[<h2 id="协议解析"><a href="#协议解析" class="headerlink" title="协议解析"></a>协议解析</h2><p>ARP（Address Resolution Protocol）协议是一种用于在计算机网络中解析网络层地址（如IP地址）与物理地址（如MAC地址）之间映射关系的协议。在数据包从源主机发送到目标主机的过程中，需要将目标主机的网络层地址转换为物理地址，才能在链路层上进行数据传输。</p>
@@ -81,6 +27,32 @@
         <tag>socket</tag>
         <tag>chatgpt</tag>
         <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/11/04/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清除旧的文件</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署GitPage</span></span><br><span class="line">hexo deploy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hello</tag>
       </tags>
   </entry>
   <entry>
@@ -484,146 +456,6 @@
       </tags>
   </entry>
   <entry>
-    <title>反弹 Shell</title>
-    <url>/2023/09/02/oneline-shell/</url>
-    <content><![CDATA[<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><a href="https://www.anquanke.com/post/id/87017">【技术分享】linux各种一句话反弹shell总结</a></li>
-<li><a href="https://xz.aliyun.com/t/9488">反弹Shell，看这一篇就够了</a></li>
-<li><a href="https://www.cnblogs.com/sdgfsdgfsd/p/13305556.html">常用的一句话反弹shell总结</a></li>
-<li><a href="https://www.wangan.com/wenda/2047">内网一句话反弹 shell 都有哪些</a></li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>PyPI 镜像使用帮助</title>
-    <url>/2023/10/29/pypi/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a></p>
-<ul>
-<li><a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">PYPI</a></li>
-</ul>
-</blockquote>
-<p>PyPI 镜像在每次同步成功后间隔 5 分钟同步一次。</p>
-<h2 id="临时使用"><a href="#临时使用" class="headerlink" title="临时使用"></a>临时使用</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package</span><br></pre></td></tr></table></figure>
-
-<p>注意，<code>simple</code> 不能少, 是 <code>https</code> 而不是 <code>http</code></p>
-<span id="more"></span>
-
-<h2 id="设为默认"><a href="#设为默认" class="headerlink" title="设为默认"></a>设为默认</h2><p>升级 pip 到最新的版本 (&gt;&#x3D;10.0.0) 后进行配置：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python -m pip install --upgrade pip</span><br><span class="line">pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
-
-<p>如果您到 pip 默认源的网络连接较差，临时使用本镜像站来升级 pip：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置多个镜像源"><a href="#配置多个镜像源" class="headerlink" title="配置多个镜像源"></a>配置多个镜像源</h2><p>如果您想配置多个镜像源平衡负载，可在已经替换 <code>index-url</code> 的情况下通过以下方式继续增加源站：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip config set global.extra-index-url &quot;&lt;url1&gt; &lt;url2&gt;...&quot;</span><br></pre></td></tr></table></figure>
-
-<p>请自行替换引号内的内容，源地址之间需要有空格</p>
-<p>可用的 <code>pypi</code> 源列表（校园网联合镜像站）：<a href="https://mirrors.cernet.edu.cn/list/pypi">https://mirrors.cernet.edu.cn/list/pypi</a></p>
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>清华源</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 部署 OpenVPN</title>
-    <url>/2023/10/29/setup-openvpn/</url>
-    <content><![CDATA[<h2 id="0x01-环境安装"><a href="#0x01-环境安装" class="headerlink" title="0x01. 环境安装"></a>0x01. 环境安装</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 更新 CentOS 软件包</span></span><br><span class="line">yum -y update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 OpenVPN 和 EasyRSA</span></span><br><span class="line">yum -y install openvpn easy-rsa firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果未能成功安装 OpenVPN，则可能需要先安装一下 Epel 库</span></span><br><span class="line">yum install epel-release -y</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h2 id="0x02-证书生成"><a href="#0x02-证书生成" class="headerlink" title="0x02. 证书生成"></a>0x02. 证书生成</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 首先需要初始化 PKI ，会在当前目录生成 pki 目录</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa init-pki</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来是生成 CA 证书，其中 nopass 表示不加密私钥，主要是方便后面导出公钥与颁发服务器证书</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-ca nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再来是生成交互密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa gen-dh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始生成服务端密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-server-full server nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来生成客户端密钥，如果未开启同证书允许多人登陆，则需要多次执行生成对应的客户端密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-client-full client nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最后是生成证书交互列表，如果不需要 crl-verify 则可以跳过</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa gen-crl</span><br><span class="line"></span><br><span class="line"><span class="comment"># 其实到这一步需要的证书都以及生成好了，如果你开启了 tls-auth 则还需要生成共享密钥</span></span><br><span class="line">openvpn --genkey --secret pki/ta.key</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在上面所有证书都生成完毕之后</span></span><br><span class="line"><span class="comment"># 创建目录存放所有相关证书文件，方便后期管理（备份与恢复）</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 服务端配置所需证书文件</span></span><br><span class="line"><span class="built_in">mkdir</span> -p openvpn/server</span><br><span class="line"><span class="built_in">cp</span> pki/ca.crt openvpn/server/ca.crt</span><br><span class="line"><span class="built_in">cp</span> pki/dh.pem openvpn/server/dh.pem</span><br><span class="line"><span class="built_in">cp</span> pki/issued/server.crt openvpn/server/server.crt</span><br><span class="line"><span class="built_in">cp</span> pki/private/server.key openvpn/server/server.key</span><br><span class="line"><span class="built_in">cp</span> pki/ta.key openvpn/server/ta.key</span><br><span class="line"><span class="built_in">cp</span> pki/crl.pem openvpn/server/crl.pem</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 客户端配置所需证书文件</span></span><br><span class="line"><span class="built_in">mkdir</span> -p openvpn/client</span><br><span class="line"><span class="built_in">cp</span> pki/ca.crt openvpn/client/ca.crt</span><br><span class="line"><span class="built_in">cp</span> pki/issued/client.crt openvpn/client/client.crt</span><br><span class="line"><span class="built_in">cp</span> pki/private/client.key openvpn/client/client.key</span><br><span class="line"><span class="built_in">cp</span> pki/ta.key openvpn/client/ta.key</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x03-服务端配置"><a href="#0x03-服务端配置" class="headerlink" title="0x03. 服务端配置"></a>0x03. 服务端配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 复制官方服务端配置样例</span></span><br><span class="line"><span class="built_in">cp</span> /usr/share/doc/openvpn-2.4.12/sample/sample-config-files/server.conf openvpn/server/server.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># 以下为修改配置文件内容</span></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SSL/TLS root certificate (ca), certificate</span></span><br><span class="line"><span class="comment"># (cert), and private key (key).  Each client</span></span><br><span class="line"><span class="comment"># and the server must have their own cert and</span></span><br><span class="line"><span class="comment"># key file.  The server and all clients will</span></span><br><span class="line"><span class="comment"># use the same ca file.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># See the &quot;easy-rsa&quot; directory for a series</span></span><br><span class="line"><span class="comment"># of scripts for generating RSA certificates</span></span><br><span class="line"><span class="comment"># and private keys.  Remember to use</span></span><br><span class="line"><span class="comment"># a unique Common Name for the server</span></span><br><span class="line"><span class="comment"># and each of the client certificates.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Any X509 key management system can be used.</span></span><br><span class="line"><span class="comment"># OpenVPN can also use a PKCS #12 formatted key file</span></span><br><span class="line"><span class="comment"># (see &quot;pkcs12&quot; directive in man page).</span></span><br><span class="line">ca ca.crt</span><br><span class="line">cert server.crt</span><br><span class="line">key server.key  <span class="comment"># This file should be kept secret</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Diffie hellman parameters.</span></span><br><span class="line"><span class="comment"># Generate your own with:</span></span><br><span class="line"><span class="comment">#   openssl dhparam -out dh2048.pem 2048</span></span><br><span class="line">dh dh.pem	</span><br><span class="line"><span class="comment"># 以上配置内容修改为证书生成所对应的文件名及路径，服务端识别的相对路径为 `/etc/openvpn`</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Push routes to the client to allow it</span></span><br><span class="line"><span class="comment"># to reach other private subnets behind</span></span><br><span class="line"><span class="comment"># the server.  Remember that these</span></span><br><span class="line"><span class="comment"># private subnets will also need</span></span><br><span class="line"><span class="comment"># to know to route the OpenVPN client</span></span><br><span class="line"><span class="comment"># address pool (10.8.0.0/255.255.255.0)</span></span><br><span class="line"><span class="comment"># back to the OpenVPN server.</span></span><br><span class="line">push <span class="string">&quot;route 172.16.1.0 255.255.255.0&quot;</span></span><br><span class="line">push <span class="string">&quot;route 192.168.1.0 255.255.255.0&quot;</span></span><br><span class="line"><span class="comment"># 推送路由信息给客户端以找到 VPN 背后的子网</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Select a cryptographic cipher.</span></span><br><span class="line"><span class="comment"># This config item must be copied to</span></span><br><span class="line"><span class="comment"># the client config file as well.</span></span><br><span class="line"><span class="comment"># Note that v2.4 client/server will automatically</span></span><br><span class="line"><span class="comment"># negotiate AES-256-GCM in TLS mode.</span></span><br><span class="line"><span class="comment"># See also the ncp-cipher option in the manpage</span></span><br><span class="line">cipher AES-256-GCM	<span class="comment"># 原：AES-256-CBC</span></span><br><span class="line"><span class="comment"># 修改为安全性更高的加密方式</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最后追加（可选）</span></span><br><span class="line">crl-verify crl.pem</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x04-客户端配置"><a href="#0x04-客户端配置" class="headerlink" title="0x04. 客户端配置"></a>0x04. 客户端配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 复杂官方客户端配置样例</span></span><br><span class="line"><span class="built_in">cp</span> /usr/share/doc/openvpn-2.4.12/sample/sample-config-files/client.conf openvpn/client/client.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># 以下为修改配置文件内容</span></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># The hostname/IP and port of the server.</span></span><br><span class="line"><span class="comment"># You can have multiple remote entries</span></span><br><span class="line"><span class="comment"># to load balance between the servers.</span></span><br><span class="line">remote my-server-1 1194</span><br><span class="line">;remote my-server-2 1194</span><br><span class="line"><span class="comment"># 修改服务器监听地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SSL/TLS parms.</span></span><br><span class="line"><span class="comment"># See the server config file for more</span></span><br><span class="line"><span class="comment"># description.  It&#x27;s best to use</span></span><br><span class="line"><span class="comment"># a separate .crt/.key file pair</span></span><br><span class="line"><span class="comment"># for each client.  A single ca</span></span><br><span class="line"><span class="comment"># file can be used for all clients.</span></span><br><span class="line">ca ca.crt</span><br><span class="line">cert client.crt</span><br><span class="line">key client.key</span><br><span class="line"></span><br><span class="line"><span class="comment"># If a tls-auth key is used on the server</span></span><br><span class="line"><span class="comment"># then every client must also have the key.</span></span><br><span class="line">tls-auth ta.key 1</span><br><span class="line"><span class="comment"># 以上配置内容修改为文件所对应路径，证书文件与配置文件在同一目录下即可</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Select a cryptographic cipher.</span></span><br><span class="line"><span class="comment"># If the cipher option is used on the server</span></span><br><span class="line"><span class="comment"># then you must also specify it here.</span></span><br><span class="line"><span class="comment"># Note that v2.4 client/server will automatically</span></span><br><span class="line"><span class="comment"># negotiate AES-256-GCM in TLS mode.</span></span><br><span class="line"><span class="comment"># See also the ncp-cipher option in the manpage</span></span><br><span class="line">cipher AES-256-GCM</span><br><span class="line"><span class="comment"># 修改加密方式</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x05-启动服务端并让其开机自动启动"><a href="#0x05-启动服务端并让其开机自动启动" class="headerlink" title="0x05. 启动服务端并让其开机自动启动"></a>0x05. 启动服务端并让其开机自动启动</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start openvpn@server</span><br><span class="line">systemctl <span class="built_in">enable</span> openvpn@server</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x06-配置防火墙与流量转发"><a href="#0x06-配置防火墙与流量转发" class="headerlink" title="0x06. 配置防火墙与流量转发"></a>0x06. 配置防火墙与流量转发</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置防火墙与流量转发</span></span><br><span class="line">firewall-cmd --permanent --add-service openvpn</span><br><span class="line">firewall-cmd --permanent --add-masquerade</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否开启流量转发</span></span><br><span class="line">sysctl -a | grep net.ipv4.ip_forward</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保net.ipv4.ip_forward 等于 1，如果不是，则需要修改一下</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;net.ipv4.ip_forward = 1&quot;</span> &gt;&gt; /etc/sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x07-合并证书到配置文件中"><a href="#0x07-合并证书到配置文件中" class="headerlink" title="0x07. 合并证书到配置文件中"></a>0x07. 合并证书到配置文件中</h2><p>编辑client.ovpn客户端配置文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim client.ovpn</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除或者注释以下几行内容：</span></span><br><span class="line">ca ca.crt　　			改为：<span class="comment">#ca ca.crt</span></span><br><span class="line">cert client.crt　　	改为：<span class="comment">#cert client.crt</span></span><br><span class="line">key client.key　　	改为：<span class="comment">#key client.key</span></span><br><span class="line">tls-auth ta.key 1　　	改为：<span class="comment">#tls-auth ta.key 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在最后面添加以下内容：</span></span><br><span class="line">&lt;ca&gt;</span><br><span class="line"><span class="comment"># ca.crt 文件内容</span></span><br><span class="line">&lt;/ca&gt;</span><br><span class="line">&lt;cert&gt;</span><br><span class="line"><span class="comment"># client.crt 文件内容</span></span><br><span class="line">&lt;/cert&gt;</span><br><span class="line">&lt;key&gt;</span><br><span class="line"><span class="comment"># client.key 文件内容</span></span><br><span class="line">&lt;/key&gt;</span><br><span class="line">key-direction 1</span><br><span class="line">&lt;tls-auth&gt;</span><br><span class="line"><span class="comment"># ta.key 文件内容</span></span><br><span class="line">&lt;/tls-auth&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制各文件里的内容到相应的位置即可！保存退出！！</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x08-故障修复"><a href="#0x08-故障修复" class="headerlink" title="0x08. 故障修复"></a>0x08. 故障修复</h2><h3 id="TLS密钥协商在60秒内失败"><a href="#TLS密钥协商在60秒内失败" class="headerlink" title="TLS密钥协商在60秒内失败"></a>TLS密钥协商在60秒内失败</h3><blockquote>
-<p>TLS错误：TLS密钥协商在60秒内失败（检查您的网络连接）</p>
-</blockquote>
-<p>设置OpenVPN时最常见的问题之一是，连接两端的两个OpenVPN守护程序都无法彼此建立TCP或UDP连接。</p>
-<p>这几乎是由于以下原因造成的：</p>
-<ul>
-<li><p>服务器网络上的外围防火墙正在过滤传入的OpenVPN数据包（默认情况下，OpenVPN使用UDP或TCP端口号1194）。</p>
-</li>
-<li><p>在OpenVPN服务器计算机上运行的软件防火墙本身正在过滤端口1194上的传入连接。请注意，除非另有配置，否则许多操作系统默认情况下会阻止传入连接。</p>
-</li>
-<li><p>服务器网络上的NAT网关没有TCP &#x2F; UDP 1194到OpenVPN服务器计算机内部地址的端口转发规则。<br>OpenVPN客户端配置在其配置文件中没有正确的服务器地址。客户端配置文件中的remote指令必须指向服务器本身或服务器网络网关的公共IP地址。</p>
-</li>
-<li><p>另一个可能的原因是Windows防火墙阻止了对openvpn.exe二进制文件的访问。您可能需要将其列入白名单（添加到“例外”列表中），OpenVPN才能正常工作。</p>
-</li>
-</ul>
-<p>在您的情况下，任何这些也很可能导致相同的问题。因此，只需逐一浏览。</p>
-<h3 id="Failed-to-start-OpenVPN-Robust"><a href="#Failed-to-start-OpenVPN-Robust" class="headerlink" title="Failed to start OpenVPN Robust"></a>Failed to start OpenVPN Robust</h3><p>Failed to start OpenVPN Robust And Highly Flexible Tunneling Application</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这次出现这个故障的原因是SELinux，因为从Windows系统上传配置文件到Linux系统，造成selinux的权限设置有问题</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<h2 id="0x09-参考文章"><a href="#0x09-参考文章" class="headerlink" title="0x09. 参考文章"></a>0x09. 参考文章</h2><ul>
-<li><a href="https://cloud.tencent.com/developer/article/1871073">Centos7安装与配置OpenVPN服务器 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></li>
-<li><a href="https://chanjarster.github.io/post/network/ip-forwarding-masq-nat/">IP Forwarding, Masquerading 和 NAT</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>安全运维</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>openvpn</tag>
-        <tag>security</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 下安装 JDK</title>
-    <url>/2023/09/01/setup-jdk/</url>
-    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
-
-<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>jdk</tag>
-        <tag>pyspark</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CentOS7 下安装 Jupyter</title>
     <url>/2023/09/02/setup-jupyter/</url>
     <content><![CDATA[<h1 id="JupyterLab"><a href="#JupyterLab" class="headerlink" title="JupyterLab"></a>JupyterLab</h1><p>Install JupyterLab with pip:</p>
@@ -647,8 +479,31 @@
       </categories>
       <tags>
         <tag>centos7</tag>
-        <tag>pyspark</tag>
         <tag>jupyterlab</tag>
+        <tag>pyspark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 JDK</title>
+    <url>/2023/09/01/setup-jdk/</url>
+    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
+        <tag>jdk</tag>
       </tags>
   </entry>
   <entry>
@@ -672,6 +527,60 @@
       <tags>
         <tag>centos7</tag>
         <tag>pyspark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 部署 OpenVPN</title>
+    <url>/2023/10/29/setup-openvpn/</url>
+    <content><![CDATA[<h2 id="0x01-环境安装"><a href="#0x01-环境安装" class="headerlink" title="0x01. 环境安装"></a>0x01. 环境安装</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 更新 CentOS 软件包</span></span><br><span class="line">yum -y update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 OpenVPN 和 EasyRSA</span></span><br><span class="line">yum -y install openvpn easy-rsa firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果未能成功安装 OpenVPN，则可能需要先安装一下 Epel 库</span></span><br><span class="line">yum install epel-release -y</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="0x02-证书生成"><a href="#0x02-证书生成" class="headerlink" title="0x02. 证书生成"></a>0x02. 证书生成</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 首先需要初始化 PKI ，会在当前目录生成 pki 目录</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa init-pki</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来是生成 CA 证书，其中 nopass 表示不加密私钥，主要是方便后面导出公钥与颁发服务器证书</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-ca nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再来是生成交互密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa gen-dh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始生成服务端密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-server-full server nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来生成客户端密钥，如果未开启同证书允许多人登陆，则需要多次执行生成对应的客户端密钥</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa build-client-full client nopass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最后是生成证书交互列表，如果不需要 crl-verify 则可以跳过</span></span><br><span class="line">/usr/share/easy-rsa/3/easyrsa gen-crl</span><br><span class="line"></span><br><span class="line"><span class="comment"># 其实到这一步需要的证书都以及生成好了，如果你开启了 tls-auth 则还需要生成共享密钥</span></span><br><span class="line">openvpn --genkey --secret pki/ta.key</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在上面所有证书都生成完毕之后</span></span><br><span class="line"><span class="comment"># 创建目录存放所有相关证书文件，方便后期管理（备份与恢复）</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 服务端配置所需证书文件</span></span><br><span class="line"><span class="built_in">mkdir</span> -p openvpn/server</span><br><span class="line"><span class="built_in">cp</span> pki/ca.crt openvpn/server/ca.crt</span><br><span class="line"><span class="built_in">cp</span> pki/dh.pem openvpn/server/dh.pem</span><br><span class="line"><span class="built_in">cp</span> pki/issued/server.crt openvpn/server/server.crt</span><br><span class="line"><span class="built_in">cp</span> pki/private/server.key openvpn/server/server.key</span><br><span class="line"><span class="built_in">cp</span> pki/ta.key openvpn/server/ta.key</span><br><span class="line"><span class="built_in">cp</span> pki/crl.pem openvpn/server/crl.pem</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 客户端配置所需证书文件</span></span><br><span class="line"><span class="built_in">mkdir</span> -p openvpn/client</span><br><span class="line"><span class="built_in">cp</span> pki/ca.crt openvpn/client/ca.crt</span><br><span class="line"><span class="built_in">cp</span> pki/issued/client.crt openvpn/client/client.crt</span><br><span class="line"><span class="built_in">cp</span> pki/private/client.key openvpn/client/client.key</span><br><span class="line"><span class="built_in">cp</span> pki/ta.key openvpn/client/ta.key</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x03-服务端配置"><a href="#0x03-服务端配置" class="headerlink" title="0x03. 服务端配置"></a>0x03. 服务端配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 复制官方服务端配置样例</span></span><br><span class="line"><span class="built_in">cp</span> /usr/share/doc/openvpn-2.4.12/sample/sample-config-files/server.conf openvpn/server/server.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># 以下为修改配置文件内容</span></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SSL/TLS root certificate (ca), certificate</span></span><br><span class="line"><span class="comment"># (cert), and private key (key).  Each client</span></span><br><span class="line"><span class="comment"># and the server must have their own cert and</span></span><br><span class="line"><span class="comment"># key file.  The server and all clients will</span></span><br><span class="line"><span class="comment"># use the same ca file.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># See the &quot;easy-rsa&quot; directory for a series</span></span><br><span class="line"><span class="comment"># of scripts for generating RSA certificates</span></span><br><span class="line"><span class="comment"># and private keys.  Remember to use</span></span><br><span class="line"><span class="comment"># a unique Common Name for the server</span></span><br><span class="line"><span class="comment"># and each of the client certificates.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Any X509 key management system can be used.</span></span><br><span class="line"><span class="comment"># OpenVPN can also use a PKCS #12 formatted key file</span></span><br><span class="line"><span class="comment"># (see &quot;pkcs12&quot; directive in man page).</span></span><br><span class="line">ca ca.crt</span><br><span class="line">cert server.crt</span><br><span class="line">key server.key  <span class="comment"># This file should be kept secret</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Diffie hellman parameters.</span></span><br><span class="line"><span class="comment"># Generate your own with:</span></span><br><span class="line"><span class="comment">#   openssl dhparam -out dh2048.pem 2048</span></span><br><span class="line">dh dh.pem </span><br><span class="line"><span class="comment"># 以上配置内容修改为证书生成所对应的文件名及路径，服务端识别的相对路径为 `/etc/openvpn`</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Push routes to the client to allow it</span></span><br><span class="line"><span class="comment"># to reach other private subnets behind</span></span><br><span class="line"><span class="comment"># the server.  Remember that these</span></span><br><span class="line"><span class="comment"># private subnets will also need</span></span><br><span class="line"><span class="comment"># to know to route the OpenVPN client</span></span><br><span class="line"><span class="comment"># address pool (10.8.0.0/255.255.255.0)</span></span><br><span class="line"><span class="comment"># back to the OpenVPN server.</span></span><br><span class="line">push <span class="string">&quot;route 172.16.1.0 255.255.255.0&quot;</span></span><br><span class="line">push <span class="string">&quot;route 192.168.1.0 255.255.255.0&quot;</span></span><br><span class="line"><span class="comment"># 推送路由信息给客户端以找到 VPN 背后的子网</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Select a cryptographic cipher.</span></span><br><span class="line"><span class="comment"># This config item must be copied to</span></span><br><span class="line"><span class="comment"># the client config file as well.</span></span><br><span class="line"><span class="comment"># Note that v2.4 client/server will automatically</span></span><br><span class="line"><span class="comment"># negotiate AES-256-GCM in TLS mode.</span></span><br><span class="line"><span class="comment"># See also the ncp-cipher option in the manpage</span></span><br><span class="line">cipher AES-256-GCM <span class="comment"># 原：AES-256-CBC</span></span><br><span class="line"><span class="comment"># 修改为安全性更高的加密方式</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最后追加（可选）</span></span><br><span class="line">crl-verify crl.pem</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x04-客户端配置"><a href="#0x04-客户端配置" class="headerlink" title="0x04. 客户端配置"></a>0x04. 客户端配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 复杂官方客户端配置样例</span></span><br><span class="line"><span class="built_in">cp</span> /usr/share/doc/openvpn-2.4.12/sample/sample-config-files/client.conf openvpn/client/client.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># 以下为修改配置文件内容</span></span><br><span class="line"><span class="comment">#############################################################</span></span><br><span class="line"><span class="comment"># The hostname/IP and port of the server.</span></span><br><span class="line"><span class="comment"># You can have multiple remote entries</span></span><br><span class="line"><span class="comment"># to load balance between the servers.</span></span><br><span class="line">remote my-server-1 1194</span><br><span class="line">;remote my-server-2 1194</span><br><span class="line"><span class="comment"># 修改服务器监听地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SSL/TLS parms.</span></span><br><span class="line"><span class="comment"># See the server config file for more</span></span><br><span class="line"><span class="comment"># description.  It&#x27;s best to use</span></span><br><span class="line"><span class="comment"># a separate .crt/.key file pair</span></span><br><span class="line"><span class="comment"># for each client.  A single ca</span></span><br><span class="line"><span class="comment"># file can be used for all clients.</span></span><br><span class="line">ca ca.crt</span><br><span class="line">cert client.crt</span><br><span class="line">key client.key</span><br><span class="line"></span><br><span class="line"><span class="comment"># If a tls-auth key is used on the server</span></span><br><span class="line"><span class="comment"># then every client must also have the key.</span></span><br><span class="line">tls-auth ta.key 1</span><br><span class="line"><span class="comment"># 以上配置内容修改为文件所对应路径，证书文件与配置文件在同一目录下即可</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Select a cryptographic cipher.</span></span><br><span class="line"><span class="comment"># If the cipher option is used on the server</span></span><br><span class="line"><span class="comment"># then you must also specify it here.</span></span><br><span class="line"><span class="comment"># Note that v2.4 client/server will automatically</span></span><br><span class="line"><span class="comment"># negotiate AES-256-GCM in TLS mode.</span></span><br><span class="line"><span class="comment"># See also the ncp-cipher option in the manpage</span></span><br><span class="line">cipher AES-256-GCM</span><br><span class="line"><span class="comment"># 修改加密方式</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x05-启动服务端并让其开机自动启动"><a href="#0x05-启动服务端并让其开机自动启动" class="headerlink" title="0x05. 启动服务端并让其开机自动启动"></a>0x05. 启动服务端并让其开机自动启动</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start openvpn@server</span><br><span class="line">systemctl <span class="built_in">enable</span> openvpn@server</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x06-配置防火墙与流量转发"><a href="#0x06-配置防火墙与流量转发" class="headerlink" title="0x06. 配置防火墙与流量转发"></a>0x06. 配置防火墙与流量转发</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置防火墙与流量转发</span></span><br><span class="line">firewall-cmd --permanent --add-service openvpn</span><br><span class="line">firewall-cmd --permanent --add-masquerade</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否开启流量转发</span></span><br><span class="line">sysctl -a | grep net.ipv4.ip_forward</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保net.ipv4.ip_forward 等于 1，如果不是，则需要修改一下</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;net.ipv4.ip_forward = 1&quot;</span> &gt;&gt; /etc/sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x07-合并证书到配置文件中"><a href="#0x07-合并证书到配置文件中" class="headerlink" title="0x07. 合并证书到配置文件中"></a>0x07. 合并证书到配置文件中</h2><p>编辑client.ovpn客户端配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim client.ovpn</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除或者注释以下几行内容：</span></span><br><span class="line">ca ca.crt　　   改为：<span class="comment">#ca ca.crt</span></span><br><span class="line">cert client.crt　　 改为：<span class="comment">#cert client.crt</span></span><br><span class="line">key client.key　　 改为：<span class="comment">#key client.key</span></span><br><span class="line">tls-auth ta.key 1　　 改为：<span class="comment">#tls-auth ta.key 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在最后面添加以下内容：</span></span><br><span class="line">&lt;ca&gt;</span><br><span class="line"><span class="comment"># ca.crt 文件内容</span></span><br><span class="line">&lt;/ca&gt;</span><br><span class="line">&lt;cert&gt;</span><br><span class="line"><span class="comment"># client.crt 文件内容</span></span><br><span class="line">&lt;/cert&gt;</span><br><span class="line">&lt;key&gt;</span><br><span class="line"><span class="comment"># client.key 文件内容</span></span><br><span class="line">&lt;/key&gt;</span><br><span class="line">key-direction 1</span><br><span class="line">&lt;tls-auth&gt;</span><br><span class="line"><span class="comment"># ta.key 文件内容</span></span><br><span class="line">&lt;/tls-auth&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制各文件里的内容到相应的位置即可！保存退出！！</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x08-故障修复"><a href="#0x08-故障修复" class="headerlink" title="0x08. 故障修复"></a>0x08. 故障修复</h2><h3 id="TLS密钥协商在60秒内失败"><a href="#TLS密钥协商在60秒内失败" class="headerlink" title="TLS密钥协商在60秒内失败"></a>TLS密钥协商在60秒内失败</h3><blockquote>
+<p>TLS错误：TLS密钥协商在60秒内失败（检查您的网络连接）</p>
+</blockquote>
+<p>设置OpenVPN时最常见的问题之一是，连接两端的两个OpenVPN守护程序都无法彼此建立TCP或UDP连接。</p>
+<p>这几乎是由于以下原因造成的：</p>
+<ul>
+<li><p>服务器网络上的外围防火墙正在过滤传入的OpenVPN数据包（默认情况下，OpenVPN使用UDP或TCP端口号1194）。</p>
+</li>
+<li><p>在OpenVPN服务器计算机上运行的软件防火墙本身正在过滤端口1194上的传入连接。请注意，除非另有配置，否则许多操作系统默认情况下会阻止传入连接。</p>
+</li>
+<li><p>服务器网络上的NAT网关没有TCP &#x2F; UDP 1194到OpenVPN服务器计算机内部地址的端口转发规则。<br>OpenVPN客户端配置在其配置文件中没有正确的服务器地址。客户端配置文件中的remote指令必须指向服务器本身或服务器网络网关的公共IP地址。</p>
+</li>
+<li><p>另一个可能的原因是Windows防火墙阻止了对openvpn.exe二进制文件的访问。您可能需要将其列入白名单（添加到“例外”列表中），OpenVPN才能正常工作。</p>
+</li>
+</ul>
+<p>在您的情况下，任何这些也很可能导致相同的问题。因此，只需逐一浏览。</p>
+<h3 id="Failed-to-start-OpenVPN-Robust"><a href="#Failed-to-start-OpenVPN-Robust" class="headerlink" title="Failed to start OpenVPN Robust"></a>Failed to start OpenVPN Robust</h3><p>Failed to start OpenVPN Robust And Highly Flexible Tunneling Application</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这次出现这个故障的原因是SELinux，因为从Windows系统上传配置文件到Linux系统，造成selinux的权限设置有问题</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x09-参考文章"><a href="#0x09-参考文章" class="headerlink" title="0x09. 参考文章"></a>0x09. 参考文章</h2><ul>
+<li><a href="https://cloud.tencent.com/developer/article/1871073">Centos7安装与配置OpenVPN服务器 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></li>
+<li><a href="https://chanjarster.github.io/post/network/ip-forwarding-masq-nat/">IP Forwarding, Masquerading 和 NAT</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>自建服务</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>openvpn</tag>
+        <tag>security</tag>
+        <tag>self-hosted</tag>
       </tags>
   </entry>
   <entry>
