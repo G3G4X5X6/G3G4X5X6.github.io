@@ -132,9 +132,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
     
   </entry>
   
@@ -180,9 +180,39 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
+    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
+    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
     
-    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
+  </entry>
+  
+  <entry>
+    <title>开发环境依赖组件容器化配置参考</title>
+    <link href="http://example.com/2023/08/20/docker-compose4dev/"/>
+    <id>http://example.com/2023/08/20/docker-compose4dev/</id>
+    <published>2023-08-20T04:05:26.000Z</published>
+    <updated>2024-11-05T02:34:51.434Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 &lt;code&gt;docker-compose&lt;/code&gt; 用于快速部署依赖组件环境&lt;/p&gt;
+&lt;h2 id=&quot;组件&quot;&gt;&lt;a href=&quot;#组件&quot; class=&quot;headerlink&quot; title=&quot;组件&quot;&gt;&lt;/a&gt;组件&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;elasticsearch:8.8.0&lt;/li&gt;
+&lt;li&gt;kibana:8.8.0&lt;/li&gt;
+&lt;li&gt;redis:7.0.11&lt;/li&gt;
+&lt;li&gt;mysql:8&lt;/li&gt;
+&lt;li&gt;postgres:15&lt;/li&gt;
+&lt;li&gt;grafana-enterprise&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​	&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="docker" scheme="http://example.com/tags/docker/"/>
+    
+    <category term="docker-compose" scheme="http://example.com/tags/docker-compose/"/>
     
   </entry>
   

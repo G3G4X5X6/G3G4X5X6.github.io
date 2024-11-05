@@ -30,6 +30,85 @@
       </tags>
   </entry>
   <entry>
+    <title>开发环境依赖组件容器化配置参考</title>
+    <url>/2023/08/20/docker-compose4dev/</url>
+    <content><![CDATA[<p>为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 <code>docker-compose</code> 用于快速部署依赖组件环境</p>
+<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><ul>
+<li>elasticsearch:8.8.0</li>
+<li>kibana:8.8.0</li>
+<li>redis:7.0.11</li>
+<li>mysql:8</li>
+<li>postgres:15</li>
+<li>grafana-enterprise</li>
+</ul>
+<p>​	</p>
+<span id="more"></span>
+
+
+
+<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/elasticsearch/elasticsearch:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">elasticsearch8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ELASTIC_PASSWORD=&lt;Your_ELASTIC_PASSWORD&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9200:9200&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">esdata:/usr/share/elasticsearch/data</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">kibana:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/kibana/kibana:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kibana8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SERVER_NAME=kibana</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">XPACK_SECURITY_ENABLED=true</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5601:5601&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kibanadata:/usr/share/kibana/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:7.0.11</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis7</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="comment"># 修改密码以及绑定地址</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">--requirepass</span> <span class="string">&quot;&lt;your_redis_pass&gt;&quot;</span> <span class="string">--bind</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6379:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redisdata:/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">--default-authentication-plugin=caching_sha2_password</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&lt;root_pass&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">&lt;your_db&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">&lt;your_user&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">&lt;your_pass&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line">      </span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:15</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">postgres15</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">POSTGRES_DB:</span> <span class="string">database</span>       				<span class="comment"># 设置数据库名称</span></span><br><span class="line">      <span class="attr">POSTGRES_USER:</span> <span class="string">user</span>   					<span class="comment"># 设置数据库用户</span></span><br><span class="line">      <span class="attr">POSTGRES_PASSWORD:</span> <span class="string">PasswOrd</span>				<span class="comment"># 设置数据库密码</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgres_data:/var/lib/postgresql/data</span> 	<span class="comment"># 数据持久化存储的路径</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5432:5432&quot;</span> 	<span class="comment"># 将容器的 5432 端口映射到宿主机的 5432 端口</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">grafana:</span> 	<span class="comment"># 默认账号密码: admin/admin</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">grafana/grafana-enterprise</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">GF_INSTALL_PLUGINS=grafana-clock-panel</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;3000:3000&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">grafana-storage:/var/lib/grafana</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">esdata:</span></span><br><span class="line">  <span class="attr">kibanadata:</span></span><br><span class="line">  <span class="attr">redisdata:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br><span class="line">  <span class="attr">postgres_data:</span></span><br><span class="line">  <span class="attr">grafana-storage:</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>docker-compose</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 JDK</title>
+    <url>/2023/09/01/setup-jdk/</url>
+    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>jdk</tag>
+        <tag>pyspark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下安装 Jupyter</title>
+    <url>/2023/09/02/setup-jupyter/</url>
+    <content><![CDATA[<h1 id="JupyterLab"><a href="#JupyterLab" class="headerlink" title="JupyterLab"></a>JupyterLab</h1><p>Install JupyterLab with pip:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install jupyterlab</span><br></pre></td></tr></table></figure>
+
+<p>Once installed, launch JupyterLab with:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter lab</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="Jupyter-Notebook"><a href="#Jupyter-Notebook" class="headerlink" title="Jupyter Notebook"></a>Jupyter Notebook</h1><p>Install the classic Jupyter Notebook with:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install notebook</span><br></pre></td></tr></table></figure>
+
+<p>To run the notebook:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. generate config</span></span><br><span class="line">jupyter lab --generate-config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. change settings</span></span><br><span class="line">c.ServerApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.ServerApp.open_browser = False</span><br><span class="line">c.ServerApp.allow_remote_access = True</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. open port</span></span><br><span class="line">firewall-cmd --zone=public --add-port=8888/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
+        <tag>jupyterlab</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2024/11/04/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -456,80 +535,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CentOS7 下安装 Jupyter</title>
-    <url>/2023/09/02/setup-jupyter/</url>
-    <content><![CDATA[<h1 id="JupyterLab"><a href="#JupyterLab" class="headerlink" title="JupyterLab"></a>JupyterLab</h1><p>Install JupyterLab with pip:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install jupyterlab</span><br></pre></td></tr></table></figure>
-
-<p>Once installed, launch JupyterLab with:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter lab</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="Jupyter-Notebook"><a href="#Jupyter-Notebook" class="headerlink" title="Jupyter Notebook"></a>Jupyter Notebook</h1><p>Install the classic Jupyter Notebook with:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install notebook</span><br></pre></td></tr></table></figure>
-
-<p>To run the notebook:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
-
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. generate config</span></span><br><span class="line">jupyter lab --generate-config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. change settings</span></span><br><span class="line">c.ServerApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.ServerApp.open_browser = False</span><br><span class="line">c.ServerApp.allow_remote_access = True</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. open port</span></span><br><span class="line">firewall-cmd --zone=public --add-port=8888/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>jupyterlab</tag>
-        <tag>pyspark</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 下安装 JDK</title>
-    <url>/2023/09/01/setup-jdk/</url>
-    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
-
-<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>pyspark</tag>
-        <tag>jdk</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 下部署 PySpark 开发环境</title>
-    <url>/2023/09/02/setup-pyspark/</url>
-    <content><![CDATA[<h1 id="一、下载预编译包"><a href="#一、下载预编译包" class="headerlink" title="一、下载预编译包"></a>一、下载预编译包</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载页面</span></span><br><span class="line">https://spark.apache.org/downloads.html</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载地址</span></span><br><span class="line">https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz</span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark Standalone Mode</span></span><br><span class="line">https://spark.apache.org/docs/latest/spark-standalone.html</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="二、配置环境变量"><a href="#二、配置环境变量" class="headerlink" title="二、配置环境变量"></a>二、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 spark 的 sbin 目录下的 spark-config.sh 中添加JDK的路径</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免报错：</span></span><br><span class="line"><span class="comment"># localhost:   JAVA_HOME is not set</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="三、开放端口"><a href="#三、开放端口" class="headerlink" title="三、开放端口"></a>三、开放端口</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=4040/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8081/tcp --permanent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载规则</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、启动"><a href="#四、启动" class="headerlink" title="四、启动"></a>四、启动</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./start-all.sh</span><br></pre></td></tr></table></figure>
-
-<h1 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 Spark 的 bin 目录下执行：</span></span><br><span class="line">./run-example SparkPi 10 | grep <span class="string">&quot;Pi is roughly&quot;</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>pyspark</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CentOS7 部署 OpenVPN</title>
     <url>/2023/10/29/setup-openvpn/</url>
     <content><![CDATA[<h2 id="0x01-环境安装"><a href="#0x01-环境安装" class="headerlink" title="0x01. 环境安装"></a>0x01. 环境安装</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 更新 CentOS 软件包</span></span><br><span class="line">yum -y update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 OpenVPN 和 EasyRSA</span></span><br><span class="line">yum -y install openvpn easy-rsa firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果未能成功安装 OpenVPN，则可能需要先安装一下 Epel 库</span></span><br><span class="line">yum install epel-release -y</span><br></pre></td></tr></table></figure>
@@ -639,6 +644,29 @@
       <tags>
         <tag>DNS</tag>
         <tag>domain</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下部署 PySpark 开发环境</title>
+    <url>/2023/09/02/setup-pyspark/</url>
+    <content><![CDATA[<h1 id="一、下载预编译包"><a href="#一、下载预编译包" class="headerlink" title="一、下载预编译包"></a>一、下载预编译包</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载页面</span></span><br><span class="line">https://spark.apache.org/downloads.html</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载地址</span></span><br><span class="line">https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz</span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark Standalone Mode</span></span><br><span class="line">https://spark.apache.org/docs/latest/spark-standalone.html</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、配置环境变量"><a href="#二、配置环境变量" class="headerlink" title="二、配置环境变量"></a>二、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 spark 的 sbin 目录下的 spark-config.sh 中添加JDK的路径</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免报错：</span></span><br><span class="line"><span class="comment"># localhost:   JAVA_HOME is not set</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="三、开放端口"><a href="#三、开放端口" class="headerlink" title="三、开放端口"></a>三、开放端口</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=4040/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8081/tcp --permanent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载规则</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、启动"><a href="#四、启动" class="headerlink" title="四、启动"></a>四、启动</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./start-all.sh</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 Spark 的 bin 目录下执行：</span></span><br><span class="line">./run-example SparkPi 10 | grep <span class="string">&quot;Pi is roughly&quot;</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
       </tags>
   </entry>
 </search>
