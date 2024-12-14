@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-12-14T10:59:37.849Z</updated>
+  <updated>2024-12-14T11:08:58.034Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/2024/12/14/Rust-Cargo-Workspace/"/>
     <id>http://example.com/2024/12/14/Rust-Cargo-Workspace/</id>
     <published>2024-12-14T03:51:48.000Z</published>
-    <updated>2024-12-14T10:59:37.849Z</updated>
+    <updated>2024-12-14T11:08:58.034Z</updated>
     
     
     <summary type="html">&lt;p&gt;Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（&lt;a href=&quot;crates.io&quot;&gt;Package Registry&lt;/a&gt; ） 。&lt;/p&gt;
@@ -34,9 +34,9 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
-    
     <category term="Cargo" scheme="http://example.com/tags/Cargo/"/>
+    
+    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -187,9 +187,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
     
   </entry>
   
