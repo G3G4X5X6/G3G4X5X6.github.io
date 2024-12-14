@@ -102,6 +102,135 @@
       </tags>
   </entry>
   <entry>
+    <title>Cargo 使用指南之代码组织管理</title>
+    <url>/2024/12/14/Rust-Cargo-Workspace/</url>
+    <content><![CDATA[<p>Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（<a href="crates.io">Package Registry</a> ） 。</p>
+<h1 id="0x01-快速上手"><a href="#0x01-快速上手" class="headerlink" title="0x01. 快速上手"></a>0x01. 快速上手</h1><h2 id="1-1-创建二进制项目"><a href="#1-1-创建二进制项目" class="headerlink" title="1.1 创建二进制项目"></a>1.1 创建二进制项目</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cargo new hello_world</span><br><span class="line"><span class="comment"># 等价于 cargo new hello_world --bin</span></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── main.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// cat src/main.rs</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line">// cat Cargo.toml</span><br><span class="line"><span class="section">[package]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;hello_world&quot;</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line"><span class="attr">edition</span> = <span class="string">&quot;2021&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 运行</span></span><br><span class="line">cargo run</span><br><span class="line"><span class="comment">#    Compiling hello_world v0.1.0 (/home/sec/rust-code/hello_world)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.74s</span></span><br><span class="line"><span class="comment">#      Running `target/debug/hello_world`</span></span><br><span class="line"><span class="comment"># Hello, world!</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-2-创建依赖库项目"><a href="#1-2-创建依赖库项目" class="headerlink" title="1.2 创建依赖库项目"></a>1.2 创建依赖库项目</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cargo new hello_world --lib</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── lib.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/lib.rs</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">add</span>(left: <span class="type">u64</span>, right: <span class="type">u64</span>) <span class="punctuation">-&gt;</span> <span class="type">u64</span> &#123;</span><br><span class="line">    left + right</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[cfg(test)]</span></span><br><span class="line"><span class="keyword">mod</span> tests &#123;</span><br><span class="line">    <span class="keyword">use</span> super::*;</span><br><span class="line"></span><br><span class="line">    <span class="meta">#[test]</span></span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">it_works</span>() &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">result</span> = <span class="title function_ invoke__">add</span>(<span class="number">2</span>, <span class="number">2</span>);</span><br><span class="line">        <span class="built_in">assert_eq!</span>(result, <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line">// Cargo.toml</span><br><span class="line"><span class="section">[package]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;hello_world&quot;</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line"><span class="attr">edition</span> = <span class="string">&quot;2021&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 代码测试</span></span><br><span class="line">cargo <span class="built_in">test</span></span><br><span class="line"><span class="comment">#    Compiling hello_world v0.1.0 (/home/sec/rust-code/hello_world)</span></span><br><span class="line"><span class="comment">#     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s</span></span><br><span class="line"><span class="comment">#      Running unittests src/lib.rs (target/debug/deps/hello_world-75e6e3a0ae56ef19)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 1 test</span></span><br><span class="line"><span class="comment"># test tests::it_works ... ok</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment">#    Doc-tests hello_world</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 0 tests</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="1-3-下载项目并构建"><a href="#1-3-下载项目并构建" class="headerlink" title="1.3 下载项目并构建"></a>1.3 下载项目并构建</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/rust-lang/regex.git</span><br><span class="line"><span class="comment"># Cloning into &#x27;regex&#x27;...</span></span><br><span class="line"><span class="comment"># remote: Enumerating objects: 9712, done.</span></span><br><span class="line"><span class="comment"># remote: Counting objects: 100% (3776/3776), done.</span></span><br><span class="line"><span class="comment"># remote: Compressing objects: 100% (1345/1345), done.</span></span><br><span class="line"><span class="comment"># remote: Total 9712 (delta 2492), reused 3367 (delta 2373), pack-reused 5936 (from 1)</span></span><br><span class="line"><span class="comment"># Receiving objects: 100% (9712/9712), 8.03 MiB | 816.00 KiB/s, done.</span></span><br><span class="line"><span class="comment"># Resolving deltas: 100% (6364/6364), done.</span></span><br><span class="line"><span class="built_in">cd</span> regex</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 构建</span></span><br><span class="line">cargo build</span><br><span class="line"><span class="comment">#     Updating `rsproxy-sparse` index</span></span><br><span class="line"><span class="comment">#      Locking 54 packages to latest compatible versions</span></span><br><span class="line"><span class="comment">#       Adding env_logger v0.9.3 (available: v0.11.5)</span></span><br><span class="line"><span class="comment">#    Compiling memchr v2.7.4</span></span><br><span class="line"><span class="comment">#    Compiling regex-syntax v0.8.5 (/home/sec/rust-code/regex/regex-syntax)</span></span><br><span class="line"><span class="comment">#    Compiling aho-corasick v1.1.3</span></span><br><span class="line"><span class="comment">#    Compiling regex-automata v0.4.9 (/home/sec/rust-code/regex/regex-automata)</span></span><br><span class="line"><span class="comment">#    Compiling regex v1.11.1 (/home/sec/rust-code/regex)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [optimized + debuginfo] target(s) in 7.13s</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="0x02-核心概念"><a href="#0x02-核心概念" class="headerlink" title="0x02. 核心概念"></a>0x02. 核心概念</h1><h2 id="2-1-Module"><a href="#2-1-Module" class="headerlink" title="2.1 Module"></a>2.1 Module</h2><ul>
+<li>模块(Module)：可以用来将代码分层地拆分为逻辑单元（模块），并管理它们之间的可见性（公共&#x2F;私有）</li>
+<li>模块中包含：函数、结构、特征、实现块，甚至其他模块。</li>
+<li>一个文件可以多个模块，也可以一个文件一个模块，模块可以被认为是真实项目中的<strong>代码组织单元</strong></li>
+</ul>
+<h2 id="2-2-Crate"><a href="#2-2-Crate" class="headerlink" title="2.2 Crate"></a>2.2 Crate</h2><ul>
+<li>板条箱 (Crate) 是 Rust 中的<strong>编译单元</strong>。</li>
+</ul>
+<h2 id="2-3-Package"><a href="#2-3-Package" class="headerlink" title="2.3  Package"></a>2.3  Package</h2><ul>
+<li>包（package）是一个包含一个或多个 crate 的集合，用于提供一组功能。</li>
+<li>一个包（package）包含一个 <code>Cargo.toml</code> 文件，该文件描述了如何构建这些 crate。</li>
+<li>一个包（package）可以包含任意多个二进制 crate，但最多只能包含一个库 crate。</li>
+<li>一个包（package）必须至少包含一个 crate，无论是库 crate 还是二进制 crate。</li>
+</ul>
+<h3 id="2-3-1-Package-目录布局"><a href="#2-3-1-Package-目录布局" class="headerlink" title="2.3.1 Package 目录布局"></a>2.3.1 Package 目录布局</h3><p>Cargo 使用约定来放置文件，以便轻松进入新的 Cargo Package</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── Cargo.lock</span><br><span class="line">├── Cargo.toml</span><br><span class="line">├── src/</span><br><span class="line">│   ├── lib.rs</span><br><span class="line">│   ├── main.rs</span><br><span class="line">│   └── bin/</span><br><span class="line">│       ├── named-executable.rs</span><br><span class="line">│       ├── another-executable.rs</span><br><span class="line">│       └── multi-file-executable/</span><br><span class="line">│           ├── main.rs</span><br><span class="line">│           └── some_module.rs</span><br><span class="line">├── benches/</span><br><span class="line">│   ├── large-input.rs</span><br><span class="line">│   └── multi-file-bench/</span><br><span class="line">│       ├── main.rs</span><br><span class="line">│       └── bench_module.rs</span><br><span class="line">├── examples/</span><br><span class="line">│   ├── simple.rs</span><br><span class="line">│   └── multi-file-example/</span><br><span class="line">│       ├── main.rs</span><br><span class="line">│       └── ex_module.rs</span><br><span class="line">└── tests/</span><br><span class="line">    ├── some-integration-tests.rs</span><br><span class="line">    └── multi-file-test/</span><br><span class="line">        ├── main.rs</span><br><span class="line">        └── test_module.rs</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Cargo.toml</code> 和 <code>Cargo.lock</code> 存储在包的根目录中（包根目录）。</li>
+<li>源代码放在 <code>src</code> 目录中。</li>
+<li>默认库文件是 <code>src/lib.rs</code>。</li>
+<li>默认可执行文件是 <code>src/main.rs</code>。<ul>
+<li>其他可执行文件可以放在 <code>src/bin/</code> 中。</li>
+</ul>
+</li>
+<li>基准测试放在 <code>benches</code> 目录中。</li>
+<li>示例放在 <code>examples</code> 目录中。</li>
+<li>集成测试放在 <code>tests</code> 目录中。</li>
+</ul>
+<h2 id="2-4-Workspace"><a href="#2-4-Workspace" class="headerlink" title="2.4 Workspace"></a>2.4 Workspace</h2><p>工作区(Workspace)是一个或多个包(Package)的集合，这些包称为工作区成员，它们一起进行管理。</p>
+<h1 id="0x03-基础包管理"><a href="#0x03-基础包管理" class="headerlink" title="0x03. 基础包管理"></a>0x03. 基础包管理</h1><h2 id="3-1-包含一个-crate"><a href="#3-1-包含一个-crate" class="headerlink" title="3.1 包含一个 crate"></a>3.1 包含一个 crate</h2><ul>
+<li>库 crate<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── lib.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure></li>
+<li>二进制 crate<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── main.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="3-2-包含多个-crate"><a href="#3-2-包含多个-crate" class="headerlink" title="3.2 包含多个 crate"></a>3.2 包含多个 crate</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建库crate</span></span><br><span class="line">cargo new mutil_crate --lib</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认可执行文件是 `src/main.rs`，其他可执行文件可以放在 `src/bin/` 中。</span></span><br><span class="line"><span class="comment"># 创建多个二进制crate</span></span><br><span class="line"><span class="built_in">mkdir</span> src/bin</span><br><span class="line">vim src/bin/main1.rs</span><br><span class="line">vim src/bin/main2.rs</span><br><span class="line"></span><br><span class="line"><span class="comment"># Package结构</span></span><br><span class="line">tree .</span><br><span class="line">.</span><br><span class="line">├── Cargo.toml</span><br><span class="line">└── src</span><br><span class="line">    ├── bin</span><br><span class="line">    │   ├── main1.rs</span><br><span class="line">    │   └── main2.rs</span><br><span class="line">    └── lib.rs</span><br><span class="line"></span><br><span class="line">3 directories, 4 files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行指定二进制crate</span></span><br><span class="line">cargo run --bin main1</span><br><span class="line"><span class="comment">#    Compiling mutil_crate v0.1.0 (/home/sec/rust-code/mutil_crate)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s</span></span><br><span class="line"><span class="comment">#      Running `target/debug/main1`</span></span><br><span class="line"><span class="comment"># Hello, main1!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行库crate单元测试</span></span><br><span class="line">cargo <span class="built_in">test</span> --lib</span><br><span class="line"><span class="comment">#    Compiling mutil_crate v0.1.0 (/home/sec/rust-code/mutil_crate)</span></span><br><span class="line"><span class="comment">#     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s</span></span><br><span class="line"><span class="comment">#      Running unittests src/lib.rs (target/debug/deps/mutil_crate-55531a037166be43)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 1 test</span></span><br><span class="line"><span class="comment"># test tests::it_works ... ok</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="0x04-进阶工作空间"><a href="#0x04-进阶工作空间" class="headerlink" title="0x04. 进阶工作空间"></a>0x04. 进阶工作空间</h1><p>工作区是一个或多个包的集合，这些包称为工作区成员，它们一起进行管理。</p>
+<h2 id="4-1-功能要点"><a href="#4-1-功能要点" class="headerlink" title="4.1 功能要点"></a>4.1 功能要点</h2><ul>
+<li>通用命令可以在所有工作区成员中运行，例如 <code>cargo check --workspace</code>。</li>
+<li>所有包共享一个位于工作区根目录中的通用 <code>Cargo.lock</code> 文件。</li>
+<li>所有包共享一个通用输出目录，该目录默认为工作区根目录中名为 <code>target</code> 的目录。</li>
+<li>共享包元数据，例如与 <code>workspace.package</code>。</li>
+<li><code>Cargo.toml</code> 中的 <code>[patch]</code>、<code>[replace] </code> 和 <code>[profile.*]</code> 部分仅在根清单中被识别，并在成员包的清单中被忽略。</li>
+</ul>
+<h2 id="4-2-支持配置"><a href="#4-2-支持配置" class="headerlink" title="4.2 支持配置"></a>4.2 支持配置</h2><p>工作区的根 <code>Cargo.toml</code> 支持以下部分：</p>
+<ul>
+<li>[workspace] — 定义工作区。<ul>
+<li>resolver — 设置要使用的依赖项解析器。</li>
+<li>members — 工作区中要包含的软件包。</li>
+<li>exclude — 从工作区中排除的软件包。</li>
+<li>default-members — 未选择特定软件包时要操作的软件包。</li>
+<li>package — 软件包中用于继承的键。</li>
+<li>dependency — 软件包依赖项中用于继承的键。</li>
+<li>lints — 软件包 lints 中用于继承的键。</li>
+<li>metadata — 外部工具的额外设置。</li>
+</ul>
+</li>
+<li>[patch] — 覆盖依赖项。</li>
+<li>[replace] — 覆盖依赖项（已弃用）。</li>
+<li>[profile] — 编译器设置和优化。</li>
+</ul>
+<h2 id="4-3-创建工作空间"><a href="#4-3-创建工作空间" class="headerlink" title="4.3 创建工作空间"></a>4.3 创建工作空间</h2><p>工作区至少必须有一个成员，要么是根包，要么是虚拟清单。</p>
+<p>要创建工作区，请将 <code>[workspace]</code> 表添加到 <code>Cargo.toml</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[workspace]</span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-1-有根-Package-的工作空间"><a href="#4-3-1-有根-Package-的工作空间" class="headerlink" title="4.3.1 有根 Package 的工作空间"></a>4.3.1 有根 Package 的工作空间</h3><p>如果在已经定义 <code>[package]</code> 的 <code>Cargo.toml</code> 中添加了 <code>[workspace]</code> 部分，则该包是工作区的根包。工作区根目录是工作区的 <code>Cargo.toml</code> 所在的目录。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[workspace]</span><br><span class="line"></span><br><span class="line">[package]</span><br><span class="line">name = <span class="string">&quot;hello_world&quot;</span> <span class="comment"># the name of the package</span></span><br><span class="line">version = <span class="string">&quot;0.1.0&quot;</span>    <span class="comment"># the current version, obeying semver</span></span><br><span class="line">authors = [<span class="string">&quot;Alice &lt;a@example.com&gt;&quot;</span>, <span class="string">&quot;Bob &lt;b@example.com&gt;&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-2-虚拟工作空间"><a href="#4-3-2-虚拟工作空间" class="headerlink" title="4.3.2 虚拟工作空间"></a>4.3.2 虚拟工作空间</h3><p>或者，可以创建一个包含 <code>[workspace]</code> 部分但不包含 <code>[package]</code> 部分的 <code>Cargo.toml</code> 文件。这称为虚拟清单。当没有“主”包或您希望将所有包组织在单独的目录中时，这通常很有用。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># [PROJECT_DIR]/Cargo.toml</span></span><br><span class="line">[workspace]</span><br><span class="line">members = [<span class="string">&quot;hello_world&quot;</span>]</span><br><span class="line">resolver = <span class="string">&quot;2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># [PROJECT_DIR]/hello_world/Cargo.toml</span></span><br><span class="line">[package]</span><br><span class="line">name = <span class="string">&quot;hello_world&quot;</span> <span class="comment"># the name of the package</span></span><br><span class="line">version = <span class="string">&quot;0.1.0&quot;</span>    <span class="comment"># the current version, obeying semver</span></span><br><span class="line">edition = <span class="string">&quot;2021&quot;</span>     <span class="comment"># the edition, will have no effect on a resolver used in the workspace</span></span><br><span class="line">authors = [<span class="string">&quot;Alice &lt;a@example.com&gt;&quot;</span>, <span class="string">&quot;Bob &lt;b@example.com&gt;&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>必须在虚拟工作区中明确设置解析器，因为它们没有 package.edition 来从解析器版本推断它。</li>
+<li>默认情况下，在工作区根目录中运行的命令将针对所有工作区成员运行，请参阅默认成员。</li>
+</ul>
+<h2 id="4-4-小结"><a href="#4-4-小结" class="headerlink" title="4.4 小结"></a>4.4 小结</h2><ol>
+<li>创建工作空间就是在  <code>Cargo.toml</code> 中添加了 <code>[workspace]</code> 部分。</li>
+<li>成员 <code>Package</code> 对 <code>Workspace</code> 的数据继承。</li>
+<li><code>cargo</code> 通用命令可以在所有工作区成员中运行。</li>
+<li>具体 <code>[workspace]</code> 部分配置，详情请查看官方指南： <a href="https://doc.rust-lang.org/stable/cargo/reference/workspaces.html#workspaces">Workspaces</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Rust</category>
+      </categories>
+      <tags>
+        <tag>Rust</tag>
+        <tag>笔记</tag>
+        <tag>Cargo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>开发环境依赖组件容器化配置参考</title>
     <url>/2023/08/20/docker-compose4dev/</url>
     <content><![CDATA[<p>为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 <code>docker-compose</code> 用于快速部署依赖组件环境</p>
@@ -127,60 +256,6 @@
       <tags>
         <tag>docker</tag>
         <tag>docker-compose</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2024/12/03/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清除旧的文件</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署GitPage</span></span><br><span class="line">hexo deploy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hello</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 下安装 Jupyter</title>
-    <url>/2023/09/02/setup-jupyter/</url>
-    <content><![CDATA[<h1 id="JupyterLab"><a href="#JupyterLab" class="headerlink" title="JupyterLab"></a>JupyterLab</h1><p>Install JupyterLab with pip:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install jupyterlab</span><br></pre></td></tr></table></figure>
-
-<p>Once installed, launch JupyterLab with:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter lab</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="Jupyter-Notebook"><a href="#Jupyter-Notebook" class="headerlink" title="Jupyter Notebook"></a>Jupyter Notebook</h1><p>Install the classic Jupyter Notebook with:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install notebook</span><br></pre></td></tr></table></figure>
-
-<p>To run the notebook:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
-
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. generate config</span></span><br><span class="line">jupyter lab --generate-config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. change settings</span></span><br><span class="line">c.ServerApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.ServerApp.open_browser = False</span><br><span class="line">c.ServerApp.allow_remote_access = True</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. open port</span></span><br><span class="line">firewall-cmd --zone=public --add-port=8888/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>jupyterlab</tag>
-        <tag>pyspark</tag>
       </tags>
   </entry>
   <entry>
@@ -584,26 +659,57 @@
       </tags>
   </entry>
   <entry>
-    <title>CentOS7 下安装 JDK</title>
-    <url>/2023/09/01/setup-jdk/</url>
-    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
+    <title>CentOS7 下安装 Jupyter</title>
+    <url>/2023/09/02/setup-jupyter/</url>
+    <content><![CDATA[<h1 id="JupyterLab"><a href="#JupyterLab" class="headerlink" title="JupyterLab"></a>JupyterLab</h1><p>Install JupyterLab with pip:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install jupyterlab</span><br></pre></td></tr></table></figure>
+
+<p>Once installed, launch JupyterLab with:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter lab</span><br></pre></td></tr></table></figure>
 
 <span id="more"></span>
 
-<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
+<h1 id="Jupyter-Notebook"><a href="#Jupyter-Notebook" class="headerlink" title="Jupyter Notebook"></a>Jupyter Notebook</h1><p>Install the classic Jupyter Notebook with:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install notebook</span><br></pre></td></tr></table></figure>
 
-<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<p>To run the notebook:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
 
-<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
-
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. generate config</span></span><br><span class="line">jupyter lab --generate-config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. change settings</span></span><br><span class="line">c.ServerApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.ServerApp.open_browser = False</span><br><span class="line">c.ServerApp.allow_remote_access = True</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. open port</span></span><br><span class="line">firewall-cmd --zone=public --add-port=8888/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>开发环境</category>
       </categories>
       <tags>
         <tag>centos7</tag>
+        <tag>jupyterlab</tag>
         <tag>pyspark</tag>
-        <tag>jdk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/12/03/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清除旧的文件</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署GitPage</span></span><br><span class="line">hexo deploy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hello</tag>
       </tags>
   </entry>
   <entry>
@@ -661,19 +767,18 @@
       </tags>
   </entry>
   <entry>
-    <title>CentOS7 下部署 PySpark 开发环境</title>
-    <url>/2023/09/02/setup-pyspark/</url>
-    <content><![CDATA[<h1 id="一、下载预编译包"><a href="#一、下载预编译包" class="headerlink" title="一、下载预编译包"></a>一、下载预编译包</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载页面</span></span><br><span class="line">https://spark.apache.org/downloads.html</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载地址</span></span><br><span class="line">https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz</span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark Standalone Mode</span></span><br><span class="line">https://spark.apache.org/docs/latest/spark-standalone.html</span><br></pre></td></tr></table></figure>
+    <title>CentOS7 下安装 JDK</title>
+    <url>/2023/09/01/setup-jdk/</url>
+    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
 
 <span id="more"></span>
 
-<h1 id="二、配置环境变量"><a href="#二、配置环境变量" class="headerlink" title="二、配置环境变量"></a>二、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 spark 的 sbin 目录下的 spark-config.sh 中添加JDK的路径</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免报错：</span></span><br><span class="line"><span class="comment"># localhost:   JAVA_HOME is not set</span></span><br></pre></td></tr></table></figure>
+<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
 
-<h1 id="三、开放端口"><a href="#三、开放端口" class="headerlink" title="三、开放端口"></a>三、开放端口</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=4040/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8081/tcp --permanent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载规则</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
 
-<h1 id="四、启动"><a href="#四、启动" class="headerlink" title="四、启动"></a>四、启动</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./start-all.sh</span><br></pre></td></tr></table></figure>
+<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
 
-<h1 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 Spark 的 bin 目录下执行：</span></span><br><span class="line">./run-example SparkPi 10 | grep <span class="string">&quot;Pi is roughly&quot;</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>开发环境</category>
@@ -681,6 +786,7 @@
       <tags>
         <tag>centos7</tag>
         <tag>pyspark</tag>
+        <tag>jdk</tag>
       </tags>
   </entry>
   <entry>
@@ -709,6 +815,29 @@
         <tag>centos7</tag>
         <tag>pyspark</tag>
         <tag>python3</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7 下部署 PySpark 开发环境</title>
+    <url>/2023/09/02/setup-pyspark/</url>
+    <content><![CDATA[<h1 id="一、下载预编译包"><a href="#一、下载预编译包" class="headerlink" title="一、下载预编译包"></a>一、下载预编译包</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载页面</span></span><br><span class="line">https://spark.apache.org/downloads.html</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载地址</span></span><br><span class="line">https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz</span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark Standalone Mode</span></span><br><span class="line">https://spark.apache.org/docs/latest/spark-standalone.html</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="二、配置环境变量"><a href="#二、配置环境变量" class="headerlink" title="二、配置环境变量"></a>二、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 spark 的 sbin 目录下的 spark-config.sh 中添加JDK的路径</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免报错：</span></span><br><span class="line"><span class="comment"># localhost:   JAVA_HOME is not set</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="三、开放端口"><a href="#三、开放端口" class="headerlink" title="三、开放端口"></a>三、开放端口</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=4040/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8081/tcp --permanent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载规则</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、启动"><a href="#四、启动" class="headerlink" title="四、启动"></a>四、启动</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./start-all.sh</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 Spark 的 bin 目录下执行：</span></span><br><span class="line">./run-example SparkPi 10 | grep <span class="string">&quot;Pi is roughly&quot;</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
       </tags>
   </entry>
   <entry>
