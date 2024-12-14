@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-11-04T01:38:16.183Z</updated>
+  <updated>2024-12-14T03:39:31.755Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,42 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Rust: 快速开始</title>
+    <link href="http://example.com/2024/12/14/Getting-Started/"/>
+    <id>http://example.com/2024/12/14/Getting-Started/</id>
+    <published>2024-12-14T02:54:21.000Z</published>
+    <updated>2024-12-14T03:39:31.755Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;0x01-安装&quot;&gt;&lt;a href=&quot;#0x01-安装&quot; class=&quot;headerlink&quot; title=&quot;0x01. 安装&quot;&gt;&lt;/a&gt;0x01. 安装&lt;/h1&gt;&lt;p&gt;在 Rust 开发环境中，所有工具都安装到 &lt;code&gt;~/.cargo/bin&lt;/code&gt; 目录中，您可以在此处找到 Rust 工具链，包括 &lt;code&gt;rustc&lt;/code&gt;、&lt;code&gt;cargo&lt;/code&gt; 和 &lt;code&gt;rustup&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;1-1-Windows&quot;&gt;&lt;a href=&quot;#1-1-Windows&quot; class=&quot;headerlink&quot; title=&quot;1.1 Windows&quot;&gt;&lt;/a&gt;1.1 Windows&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Using rustup (Recommended)&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.rust-lang.org/tools/install&quot;&gt;去官方网站下载安装程序&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Windows Subsystem for Linux&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;curl --proto &amp;#39;=https&amp;#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hello World</title>
-    <link href="http://example.com/2024/11/04/hello-world/"/>
-    <id>http://example.com/2024/11/04/hello-world/</id>
-    <published>2024-11-04T01:38:16.183Z</published>
-    <updated>2024-11-04T01:38:16.183Z</updated>
+    <link href="http://example.com/2024/12/03/hello-world/"/>
+    <id>http://example.com/2024/12/03/hello-world/</id>
+    <published>2024-12-03T01:54:01.950Z</published>
+    <updated>2024-12-03T01:54:01.951Z</updated>
     
     
     <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;</summary>
@@ -40,7 +71,7 @@
     <link href="http://example.com/2023/10/29/harden-mysql/"/>
     <id>http://example.com/2023/10/29/harden-mysql/</id>
     <published>2023-10-29T01:57:11.000Z</published>
-    <updated>2024-11-04T01:37:43.004Z</updated>
+    <updated>2024-12-14T02:44:04.435Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -70,7 +101,7 @@
     <link href="http://example.com/2023/10/29/setup-openvpn/"/>
     <id>http://example.com/2023/10/29/setup-openvpn/</id>
     <published>2023-10-29T01:51:39.000Z</published>
-    <updated>2024-11-04T01:37:43.015Z</updated>
+    <updated>2024-12-07T08:58:40.550Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;0x01-环境安装&quot;&gt;&lt;a href=&quot;#0x01-环境安装&quot; class=&quot;headerlink&quot; title=&quot;0x01. 环境安装&quot;&gt;&lt;/a&gt;0x01. 环境安装&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 更新 CentOS 软件包&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum -y update&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 安装 OpenVPN 和 EasyRSA&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum -y install openvpn easy-rsa firewalld&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 如果未能成功安装 OpenVPN，则可能需要先安装一下 Epel 库&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum install epel-release -y&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
@@ -95,7 +126,7 @@
     <link href="http://example.com/2023/09/02/setup-pyspark/"/>
     <id>http://example.com/2023/09/02/setup-pyspark/</id>
     <published>2023-09-01T16:05:11.000Z</published>
-    <updated>2023-09-01T16:07:34.711Z</updated>
+    <updated>2024-12-14T02:44:04.441Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;一、下载预编译包&quot;&gt;&lt;a href=&quot;#一、下载预编译包&quot; class=&quot;headerlink&quot; title=&quot;一、下载预编译包&quot;&gt;&lt;/a&gt;一、下载预编译包&lt;/h1&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 下载页面&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://spark.apache.org/downloads.html&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 下载地址&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# Spark Standalone Mode&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://spark.apache.org/docs/latest/spark-standalone.html&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
@@ -116,7 +147,7 @@
     <link href="http://example.com/2023/09/02/setup-jupyter/"/>
     <id>http://example.com/2023/09/02/setup-jupyter/</id>
     <published>2023-09-01T16:03:38.000Z</published>
-    <updated>2023-09-01T16:07:31.223Z</updated>
+    <updated>2024-12-14T02:44:04.436Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;JupyterLab&quot;&gt;&lt;a href=&quot;#JupyterLab&quot; class=&quot;headerlink&quot; title=&quot;JupyterLab&quot;&gt;&lt;/a&gt;JupyterLab&lt;/h1&gt;&lt;p&gt;Install JupyterLab with pip:&lt;/p&gt;
@@ -132,9 +163,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
-    
     <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
     
   </entry>
   
@@ -143,7 +174,7 @@
     <link href="http://example.com/2023/09/02/setup-python3-8-5/"/>
     <id>http://example.com/2023/09/02/setup-python3-8-5/</id>
     <published>2023-09-01T16:01:07.000Z</published>
-    <updated>2023-09-01T16:07:38.159Z</updated>
+    <updated>2024-12-14T02:44:04.442Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;一、前置条件&quot;&gt;&lt;a href=&quot;#一、前置条件&quot; class=&quot;headerlink&quot; title=&quot;一、前置条件&quot;&gt;&lt;/a&gt;一、前置条件&lt;/h1&gt;&lt;h2 id=&quot;1）安装依赖&quot;&gt;&lt;a href=&quot;#1）安装依赖&quot; class=&quot;headerlink&quot; title=&quot;1）安装依赖&quot;&gt;&lt;/a&gt;1）安装依赖&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;yum -y install libffi-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
@@ -168,7 +199,7 @@
     <link href="http://example.com/2023/09/01/setup-jdk/"/>
     <id>http://example.com/2023/09/01/setup-jdk/</id>
     <published>2023-09-01T15:58:29.000Z</published>
-    <updated>2023-09-01T16:07:25.351Z</updated>
+    <updated>2024-12-14T02:44:04.436Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;一、卸载系统自带的-OpenJDK&quot;&gt;&lt;a href=&quot;#一、卸载系统自带的-OpenJDK&quot; class=&quot;headerlink&quot; title=&quot;一、卸载系统自带的 OpenJDK&quot;&gt;&lt;/a&gt;一、卸载系统自带的 OpenJDK&lt;/h1&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 查看&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[root@docker ~]&lt;span class=&quot;comment&quot;&gt;# java -version&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;openjdk version &lt;span class=&quot;string&quot;&gt;&amp;quot;1.8.0_222&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;OpenJDK Runtime Environment (build 1.8.0_222-b10)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 卸载&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;rpm -qa | grep openjdk | xargs rpm -e --nodeps&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 确认&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;java -version&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
@@ -180,9 +211,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
     
   </entry>
   
@@ -191,7 +222,7 @@
     <link href="http://example.com/2023/08/20/docker-compose4dev/"/>
     <id>http://example.com/2023/08/20/docker-compose4dev/</id>
     <published>2023-08-20T04:05:26.000Z</published>
-    <updated>2024-11-05T02:34:51.434Z</updated>
+    <updated>2024-12-14T02:44:04.430Z</updated>
     
     
     <summary type="html">&lt;p&gt;为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 &lt;code&gt;docker-compose&lt;/code&gt; 用于快速部署依赖组件环境&lt;/p&gt;
@@ -221,7 +252,7 @@
     <link href="http://example.com/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/"/>
     <id>http://example.com/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/</id>
     <published>2023-06-15T11:11:59.000Z</published>
-    <updated>2023-08-20T05:03:47.796Z</updated>
+    <updated>2024-12-14T02:44:04.430Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;协议解析&quot;&gt;&lt;a href=&quot;#协议解析&quot; class=&quot;headerlink&quot; title=&quot;协议解析&quot;&gt;&lt;/a&gt;协议解析&lt;/h2&gt;&lt;p&gt;ARP（Address Resolution Protocol）协议是一种用于在计算机网络中解析网络层地址（如IP地址）与物理地址（如MAC地址）之间映射关系的协议。在数据包从源主机发送到目标主机的过程中，需要将目标主机的网络层地址转换为物理地址，才能在链路层上进行数据传输。&lt;/p&gt;</summary>
@@ -246,7 +277,7 @@
     <link href="http://example.com/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/"/>
     <id>http://example.com/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/</id>
     <published>2023-06-15T04:44:19.000Z</published>
-    <updated>2023-10-29T02:00:56.796Z</updated>
+    <updated>2024-12-14T02:44:04.442Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;技术说明&quot;&gt;&lt;a href=&quot;#技术说明&quot; class=&quot;headerlink&quot; title=&quot;技术说明&quot;&gt;&lt;/a&gt;技术说明&lt;/h1&gt;&lt;p&gt;域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。&lt;/p&gt;</summary>
