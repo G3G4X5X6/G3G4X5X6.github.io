@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-12-14T11:08:58.034Z</updated>
+  <updated>2024-12-15T13:12:26.893Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,38 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Rust “类型”</title>
+    <link href="http://example.com/2024/12/14/Rust-Types/"/>
+    <id>http://example.com/2024/12/14/Rust-Types/</id>
+    <published>2024-12-14T13:45:09.000Z</published>
+    <updated>2024-12-15T13:12:26.893Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;0x01-标量类型&quot;&gt;&lt;a href=&quot;#0x01-标量类型&quot; class=&quot;headerlink&quot; title=&quot;0x01. 标量类型&quot;&gt;&lt;/a&gt;0x01. 标量类型&lt;/h1&gt;&lt;p&gt;标量类型表示单个值。Rust</summary>
+        
+      
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Cargo 使用指南之代码组织管理</title>
     <link href="http://example.com/2024/12/14/Rust-Cargo-Workspace/"/>
     <id>http://example.com/2024/12/14/Rust-Cargo-Workspace/</id>
     <published>2024-12-14T03:51:48.000Z</published>
-    <updated>2024-12-14T11:08:58.034Z</updated>
+    <updated>2024-12-14T13:44:01.928Z</updated>
     
     
     <summary type="html">&lt;p&gt;Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（&lt;a href=&quot;crates.io&quot;&gt;Package Registry&lt;/a&gt; ） 。&lt;/p&gt;
@@ -34,9 +61,9 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="Cargo" scheme="http://example.com/tags/Cargo/"/>
-    
     <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+    <category term="Cargo" scheme="http://example.com/tags/Cargo/"/>
     
   </entry>
   
