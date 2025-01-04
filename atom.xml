@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-12-16T01:54:02.407Z</updated>
+  <updated>2025-01-04T09:52:09.842Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,26 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Rust：理解所有权</title>
+    <link href="http://example.com/2024/12/16/Rust-Understanding-Ownership/"/>
+    <id>http://example.com/2024/12/16/Rust-Understanding-Ownership/</id>
+    <published>2024-12-16T14:24:01.000Z</published>
+    <updated>2025-01-04T09:52:09.842Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;所有权是 Rust 最独特的功能，对语言的其余部分有着深远的影响。它使 Rust 能够在不需要垃圾收集器的情况下保证内存安全，因此了解所有权的工作原理非常重要。这里将尝试理解所有权以及几个相关功能：借用、切片以及 Rust 如何在内存中布局数据。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Rust “类型”</title>
     <link href="http://example.com/2024/12/14/Rust-Types/"/>
     <id>http://example.com/2024/12/14/Rust-Types/</id>
     <published>2024-12-14T13:45:09.000Z</published>
-    <updated>2024-12-16T01:54:02.407Z</updated>
+    <updated>2025-01-04T09:42:07.571Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-标量类型&quot;&gt;&lt;a href=&quot;#0x01-标量类型&quot; class=&quot;headerlink&quot; title=&quot;0x01. 标量类型&quot;&gt;&lt;/a&gt;0x01. 标量类型&lt;/h1&gt;&lt;p&gt;标量类型表示单个值。Rust 有四种主要标量类型：整数、浮点数、布尔值和字符。&lt;/p&gt;</summary>
