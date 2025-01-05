@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-01-05T11:35:16.879Z</updated>
+  <updated>2025-01-05T11:38:20.840Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,22 +21,10 @@
     <link href="http://example.com/2025/01/05/Rust-Error/"/>
     <id>http://example.com/2025/01/05/Rust-Error/</id>
     <published>2025-01-05T09:52:13.000Z</published>
-    <updated>2025-01-05T11:35:16.879Z</updated>
+    <updated>2025-01-05T11:38:20.840Z</updated>
     
     
-    <summary type="html">&lt;p&gt;错误是软件中不可避免的事实，因此 Rust 具有许多功能来处理出现错误的情况。在许多情况下，Rust 要求您承认错误的可能性并在代码编译之前采取一些措施。此要求可确保您在将代码部署到生产环境之前发现错误并适当处理它们，从而使您的程序更加健壮！&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Rust 将错误分为两大类：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;可恢复错误&lt;ul&gt;
-&lt;li&gt;对于可恢复错误，它的类型为 &lt;code&gt;Result&amp;lt;T, E&amp;gt;&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;不可恢复错误&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;panic!&lt;/code&gt; 当程序遇到不可恢复的错误时停止执行的宏。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;错误传播：&lt;code&gt;?&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;错误是软件中不可避免的事实，因此 Rust 具有许多功能来处理出现错误的情况。在许多情况下，Rust 要求您承认错误的可能性并在代码编译之前采取一些措施。此要求可确保您在将代码部署到生产环境之前发现错误并适当处理它们，从而使您的程序更加健壮！&lt;/p&gt;</summary>
     
     
     
@@ -52,17 +40,10 @@
     <link href="http://example.com/2025/01/04/Rust-Pattern-Matching/"/>
     <id>http://example.com/2025/01/04/Rust-Pattern-Matching/</id>
     <published>2025-01-04T14:09:40.000Z</published>
-    <updated>2025-01-05T09:56:41.859Z</updated>
+    <updated>2025-01-05T11:38:34.356Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;0x01-模式&quot;&gt;&lt;a href=&quot;#0x01-模式&quot; class=&quot;headerlink&quot; title=&quot;0x01. 模式&quot;&gt;&lt;/a&gt;0x01. 模式&lt;/h1&gt;&lt;p&gt;模式是 Rust 中用于匹配复杂和简单类型的结构的特殊语法。将模式与匹配表达式和其他结构结合使用，可以更好地控制程序的控制流。模式由以下内容的组合组成：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Literals&lt;/li&gt;
-&lt;li&gt;Destructured arrays, enums, structs, or tuples&lt;/li&gt;
-&lt;li&gt;Variables&lt;/li&gt;
-&lt;li&gt;Wildcards&lt;/li&gt;
-&lt;li&gt;Placeholders&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">&lt;h1 id=&quot;0x01-模式&quot;&gt;&lt;a href=&quot;#0x01-模式&quot; class=&quot;headerlink&quot; title=&quot;0x01. 模式&quot;&gt;&lt;/a&gt;0x01. 模式&lt;/h1&gt;&lt;p&gt;模式是 Rust 中用于匹配复杂和简单类型的结构的特殊语法。将模式与匹配表达式和其他结构结合使用，可以更好地控制程序的控制流。模式由以下内容的组合组成：&lt;/p&gt;</summary>
     
     
     
@@ -280,9 +261,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
-    
     <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
     
   </entry>
   
@@ -328,9 +309,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
     
   </entry>
   
