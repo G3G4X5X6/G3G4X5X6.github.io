@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-01-05T09:52:34.827Z</updated>
+  <updated>2025-01-05T09:56:41.973Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/2025/01/05/Rust-Error/"/>
     <id>http://example.com/2025/01/05/Rust-Error/</id>
     <published>2025-01-05T09:52:13.000Z</published>
-    <updated>2025-01-05T09:52:34.827Z</updated>
+    <updated>2025-01-05T09:56:41.973Z</updated>
     
     
     
@@ -31,8 +31,6 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
-    
   </entry>
   
   <entry>
@@ -40,7 +38,7 @@
     <link href="http://example.com/2025/01/04/Rust-Pattern-Matching/"/>
     <id>http://example.com/2025/01/04/Rust-Pattern-Matching/</id>
     <published>2025-01-04T14:09:40.000Z</published>
-    <updated>2025-01-05T09:51:46.187Z</updated>
+    <updated>2025-01-05T09:56:41.859Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-模式&quot;&gt;&lt;a href=&quot;#0x01-模式&quot; class=&quot;headerlink&quot; title=&quot;0x01. 模式&quot;&gt;&lt;/a&gt;0x01. 模式&lt;/h1&gt;&lt;p&gt;模式是 Rust 中用于匹配复杂和简单类型的结构的特殊语法。将模式与匹配表达式和其他结构结合使用，可以更好地控制程序的控制流。模式由以下内容的组合组成：&lt;/p&gt;
@@ -59,8 +57,6 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
-    
   </entry>
   
   <entry>
@@ -68,7 +64,7 @@
     <link href="http://example.com/2024/12/16/Rust-Understanding-Ownership/"/>
     <id>http://example.com/2024/12/16/Rust-Understanding-Ownership/</id>
     <published>2024-12-16T14:24:01.000Z</published>
-    <updated>2025-01-05T09:51:43.346Z</updated>
+    <updated>2025-01-05T09:56:41.787Z</updated>
     
     
     <summary type="html">&lt;p&gt;所有权是 Rust 最独特的功能，对语言的其余部分有着深远的影响。它使 Rust 能够在不需要垃圾收集器的情况下保证内存安全，因此了解所有权的工作原理非常重要。&lt;/p&gt;</summary>
@@ -80,8 +76,6 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
-    
   </entry>
   
   <entry>
@@ -89,7 +83,7 @@
     <link href="http://example.com/2024/12/14/Rust-Types/"/>
     <id>http://example.com/2024/12/14/Rust-Types/</id>
     <published>2024-12-14T13:45:09.000Z</published>
-    <updated>2025-01-04T09:42:07.571Z</updated>
+    <updated>2025-01-05T09:56:41.934Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-标量类型&quot;&gt;&lt;a href=&quot;#0x01-标量类型&quot; class=&quot;headerlink&quot; title=&quot;0x01. 标量类型&quot;&gt;&lt;/a&gt;0x01. 标量类型&lt;/h1&gt;&lt;p&gt;标量类型表示单个值。Rust 有四种主要标量类型：整数、浮点数、布尔值和字符。&lt;/p&gt;</summary>
@@ -101,8 +95,6 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
-    
   </entry>
   
   <entry>
@@ -110,7 +102,7 @@
     <link href="http://example.com/2024/12/14/Rust-Cargo-Workspace/"/>
     <id>http://example.com/2024/12/14/Rust-Cargo-Workspace/</id>
     <published>2024-12-14T03:51:48.000Z</published>
-    <updated>2024-12-14T13:44:01.928Z</updated>
+    <updated>2025-01-05T09:56:42.432Z</updated>
     
     
     <summary type="html">&lt;p&gt;Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（&lt;a href=&quot;crates.io&quot;&gt;Package Registry&lt;/a&gt; ） 。&lt;/p&gt;
@@ -123,8 +115,6 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
-    
     <category term="Cargo" scheme="http://example.com/tags/Cargo/"/>
     
   </entry>
@@ -134,20 +124,22 @@
     <link href="http://example.com/2024/12/14/Rust-Getting-Started/"/>
     <id>http://example.com/2024/12/14/Rust-Getting-Started/</id>
     <published>2024-12-14T02:54:21.000Z</published>
-    <updated>2024-12-14T03:39:31.755Z</updated>
+    <updated>2025-01-05T09:56:41.942Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-安装&quot;&gt;&lt;a href=&quot;#0x01-安装&quot; class=&quot;headerlink&quot; title=&quot;0x01. 安装&quot;&gt;&lt;/a&gt;0x01. 安装&lt;/h1&gt;&lt;p&gt;在 Rust 开发环境中，所有工具都安装到 &lt;code&gt;~/.cargo/bin&lt;/code&gt; 目录中，您可以在此处找到 Rust 工具链，包括 &lt;code&gt;rustc&lt;/code&gt;、&lt;code&gt;cargo&lt;/code&gt; 和 &lt;code&gt;rustup&lt;/code&gt;。&lt;/p&gt;
 &lt;h2 id=&quot;1-1-Windows&quot;&gt;&lt;a href=&quot;#1-1-Windows&quot; class=&quot;headerlink&quot; title=&quot;1.1 Windows&quot;&gt;&lt;/a&gt;1.1 Windows&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;Using rustup (Recommended)&lt;ul&gt;
+&lt;li&gt;Using rustup (Recommended)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.rust-lang.org/tools/install&quot;&gt;去官方网站下载安装程序&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Windows Subsystem for Linux&lt;ul&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;Windows Subsystem for Linux&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;code&gt;curl --proto &amp;#39;=https&amp;#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;</summary>
+&lt;/ul&gt;</summary>
     
     
     
@@ -155,8 +147,6 @@
     
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
-    
-    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -276,9 +266,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
     
   </entry>
   
@@ -324,9 +314,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
-    
     <category term="jdk" scheme="http://example.com/tags/jdk/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
     
   </entry>
   

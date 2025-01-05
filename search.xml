@@ -38,7 +38,133 @@
       </categories>
       <tags>
         <tag>Rust</tag>
-        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cargo 使用指南之代码组织管理</title>
+    <url>/2024/12/14/Rust-Cargo-Workspace/</url>
+    <content><![CDATA[<p>Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（<a href="crates.io">Package Registry</a> ） 。</p>
+<h1 id="0x01-快速上手"><a href="#0x01-快速上手" class="headerlink" title="0x01. 快速上手"></a>0x01. 快速上手</h1><h2 id="1-1-创建二进制项目"><a href="#1-1-创建二进制项目" class="headerlink" title="1.1 创建二进制项目"></a>1.1 创建二进制项目</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cargo new hello_world</span><br><span class="line"><span class="comment"># 等价于 cargo new hello_world --bin</span></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── main.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// cat src/main.rs</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line">// cat Cargo.toml</span><br><span class="line"><span class="section">[package]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;hello_world&quot;</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line"><span class="attr">edition</span> = <span class="string">&quot;2021&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 运行</span></span><br><span class="line">cargo run</span><br><span class="line"><span class="comment">#    Compiling hello_world v0.1.0 (/home/sec/rust-code/hello_world)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.74s</span></span><br><span class="line"><span class="comment">#      Running `target/debug/hello_world`</span></span><br><span class="line"><span class="comment"># Hello, world!</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="1-2-创建依赖库项目"><a href="#1-2-创建依赖库项目" class="headerlink" title="1.2 创建依赖库项目"></a>1.2 创建依赖库项目</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cargo new hello_world --lib</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── lib.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/lib.rs</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">add</span>(left: <span class="type">u64</span>, right: <span class="type">u64</span>) <span class="punctuation">-&gt;</span> <span class="type">u64</span> &#123;</span><br><span class="line">    left + right</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[cfg(test)]</span></span><br><span class="line"><span class="keyword">mod</span> tests &#123;</span><br><span class="line">    <span class="keyword">use</span> super::*;</span><br><span class="line"></span><br><span class="line">    <span class="meta">#[test]</span></span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">it_works</span>() &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">result</span> = <span class="title function_ invoke__">add</span>(<span class="number">2</span>, <span class="number">2</span>);</span><br><span class="line">        <span class="built_in">assert_eq!</span>(result, <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line">// Cargo.toml</span><br><span class="line"><span class="section">[package]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;hello_world&quot;</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line"><span class="attr">edition</span> = <span class="string">&quot;2021&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 代码测试</span></span><br><span class="line">cargo <span class="built_in">test</span></span><br><span class="line"><span class="comment">#    Compiling hello_world v0.1.0 (/home/sec/rust-code/hello_world)</span></span><br><span class="line"><span class="comment">#     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s</span></span><br><span class="line"><span class="comment">#      Running unittests src/lib.rs (target/debug/deps/hello_world-75e6e3a0ae56ef19)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 1 test</span></span><br><span class="line"><span class="comment"># test tests::it_works ... ok</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment">#    Doc-tests hello_world</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 0 tests</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br></pre></td></tr></table></figure>
+
+<h2 id="1-3-下载项目并构建"><a href="#1-3-下载项目并构建" class="headerlink" title="1.3 下载项目并构建"></a>1.3 下载项目并构建</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/rust-lang/regex.git</span><br><span class="line"><span class="comment"># Cloning into &#x27;regex&#x27;...</span></span><br><span class="line"><span class="comment"># remote: Enumerating objects: 9712, done.</span></span><br><span class="line"><span class="comment"># remote: Counting objects: 100% (3776/3776), done.</span></span><br><span class="line"><span class="comment"># remote: Compressing objects: 100% (1345/1345), done.</span></span><br><span class="line"><span class="comment"># remote: Total 9712 (delta 2492), reused 3367 (delta 2373), pack-reused 5936 (from 1)</span></span><br><span class="line"><span class="comment"># Receiving objects: 100% (9712/9712), 8.03 MiB | 816.00 KiB/s, done.</span></span><br><span class="line"><span class="comment"># Resolving deltas: 100% (6364/6364), done.</span></span><br><span class="line"><span class="built_in">cd</span> regex</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 构建</span></span><br><span class="line">cargo build</span><br><span class="line"><span class="comment">#     Updating `rsproxy-sparse` index</span></span><br><span class="line"><span class="comment">#      Locking 54 packages to latest compatible versions</span></span><br><span class="line"><span class="comment">#       Adding env_logger v0.9.3 (available: v0.11.5)</span></span><br><span class="line"><span class="comment">#    Compiling memchr v2.7.4</span></span><br><span class="line"><span class="comment">#    Compiling regex-syntax v0.8.5 (/home/sec/rust-code/regex/regex-syntax)</span></span><br><span class="line"><span class="comment">#    Compiling aho-corasick v1.1.3</span></span><br><span class="line"><span class="comment">#    Compiling regex-automata v0.4.9 (/home/sec/rust-code/regex/regex-automata)</span></span><br><span class="line"><span class="comment">#    Compiling regex v1.11.1 (/home/sec/rust-code/regex)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [optimized + debuginfo] target(s) in 7.13s</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="0x02-核心概念"><a href="#0x02-核心概念" class="headerlink" title="0x02. 核心概念"></a>0x02. 核心概念</h1><h2 id="2-1-Module"><a href="#2-1-Module" class="headerlink" title="2.1 Module"></a>2.1 Module</h2><ul>
+<li>模块(Module)：可以用来将代码分层地拆分为逻辑单元（模块），并管理它们之间的可见性（公共&#x2F;私有）</li>
+<li>模块中包含：函数、结构、特征、实现块，甚至其他模块。</li>
+<li>一个文件可以多个模块，也可以一个文件一个模块，模块可以被认为是真实项目中的<strong>代码组织单元</strong></li>
+</ul>
+<h2 id="2-2-Crate"><a href="#2-2-Crate" class="headerlink" title="2.2 Crate"></a>2.2 Crate</h2><ul>
+<li>板条箱 (Crate) 是 Rust 中的<strong>编译单元</strong>。</li>
+</ul>
+<h2 id="2-3-Package"><a href="#2-3-Package" class="headerlink" title="2.3  Package"></a>2.3  Package</h2><ul>
+<li>包（package）是一个包含一个或多个 crate 的集合，用于提供一组功能。</li>
+<li>一个包（package）包含一个 <code>Cargo.toml</code> 文件，该文件描述了如何构建这些 crate。</li>
+<li>一个包（package）可以包含任意多个二进制 crate，但最多只能包含一个库 crate。</li>
+<li>一个包（package）必须至少包含一个 crate，无论是库 crate 还是二进制 crate。</li>
+</ul>
+<h3 id="2-3-1-Package-目录布局"><a href="#2-3-1-Package-目录布局" class="headerlink" title="2.3.1 Package 目录布局"></a>2.3.1 Package 目录布局</h3><p>Cargo 使用约定来放置文件，以便轻松进入新的 Cargo Package</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── Cargo.lock</span><br><span class="line">├── Cargo.toml</span><br><span class="line">├── src/</span><br><span class="line">│   ├── lib.rs</span><br><span class="line">│   ├── main.rs</span><br><span class="line">│   └── bin/</span><br><span class="line">│       ├── named-executable.rs</span><br><span class="line">│       ├── another-executable.rs</span><br><span class="line">│       └── multi-file-executable/</span><br><span class="line">│           ├── main.rs</span><br><span class="line">│           └── some_module.rs</span><br><span class="line">├── benches/</span><br><span class="line">│   ├── large-input.rs</span><br><span class="line">│   └── multi-file-bench/</span><br><span class="line">│       ├── main.rs</span><br><span class="line">│       └── bench_module.rs</span><br><span class="line">├── examples/</span><br><span class="line">│   ├── simple.rs</span><br><span class="line">│   └── multi-file-example/</span><br><span class="line">│       ├── main.rs</span><br><span class="line">│       └── ex_module.rs</span><br><span class="line">└── tests/</span><br><span class="line">    ├── some-integration-tests.rs</span><br><span class="line">    └── multi-file-test/</span><br><span class="line">        ├── main.rs</span><br><span class="line">        └── test_module.rs</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Cargo.toml</code> 和 <code>Cargo.lock</code> 存储在包的根目录中（包根目录）。</li>
+<li>源代码放在 <code>src</code> 目录中。</li>
+<li>默认库文件是 <code>src/lib.rs</code>。</li>
+<li>默认可执行文件是 <code>src/main.rs</code>。<ul>
+<li>其他可执行文件可以放在 <code>src/bin/</code> 中。</li>
+</ul>
+</li>
+<li>基准测试放在 <code>benches</code> 目录中。</li>
+<li>示例放在 <code>examples</code> 目录中。</li>
+<li>集成测试放在 <code>tests</code> 目录中。</li>
+</ul>
+<h2 id="2-4-Workspace"><a href="#2-4-Workspace" class="headerlink" title="2.4 Workspace"></a>2.4 Workspace</h2><p>工作区(Workspace)是一个或多个包(Package)的集合，这些包称为工作区成员，它们一起进行管理。</p>
+<h1 id="0x03-基础包管理"><a href="#0x03-基础包管理" class="headerlink" title="0x03. 基础包管理"></a>0x03. 基础包管理</h1><h2 id="3-1-包含一个-crate"><a href="#3-1-包含一个-crate" class="headerlink" title="3.1 包含一个 crate"></a>3.1 包含一个 crate</h2><ul>
+<li>库 crate</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── lib.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>二进制 crate</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── main.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-2-包含多个-crate"><a href="#3-2-包含多个-crate" class="headerlink" title="3.2 包含多个 crate"></a>3.2 包含多个 crate</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建库crate</span></span><br><span class="line">cargo new mutil_crate --lib</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认可执行文件是 `src/main.rs`，其他可执行文件可以放在 `src/bin/` 中。</span></span><br><span class="line"><span class="comment"># 创建多个二进制crate</span></span><br><span class="line"><span class="built_in">mkdir</span> src/bin</span><br><span class="line">vim src/bin/main1.rs</span><br><span class="line">vim src/bin/main2.rs</span><br><span class="line"></span><br><span class="line"><span class="comment"># Package结构</span></span><br><span class="line">tree .</span><br><span class="line">.</span><br><span class="line">├── Cargo.toml</span><br><span class="line">└── src</span><br><span class="line">    ├── bin</span><br><span class="line">    │   ├── main1.rs</span><br><span class="line">    │   └── main2.rs</span><br><span class="line">    └── lib.rs</span><br><span class="line"></span><br><span class="line">3 directories, 4 files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行指定二进制crate</span></span><br><span class="line">cargo run --bin main1</span><br><span class="line"><span class="comment">#    Compiling mutil_crate v0.1.0 (/home/sec/rust-code/mutil_crate)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s</span></span><br><span class="line"><span class="comment">#      Running `target/debug/main1`</span></span><br><span class="line"><span class="comment"># Hello, main1!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行库crate单元测试</span></span><br><span class="line">cargo <span class="built_in">test</span> --lib</span><br><span class="line"><span class="comment">#    Compiling mutil_crate v0.1.0 (/home/sec/rust-code/mutil_crate)</span></span><br><span class="line"><span class="comment">#     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s</span></span><br><span class="line"><span class="comment">#      Running unittests src/lib.rs (target/debug/deps/mutil_crate-55531a037166be43)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 1 test</span></span><br><span class="line"><span class="comment"># test tests::it_works ... ok</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br></pre></td></tr></table></figure>
+
+<h1 id="0x04-进阶工作空间"><a href="#0x04-进阶工作空间" class="headerlink" title="0x04. 进阶工作空间"></a>0x04. 进阶工作空间</h1><p>工作区是一个或多个包的集合，这些包称为工作区成员，它们一起进行管理。</p>
+<h2 id="4-1-功能要点"><a href="#4-1-功能要点" class="headerlink" title="4.1 功能要点"></a>4.1 功能要点</h2><ul>
+<li>通用命令可以在所有工作区成员中运行，例如 <code>cargo check --workspace</code>。</li>
+<li>所有包共享一个位于工作区根目录中的通用 <code>Cargo.lock</code> 文件。</li>
+<li>所有包共享一个通用输出目录，该目录默认为工作区根目录中名为 <code>target</code> 的目录。</li>
+<li>共享包元数据，例如与 <code>workspace.package</code>。</li>
+<li><code>Cargo.toml</code> 中的 <code>[patch]</code>、<code>[replace]</code> 和 <code>[profile.*]</code> 部分仅在根清单中被识别，并在成员包的清单中被忽略。</li>
+</ul>
+<h2 id="4-2-支持配置"><a href="#4-2-支持配置" class="headerlink" title="4.2 支持配置"></a>4.2 支持配置</h2><p>工作区的根 <code>Cargo.toml</code> 支持以下部分：</p>
+<ul>
+<li>[workspace] — 定义工作区。<ul>
+<li>resolver — 设置要使用的依赖项解析器。</li>
+<li>members — 工作区中要包含的软件包。</li>
+<li>exclude — 从工作区中排除的软件包。</li>
+<li>default-members — 未选择特定软件包时要操作的软件包。</li>
+<li>package — 软件包中用于继承的键。</li>
+<li>dependency — 软件包依赖项中用于继承的键。</li>
+<li>lints — 软件包 lints 中用于继承的键。</li>
+<li>metadata — 外部工具的额外设置。</li>
+</ul>
+</li>
+<li>[patch] — 覆盖依赖项。</li>
+<li>[replace] — 覆盖依赖项（已弃用）。</li>
+<li>[profile] — 编译器设置和优化。</li>
+</ul>
+<h2 id="4-3-创建工作空间"><a href="#4-3-创建工作空间" class="headerlink" title="4.3 创建工作空间"></a>4.3 创建工作空间</h2><p>工作区至少必须有一个成员，要么是根包，要么是虚拟清单。</p>
+<p>要创建工作区，请将 <code>[workspace]</code> 表添加到 <code>Cargo.toml</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[workspace]</span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-1-有根-Package-的工作空间"><a href="#4-3-1-有根-Package-的工作空间" class="headerlink" title="4.3.1 有根 Package 的工作空间"></a>4.3.1 有根 Package 的工作空间</h3><p>如果在已经定义 <code>[package]</code> 的 <code>Cargo.toml</code> 中添加了 <code>[workspace]</code> 部分，则该包是工作区的根包。工作区根目录是工作区的 <code>Cargo.toml</code> 所在的目录。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[workspace]</span><br><span class="line"></span><br><span class="line">[package]</span><br><span class="line">name = <span class="string">&quot;hello_world&quot;</span> <span class="comment"># the name of the package</span></span><br><span class="line">version = <span class="string">&quot;0.1.0&quot;</span>    <span class="comment"># the current version, obeying semver</span></span><br><span class="line">authors = [<span class="string">&quot;Alice &lt;a@example.com&gt;&quot;</span>, <span class="string">&quot;Bob &lt;b@example.com&gt;&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-2-虚拟工作空间"><a href="#4-3-2-虚拟工作空间" class="headerlink" title="4.3.2 虚拟工作空间"></a>4.3.2 虚拟工作空间</h3><p>或者，可以创建一个包含 <code>[workspace]</code> 部分但不包含 <code>[package]</code> 部分的 <code>Cargo.toml</code> 文件。这称为虚拟清单。当没有“主”包或您希望将所有包组织在单独的目录中时，这通常很有用。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># [PROJECT_DIR]/Cargo.toml</span></span><br><span class="line">[workspace]</span><br><span class="line">members = [<span class="string">&quot;hello_world&quot;</span>]</span><br><span class="line">resolver = <span class="string">&quot;2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># [PROJECT_DIR]/hello_world/Cargo.toml</span></span><br><span class="line">[package]</span><br><span class="line">name = <span class="string">&quot;hello_world&quot;</span> <span class="comment"># the name of the package</span></span><br><span class="line">version = <span class="string">&quot;0.1.0&quot;</span>    <span class="comment"># the current version, obeying semver</span></span><br><span class="line">edition = <span class="string">&quot;2021&quot;</span>     <span class="comment"># the edition, will have no effect on a resolver used in the workspace</span></span><br><span class="line">authors = [<span class="string">&quot;Alice &lt;a@example.com&gt;&quot;</span>, <span class="string">&quot;Bob &lt;b@example.com&gt;&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>必须在虚拟工作区中明确设置解析器，因为它们没有 <code>package.edition</code> 来从解析器版本推断它。</li>
+<li>默认情况下，在工作区根目录中运行的命令将针对所有工作区成员运行，请参阅 <a href="https://doc.rust-lang.org/stable/cargo/reference/workspaces.html#the-default-members-field"><code>default-members</code></a>。</li>
+</ul>
+<h2 id="4-4-小结"><a href="#4-4-小结" class="headerlink" title="4.4 小结"></a>4.4 小结</h2><ol>
+<li>创建工作空间就是在  <code>Cargo.toml</code> 中添加了 <code>[workspace]</code> 部分。</li>
+<li>成员 <code>Package</code> 对 <code>Workspace</code> 的数据继承。</li>
+<li><code>cargo</code> 通用命令可以对空间成员进行统一管理。</li>
+<li>具体 <code>[workspace]</code> 部分配置，详情请查看官方指南： <a href="https://doc.rust-lang.org/stable/cargo/reference/workspaces.html#workspaces">Workspaces</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Rust</category>
+      </categories>
+      <tags>
+        <tag>Rust</tag>
+        <tag>Cargo</tag>
       </tags>
   </entry>
   <entry>
@@ -46,19 +172,20 @@
     <url>/2024/12/14/Rust-Getting-Started/</url>
     <content><![CDATA[<h1 id="0x01-安装"><a href="#0x01-安装" class="headerlink" title="0x01. 安装"></a>0x01. 安装</h1><p>在 Rust 开发环境中，所有工具都安装到 <code>~/.cargo/bin</code> 目录中，您可以在此处找到 Rust 工具链，包括 <code>rustc</code>、<code>cargo</code> 和 <code>rustup</code>。</p>
 <h2 id="1-1-Windows"><a href="#1-1-Windows" class="headerlink" title="1.1 Windows"></a>1.1 Windows</h2><ol>
-<li>Using rustup (Recommended)<ul>
+<li>Using rustup (Recommended)</li>
+</ol>
+<ul>
 <li><a href="https://www.rust-lang.org/tools/install">去官方网站下载安装程序</a></li>
 </ul>
-</li>
-<li>Windows Subsystem for Linux<ul>
+<ol start="3">
+<li>Windows Subsystem for Linux</li>
+</ol>
+<ul>
 <li><code>curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></li>
 </ul>
-</li>
-</ol>
 <span id="more"></span>
 
 <h2 id="1-2-Linux-MacOS"><a href="#1-2-Linux-MacOS" class="headerlink" title="1.2 Linux &amp; MacOS"></a>1.2 Linux &amp; MacOS</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl --proto &#x27;=https&#x27; --tlsv1.2 -sSf https://sh.rustup.rs | sh</span><br></pre></td></tr></table></figure>
-
 
 <h1 id="0x02-更新"><a href="#0x02-更新" class="headerlink" title="0x02. 更新"></a>0x02. 更新</h1><p>要更新 Rust，在终端执行以下命令即可更新：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rustup update</span><br></pre></td></tr></table></figure>
@@ -78,7 +205,7 @@
 <p>步骤二：安装 Rust（请先完成步骤一的环境变量导入并 source rc 文件或重启终端生效）</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl --proto &#x27;=https&#x27; --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh</span><br></pre></td></tr></table></figure>
 
-<p>步骤三：设置 crates.io 镜像， 修改配置 ~&#x2F;.cargo&#x2F;config，已支持git协议和sparse协议，&gt;&#x3D;1.68 版本建议使用 sparse-index，速度更快。 </p>
+<p>步骤三：设置 crates.io 镜像， 修改配置 ~&#x2F;.cargo&#x2F;config，已支持git协议和sparse协议，&gt;&#x3D;1.68 版本建议使用 sparse-index，速度更快。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[source.crates-io]</span><br><span class="line">replace-with = &#x27;rsproxy-sparse&#x27;</span><br><span class="line">[source.rsproxy]</span><br><span class="line">registry = &quot;https://rsproxy.cn/crates.io-index&quot;</span><br><span class="line">[source.rsproxy-sparse]</span><br><span class="line">registry = &quot;sparse+https://rsproxy.cn/index/&quot;</span><br><span class="line">[registries.rsproxy]</span><br><span class="line">index = &quot;https://rsproxy.cn/crates.io-index&quot;</span><br><span class="line">[net]</span><br><span class="line">git-fetch-with-cli = true</span><br></pre></td></tr></table></figure>
 
 <h1 id="0x06-本地文档"><a href="#0x06-本地文档" class="headerlink" title="0x06. 本地文档"></a>0x06. 本地文档</h1><p>Rust 的安装还包括文档的本地副本，以便您可以离线阅读。运行 <code>rustup doc</code> 即可在浏览器中打开本地文档。</p>
@@ -86,31 +213,79 @@
 
 <h2 id="7-2-编写并运行Rust程序"><a href="#7-2-编写并运行Rust程序" class="headerlink" title="7.2 编写并运行Rust程序"></a>7.2 编写并运行Rust程序</h2><p>接下来，创建一个新的源文件并将其命名为 <code>main.rs</code>。Rust 文件始终以 <code>.rs</code> 扩展名结尾。如果文件名中使用多个单词，则惯例是使用下划线将它们分隔开。例如，使用 <code>hello_world.rs</code> 而不是 <code>helloworld.rs</code>。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>编译运行</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rustc main.rs</span><br><span class="line">./main</span><br><span class="line"><span class="comment"># Hello, world!</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ]]></content>
       <categories>
         <category>Rust</category>
       </categories>
       <tags>
         <tag>Rust</tag>
-        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Rust: 理解所有权</title>
+    <url>/2024/12/16/Rust-Understanding-Ownership/</url>
+    <content><![CDATA[<p>所有权是 Rust 最独特的功能，对语言的其余部分有着深远的影响。它使 Rust 能够在不需要垃圾收集器的情况下保证内存安全，因此了解所有权的工作原理非常重要。</p>
+<span id="more"></span>
+
+<h1 id="0x01-什么是所有权？"><a href="#0x01-什么是所有权？" class="headerlink" title="0x01. 什么是所有权？"></a>0x01. 什么是所有权？</h1><p>所有权是一组规则，用于控制 Rust 程序如何管理内存。</p>
+<h1 id="0x02-所有权规则"><a href="#0x02-所有权规则" class="headerlink" title="0x02. 所有权规则"></a>0x02. 所有权规则</h1><ul>
+<li>每个值都有一个所有者。</li>
+<li>一次只能有一个所有者。</li>
+<li>当所有者超出范围时，该值将被删除。</li>
+</ul>
+<h2 id="2-1-每个值都有一个所有者"><a href="#2-1-每个值都有一个所有者" class="headerlink" title="2.1 每个值都有一个所有者"></a>2.1 每个值都有一个所有者</h2><p>Rust 中每一个值都被一个变量所拥有，该变量被称为值的所有者。</p>
+<h2 id="2-2-所有者超出范围时，该值将被删除"><a href="#2-2-所有者超出范围时，该值将被删除" class="headerlink" title="2.2 所有者超出范围时，该值将被删除"></a>2.2 所有者超出范围时，该值将被删除</h2><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line">&#123;                      <span class="comment">// s is not valid here, it’s not yet declared</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s</span> = <span class="string">&quot;hello&quot;</span>;   <span class="comment">// s is valid from this point forward</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// do stuff with s</span></span><br><span class="line">&#125;                      <span class="comment">// this scope is now over, and s is no longer valid</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>此外，这还隐含着一种设计选择：Rust 永远不会自动创建数据的“深层”副本。因此，可以认为任何自动复制在运行时性能方面都是低成本的。</p>
+</blockquote>
+<h2 id="2-3-一次只能有一个所有者。（变量与数据的交互）"><a href="#2-3-一次只能有一个所有者。（变量与数据的交互）" class="headerlink" title="2.3 一次只能有一个所有者。（变量与数据的交互）"></a>2.3 一次只能有一个所有者。（变量与数据的交互）</h2><blockquote>
+<p>String 由三部分组成：指向保存字符串内容的内存的指针、长度和容量。这组数据存储在栈上。字符串内容保存在堆上。</p>
+</blockquote>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"># 仅栈数据：复制</span><br><span class="line"><span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>; # <span class="number">5</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">y</span> = x; # <span class="number">5</span></span><br><span class="line"></span><br><span class="line"># 所有权转移</span><br><span class="line"><span class="keyword">let</span> <span class="variable">s1</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>); </span><br><span class="line"><span class="keyword">let</span> <span class="variable">s2</span> = s1;                    </span><br></pre></td></tr></table></figure>
+
+<h1 id="0x03-参数传递"><a href="#0x03-参数传递" class="headerlink" title="0x03. 参数传递"></a>0x03. 参数传递</h1><p>将值传递给函数的机制与将值赋给变量的机制类似。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);  <span class="comment">// s comes into scope</span></span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">takes_ownership</span>(s);             <span class="comment">// s&#x27;s value moves into the function...</span></span><br><span class="line">                                    <span class="comment">// ... and so is no longer valid here</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;                      <span class="comment">// x comes into scope</span></span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">makes_copy</span>(x);                  <span class="comment">// x would move into the function,</span></span><br><span class="line">                                    <span class="comment">// but i32 is Copy, so it&#x27;s okay to still</span></span><br><span class="line">                                    <span class="comment">// use x afterward</span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// Here, x goes out of scope, then s. But because s&#x27;s value was moved, nothing</span></span><br><span class="line">  <span class="comment">// special happens.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">takes_ownership</span>(some_string: <span class="type">String</span>) &#123; <span class="comment">// some_string comes into scope</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;some_string&#125;&quot;</span>);</span><br><span class="line">&#125; <span class="comment">// Here, some_string goes out of scope and `drop` is called. The backing</span></span><br><span class="line">  <span class="comment">// memory is freed.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">makes_copy</span>(some_integer: <span class="type">i32</span>) &#123; <span class="comment">// some_integer comes into scope</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;some_integer&#125;&quot;</span>);</span><br><span class="line">&#125; <span class="comment">// Here, some_integer goes out of scope. Nothing special happens.</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="0x04-函数返回"><a href="#0x04-函数返回" class="headerlink" title="0x04. 函数返回"></a>0x04. 函数返回</h1><p>返回值也可以转移所有权。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s1</span> = <span class="title function_ invoke__">gives_ownership</span>();         <span class="comment">// gives_ownership moves its return</span></span><br><span class="line">                                        <span class="comment">// value into s1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s2</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);     <span class="comment">// s2 comes into scope</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s3</span> = <span class="title function_ invoke__">takes_and_gives_back</span>(s2);  <span class="comment">// s2 is moved into</span></span><br><span class="line">                                        <span class="comment">// takes_and_gives_back, which also</span></span><br><span class="line">                                        <span class="comment">// moves its return value into s3</span></span><br><span class="line">&#125; <span class="comment">// Here, s3 goes out of scope and is dropped. s2 was moved, so nothing</span></span><br><span class="line">  <span class="comment">// happens. s1 goes out of scope and is dropped.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">gives_ownership</span>() <span class="punctuation">-&gt;</span> <span class="type">String</span> &#123;             <span class="comment">// gives_ownership will move its</span></span><br><span class="line">                                             <span class="comment">// return value into the function</span></span><br><span class="line">                                             <span class="comment">// that calls it</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">some_string</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;yours&quot;</span>); <span class="comment">// some_string comes into scope</span></span><br><span class="line"></span><br><span class="line">    some_string                              <span class="comment">// some_string is returned and</span></span><br><span class="line">                                             <span class="comment">// moves out to the calling</span></span><br><span class="line">                                             <span class="comment">// function</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This function takes a String and returns one</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">takes_and_gives_back</span>(a_string: <span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">String</span> &#123; <span class="comment">// a_string comes into</span></span><br><span class="line">                                                      <span class="comment">// scope</span></span><br><span class="line"></span><br><span class="line">    a_string  <span class="comment">// a_string is returned and moves out to the calling function</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Rust</category>
+      </categories>
+      <tags>
+        <tag>Rust</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>开发环境依赖组件容器化配置参考</title>
+    <url>/2023/08/20/docker-compose4dev/</url>
+    <content><![CDATA[<p>为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 <code>docker-compose</code> 用于快速部署依赖组件环境</p>
+<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><ul>
+<li>elasticsearch:8.8.0</li>
+<li>kibana:8.8.0</li>
+<li>redis:7.0.11</li>
+<li>mysql:8</li>
+<li>postgres:15</li>
+<li>grafana-enterprise</li>
+</ul>
+<p>​	</p>
+<span id="more"></span>
+
+
+
+<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/elasticsearch/elasticsearch:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">elasticsearch8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ELASTIC_PASSWORD=&lt;Your_ELASTIC_PASSWORD&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9200:9200&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">esdata:/usr/share/elasticsearch/data</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">kibana:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/kibana/kibana:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kibana8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SERVER_NAME=kibana</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">XPACK_SECURITY_ENABLED=true</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5601:5601&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kibanadata:/usr/share/kibana/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:7.0.11</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis7</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="comment"># 修改密码以及绑定地址</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">--requirepass</span> <span class="string">&quot;&lt;your_redis_pass&gt;&quot;</span> <span class="string">--bind</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6379:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redisdata:/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">--default-authentication-plugin=caching_sha2_password</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&lt;root_pass&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">&lt;your_db&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">&lt;your_user&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">&lt;your_pass&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line">      </span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:15</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">postgres15</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">POSTGRES_DB:</span> <span class="string">database</span>       				<span class="comment"># 设置数据库名称</span></span><br><span class="line">      <span class="attr">POSTGRES_USER:</span> <span class="string">user</span>   					<span class="comment"># 设置数据库用户</span></span><br><span class="line">      <span class="attr">POSTGRES_PASSWORD:</span> <span class="string">PasswOrd</span>				<span class="comment"># 设置数据库密码</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgres_data:/var/lib/postgresql/data</span> 	<span class="comment"># 数据持久化存储的路径</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5432:5432&quot;</span> 	<span class="comment"># 将容器的 5432 端口映射到宿主机的 5432 端口</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">grafana:</span> 	<span class="comment"># 默认账号密码: admin/admin</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">grafana/grafana-enterprise</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">GF_INSTALL_PLUGINS=grafana-clock-panel</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;3000:3000&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">grafana-storage:/var/lib/grafana</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">esdata:</span></span><br><span class="line">  <span class="attr">kibanadata:</span></span><br><span class="line">  <span class="attr">redisdata:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br><span class="line">  <span class="attr">postgres_data:</span></span><br><span class="line">  <span class="attr">grafana-storage:</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>docker-compose</tag>
       </tags>
   </entry>
   <entry>
@@ -204,136 +379,6 @@
       </categories>
       <tags>
         <tag>Rust</tag>
-        <tag>笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Cargo 使用指南之代码组织管理</title>
-    <url>/2024/12/14/Rust-Cargo-Workspace/</url>
-    <content><![CDATA[<p>Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（<a href="crates.io">Package Registry</a> ） 。</p>
-<h1 id="0x01-快速上手"><a href="#0x01-快速上手" class="headerlink" title="0x01. 快速上手"></a>0x01. 快速上手</h1><h2 id="1-1-创建二进制项目"><a href="#1-1-创建二进制项目" class="headerlink" title="1.1 创建二进制项目"></a>1.1 创建二进制项目</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cargo new hello_world</span><br><span class="line"><span class="comment"># 等价于 cargo new hello_world --bin</span></span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── main.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// cat src/main.rs</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line">// cat Cargo.toml</span><br><span class="line"><span class="section">[package]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;hello_world&quot;</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line"><span class="attr">edition</span> = <span class="string">&quot;2021&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 运行</span></span><br><span class="line">cargo run</span><br><span class="line"><span class="comment">#    Compiling hello_world v0.1.0 (/home/sec/rust-code/hello_world)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.74s</span></span><br><span class="line"><span class="comment">#      Running `target/debug/hello_world`</span></span><br><span class="line"><span class="comment"># Hello, world!</span></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="1-2-创建依赖库项目"><a href="#1-2-创建依赖库项目" class="headerlink" title="1.2 创建依赖库项目"></a>1.2 创建依赖库项目</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cargo new hello_world --lib</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── lib.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/lib.rs</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">add</span>(left: <span class="type">u64</span>, right: <span class="type">u64</span>) <span class="punctuation">-&gt;</span> <span class="type">u64</span> &#123;</span><br><span class="line">    left + right</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[cfg(test)]</span></span><br><span class="line"><span class="keyword">mod</span> tests &#123;</span><br><span class="line">    <span class="keyword">use</span> super::*;</span><br><span class="line"></span><br><span class="line">    <span class="meta">#[test]</span></span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">it_works</span>() &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">result</span> = <span class="title function_ invoke__">add</span>(<span class="number">2</span>, <span class="number">2</span>);</span><br><span class="line">        <span class="built_in">assert_eq!</span>(result, <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line">// Cargo.toml</span><br><span class="line"><span class="section">[package]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;hello_world&quot;</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line"><span class="attr">edition</span> = <span class="string">&quot;2021&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 代码测试</span></span><br><span class="line">cargo <span class="built_in">test</span></span><br><span class="line"><span class="comment">#    Compiling hello_world v0.1.0 (/home/sec/rust-code/hello_world)</span></span><br><span class="line"><span class="comment">#     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s</span></span><br><span class="line"><span class="comment">#      Running unittests src/lib.rs (target/debug/deps/hello_world-75e6e3a0ae56ef19)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 1 test</span></span><br><span class="line"><span class="comment"># test tests::it_works ... ok</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment">#    Doc-tests hello_world</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 0 tests</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="1-3-下载项目并构建"><a href="#1-3-下载项目并构建" class="headerlink" title="1.3 下载项目并构建"></a>1.3 下载项目并构建</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/rust-lang/regex.git</span><br><span class="line"><span class="comment"># Cloning into &#x27;regex&#x27;...</span></span><br><span class="line"><span class="comment"># remote: Enumerating objects: 9712, done.</span></span><br><span class="line"><span class="comment"># remote: Counting objects: 100% (3776/3776), done.</span></span><br><span class="line"><span class="comment"># remote: Compressing objects: 100% (1345/1345), done.</span></span><br><span class="line"><span class="comment"># remote: Total 9712 (delta 2492), reused 3367 (delta 2373), pack-reused 5936 (from 1)</span></span><br><span class="line"><span class="comment"># Receiving objects: 100% (9712/9712), 8.03 MiB | 816.00 KiB/s, done.</span></span><br><span class="line"><span class="comment"># Resolving deltas: 100% (6364/6364), done.</span></span><br><span class="line"><span class="built_in">cd</span> regex</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 构建</span></span><br><span class="line">cargo build</span><br><span class="line"><span class="comment">#     Updating `rsproxy-sparse` index</span></span><br><span class="line"><span class="comment">#      Locking 54 packages to latest compatible versions</span></span><br><span class="line"><span class="comment">#       Adding env_logger v0.9.3 (available: v0.11.5)</span></span><br><span class="line"><span class="comment">#    Compiling memchr v2.7.4</span></span><br><span class="line"><span class="comment">#    Compiling regex-syntax v0.8.5 (/home/sec/rust-code/regex/regex-syntax)</span></span><br><span class="line"><span class="comment">#    Compiling aho-corasick v1.1.3</span></span><br><span class="line"><span class="comment">#    Compiling regex-automata v0.4.9 (/home/sec/rust-code/regex/regex-automata)</span></span><br><span class="line"><span class="comment">#    Compiling regex v1.11.1 (/home/sec/rust-code/regex)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [optimized + debuginfo] target(s) in 7.13s</span></span><br></pre></td></tr></table></figure>
-
-
-<h1 id="0x02-核心概念"><a href="#0x02-核心概念" class="headerlink" title="0x02. 核心概念"></a>0x02. 核心概念</h1><h2 id="2-1-Module"><a href="#2-1-Module" class="headerlink" title="2.1 Module"></a>2.1 Module</h2><ul>
-<li>模块(Module)：可以用来将代码分层地拆分为逻辑单元（模块），并管理它们之间的可见性（公共&#x2F;私有）</li>
-<li>模块中包含：函数、结构、特征、实现块，甚至其他模块。</li>
-<li>一个文件可以多个模块，也可以一个文件一个模块，模块可以被认为是真实项目中的<strong>代码组织单元</strong></li>
-</ul>
-<h2 id="2-2-Crate"><a href="#2-2-Crate" class="headerlink" title="2.2 Crate"></a>2.2 Crate</h2><ul>
-<li>板条箱 (Crate) 是 Rust 中的<strong>编译单元</strong>。</li>
-</ul>
-<h2 id="2-3-Package"><a href="#2-3-Package" class="headerlink" title="2.3  Package"></a>2.3  Package</h2><ul>
-<li>包（package）是一个包含一个或多个 crate 的集合，用于提供一组功能。</li>
-<li>一个包（package）包含一个 <code>Cargo.toml</code> 文件，该文件描述了如何构建这些 crate。</li>
-<li>一个包（package）可以包含任意多个二进制 crate，但最多只能包含一个库 crate。</li>
-<li>一个包（package）必须至少包含一个 crate，无论是库 crate 还是二进制 crate。</li>
-</ul>
-<h3 id="2-3-1-Package-目录布局"><a href="#2-3-1-Package-目录布局" class="headerlink" title="2.3.1 Package 目录布局"></a>2.3.1 Package 目录布局</h3><p>Cargo 使用约定来放置文件，以便轻松进入新的 Cargo Package</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── Cargo.lock</span><br><span class="line">├── Cargo.toml</span><br><span class="line">├── src/</span><br><span class="line">│   ├── lib.rs</span><br><span class="line">│   ├── main.rs</span><br><span class="line">│   └── bin/</span><br><span class="line">│       ├── named-executable.rs</span><br><span class="line">│       ├── another-executable.rs</span><br><span class="line">│       └── multi-file-executable/</span><br><span class="line">│           ├── main.rs</span><br><span class="line">│           └── some_module.rs</span><br><span class="line">├── benches/</span><br><span class="line">│   ├── large-input.rs</span><br><span class="line">│   └── multi-file-bench/</span><br><span class="line">│       ├── main.rs</span><br><span class="line">│       └── bench_module.rs</span><br><span class="line">├── examples/</span><br><span class="line">│   ├── simple.rs</span><br><span class="line">│   └── multi-file-example/</span><br><span class="line">│       ├── main.rs</span><br><span class="line">│       └── ex_module.rs</span><br><span class="line">└── tests/</span><br><span class="line">    ├── some-integration-tests.rs</span><br><span class="line">    └── multi-file-test/</span><br><span class="line">        ├── main.rs</span><br><span class="line">        └── test_module.rs</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>Cargo.toml</code> 和 <code>Cargo.lock</code> 存储在包的根目录中（包根目录）。</li>
-<li>源代码放在 <code>src</code> 目录中。</li>
-<li>默认库文件是 <code>src/lib.rs</code>。</li>
-<li>默认可执行文件是 <code>src/main.rs</code>。<ul>
-<li>其他可执行文件可以放在 <code>src/bin/</code> 中。</li>
-</ul>
-</li>
-<li>基准测试放在 <code>benches</code> 目录中。</li>
-<li>示例放在 <code>examples</code> 目录中。</li>
-<li>集成测试放在 <code>tests</code> 目录中。</li>
-</ul>
-<h2 id="2-4-Workspace"><a href="#2-4-Workspace" class="headerlink" title="2.4 Workspace"></a>2.4 Workspace</h2><p>工作区(Workspace)是一个或多个包(Package)的集合，这些包称为工作区成员，它们一起进行管理。</p>
-<h1 id="0x03-基础包管理"><a href="#0x03-基础包管理" class="headerlink" title="0x03. 基础包管理"></a>0x03. 基础包管理</h1><h2 id="3-1-包含一个-crate"><a href="#3-1-包含一个-crate" class="headerlink" title="3.1 包含一个 crate"></a>3.1 包含一个 crate</h2><ul>
-<li>库 crate<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── lib.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure></li>
-<li>二进制 crate<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello_world/</span><br><span class="line"><span class="comment"># 项目结构</span></span><br><span class="line">tree .</span><br><span class="line"><span class="comment"># .</span></span><br><span class="line"><span class="comment"># ├── Cargo.toml</span></span><br><span class="line"><span class="comment"># └── src</span></span><br><span class="line"><span class="comment">#     └── main.rs</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># 2 directories, 2 files</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="3-2-包含多个-crate"><a href="#3-2-包含多个-crate" class="headerlink" title="3.2 包含多个 crate"></a>3.2 包含多个 crate</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建库crate</span></span><br><span class="line">cargo new mutil_crate --lib</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认可执行文件是 `src/main.rs`，其他可执行文件可以放在 `src/bin/` 中。</span></span><br><span class="line"><span class="comment"># 创建多个二进制crate</span></span><br><span class="line"><span class="built_in">mkdir</span> src/bin</span><br><span class="line">vim src/bin/main1.rs</span><br><span class="line">vim src/bin/main2.rs</span><br><span class="line"></span><br><span class="line"><span class="comment"># Package结构</span></span><br><span class="line">tree .</span><br><span class="line">.</span><br><span class="line">├── Cargo.toml</span><br><span class="line">└── src</span><br><span class="line">    ├── bin</span><br><span class="line">    │   ├── main1.rs</span><br><span class="line">    │   └── main2.rs</span><br><span class="line">    └── lib.rs</span><br><span class="line"></span><br><span class="line">3 directories, 4 files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行指定二进制crate</span></span><br><span class="line">cargo run --bin main1</span><br><span class="line"><span class="comment">#    Compiling mutil_crate v0.1.0 (/home/sec/rust-code/mutil_crate)</span></span><br><span class="line"><span class="comment">#     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s</span></span><br><span class="line"><span class="comment">#      Running `target/debug/main1`</span></span><br><span class="line"><span class="comment"># Hello, main1!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行库crate单元测试</span></span><br><span class="line">cargo <span class="built_in">test</span> --lib</span><br><span class="line"><span class="comment">#    Compiling mutil_crate v0.1.0 (/home/sec/rust-code/mutil_crate)</span></span><br><span class="line"><span class="comment">#     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s</span></span><br><span class="line"><span class="comment">#      Running unittests src/lib.rs (target/debug/deps/mutil_crate-55531a037166be43)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># running 1 test</span></span><br><span class="line"><span class="comment"># test tests::it_works ... ok</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s</span></span><br><span class="line"><span class="comment"># </span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="0x04-进阶工作空间"><a href="#0x04-进阶工作空间" class="headerlink" title="0x04. 进阶工作空间"></a>0x04. 进阶工作空间</h1><p>工作区是一个或多个包的集合，这些包称为工作区成员，它们一起进行管理。</p>
-<h2 id="4-1-功能要点"><a href="#4-1-功能要点" class="headerlink" title="4.1 功能要点"></a>4.1 功能要点</h2><ul>
-<li>通用命令可以在所有工作区成员中运行，例如 <code>cargo check --workspace</code>。</li>
-<li>所有包共享一个位于工作区根目录中的通用 <code>Cargo.lock</code> 文件。</li>
-<li>所有包共享一个通用输出目录，该目录默认为工作区根目录中名为 <code>target</code> 的目录。</li>
-<li>共享包元数据，例如与 <code>workspace.package</code>。</li>
-<li><code>Cargo.toml</code> 中的 <code>[patch]</code>、<code>[replace] </code> 和 <code>[profile.*]</code> 部分仅在根清单中被识别，并在成员包的清单中被忽略。</li>
-</ul>
-<h2 id="4-2-支持配置"><a href="#4-2-支持配置" class="headerlink" title="4.2 支持配置"></a>4.2 支持配置</h2><p>工作区的根 <code>Cargo.toml</code> 支持以下部分：</p>
-<ul>
-<li>[workspace] — 定义工作区。<ul>
-<li>resolver — 设置要使用的依赖项解析器。</li>
-<li>members — 工作区中要包含的软件包。</li>
-<li>exclude — 从工作区中排除的软件包。</li>
-<li>default-members — 未选择特定软件包时要操作的软件包。</li>
-<li>package — 软件包中用于继承的键。</li>
-<li>dependency — 软件包依赖项中用于继承的键。</li>
-<li>lints — 软件包 lints 中用于继承的键。</li>
-<li>metadata — 外部工具的额外设置。</li>
-</ul>
-</li>
-<li>[patch] — 覆盖依赖项。</li>
-<li>[replace] — 覆盖依赖项（已弃用）。</li>
-<li>[profile] — 编译器设置和优化。</li>
-</ul>
-<h2 id="4-3-创建工作空间"><a href="#4-3-创建工作空间" class="headerlink" title="4.3 创建工作空间"></a>4.3 创建工作空间</h2><p>工作区至少必须有一个成员，要么是根包，要么是虚拟清单。</p>
-<p>要创建工作区，请将 <code>[workspace]</code> 表添加到 <code>Cargo.toml</code>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[workspace]</span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-3-1-有根-Package-的工作空间"><a href="#4-3-1-有根-Package-的工作空间" class="headerlink" title="4.3.1 有根 Package 的工作空间"></a>4.3.1 有根 Package 的工作空间</h3><p>如果在已经定义 <code>[package]</code> 的 <code>Cargo.toml</code> 中添加了 <code>[workspace]</code> 部分，则该包是工作区的根包。工作区根目录是工作区的 <code>Cargo.toml</code> 所在的目录。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[workspace]</span><br><span class="line"></span><br><span class="line">[package]</span><br><span class="line">name = <span class="string">&quot;hello_world&quot;</span> <span class="comment"># the name of the package</span></span><br><span class="line">version = <span class="string">&quot;0.1.0&quot;</span>    <span class="comment"># the current version, obeying semver</span></span><br><span class="line">authors = [<span class="string">&quot;Alice &lt;a@example.com&gt;&quot;</span>, <span class="string">&quot;Bob &lt;b@example.com&gt;&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-3-2-虚拟工作空间"><a href="#4-3-2-虚拟工作空间" class="headerlink" title="4.3.2 虚拟工作空间"></a>4.3.2 虚拟工作空间</h3><p>或者，可以创建一个包含 <code>[workspace]</code> 部分但不包含 <code>[package]</code> 部分的 <code>Cargo.toml</code> 文件。这称为虚拟清单。当没有“主”包或您希望将所有包组织在单独的目录中时，这通常很有用。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># [PROJECT_DIR]/Cargo.toml</span></span><br><span class="line">[workspace]</span><br><span class="line">members = [<span class="string">&quot;hello_world&quot;</span>]</span><br><span class="line">resolver = <span class="string">&quot;2&quot;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># [PROJECT_DIR]/hello_world/Cargo.toml</span></span><br><span class="line">[package]</span><br><span class="line">name = <span class="string">&quot;hello_world&quot;</span> <span class="comment"># the name of the package</span></span><br><span class="line">version = <span class="string">&quot;0.1.0&quot;</span>    <span class="comment"># the current version, obeying semver</span></span><br><span class="line">edition = <span class="string">&quot;2021&quot;</span>     <span class="comment"># the edition, will have no effect on a resolver used in the workspace</span></span><br><span class="line">authors = [<span class="string">&quot;Alice &lt;a@example.com&gt;&quot;</span>, <span class="string">&quot;Bob &lt;b@example.com&gt;&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<ul>
-<li>必须在虚拟工作区中明确设置解析器，因为它们没有 <code>package.edition</code> 来从解析器版本推断它。</li>
-<li>默认情况下，在工作区根目录中运行的命令将针对所有工作区成员运行，请参阅 <a href="https://doc.rust-lang.org/stable/cargo/reference/workspaces.html#the-default-members-field"><code>default-members</code></a>。</li>
-</ul>
-<h2 id="4-4-小结"><a href="#4-4-小结" class="headerlink" title="4.4 小结"></a>4.4 小结</h2><ol>
-<li>创建工作空间就是在  <code>Cargo.toml</code> 中添加了 <code>[workspace]</code> 部分。</li>
-<li>成员 <code>Package</code> 对 <code>Workspace</code> 的数据继承。</li>
-<li><code>cargo</code> 通用命令可以对空间成员进行统一管理。</li>
-<li>具体 <code>[workspace]</code> 部分配置，详情请查看官方指南： <a href="https://doc.rust-lang.org/stable/cargo/reference/workspaces.html#workspaces">Workspaces</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Rust</category>
-      </categories>
-      <tags>
-        <tag>Rust</tag>
-        <tag>笔记</tag>
-        <tag>Cargo</tag>
       </tags>
   </entry>
   <entry>
@@ -426,29 +471,31 @@
 
 <h2 id="1-4-字符类型"><a href="#1-4-字符类型" class="headerlink" title="1.4 字符类型"></a>1.4 字符类型</h2><p>Rust 的 char 类型是该语言最原始的字母类型。以下是声明 char 值的一些示例：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">c</span> = <span class="string">&#x27;z&#x27;</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">z</span>: <span class="type">char</span> = <span class="string">&#x27;ℤ&#x27;</span>; <span class="comment">// with explicit type annotation</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">heart_eyed_cat</span> = &#x27;😻&#x27;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>请注意，我们<strong>用单引号指定 char 文字</strong>，而不是使用双引号的字符串文字。Rust 的 <strong>char 类型大小为四个字节，表示 Unicode 标量值</strong>，这意味着它可以表示的不仅仅是 ASCII。重音字母；中文、日文和韩文字符；表情符号；以及零宽度空格都是 Rust 中的有效 char 值。</p>
 <p>Unicode 标量值的范围从 U+0000 到 U+D7FF 和 U+E000 到 U+10FFFF （含）。但是，“字符”在 Unicode 中并不是一个真正的概念，因此你对“字符”的人类直觉可能与 Rust 中的 char 不匹配。我们将在第 8 章“<a href="https://doc.rust-lang.org/book/ch08-02-strings.html#storing-utf-8-encoded-text-with-strings">使用字符串存储 UTF-8 编码文本</a> ”中详细讨论这个主题。</p>
 <h1 id="0x02-字符串类型"><a href="#0x02-字符串类型" class="headerlink" title="0x02. 字符串类型"></a>0x02. 字符串类型</h1><p>看一下图 4-1，了解 String 内部发生了什么。String 由三部分组成，如左侧所示：指向保存字符串内容的内存的指针、长度和容量。这组数据存储在堆栈上。右侧是保存内容的堆上的内存。</p>
 <h2 id="2-1-创建字符串"><a href="#2-1-创建字符串" class="headerlink" title="2.1 创建字符串"></a>2.1 创建字符串</h2><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">s</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-
 <h1 id="0x03-复合类型"><a href="#0x03-复合类型" class="headerlink" title="0x03. 复合类型"></a>0x03. 复合类型</h1><h2 id="3-2-数组"><a href="#3-2-数组" class="headerlink" title="3.2 数组"></a>3.2 数组</h2><p>另一种拥有多个值集合的方法是使用数组。与元组不同，数组的每个元素都<strong>必须具有相同的类型</strong>。与其他一些语言中的数组不同，Rust 中的数组<strong>具有固定长度</strong>。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">a</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>您可以使用方括号来编写数组的类型，其中包含每个元素的类型、分号，然后是数组中元素的数量，如下所示：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">a</span>: [<span class="type">i32</span>; <span class="number">5</span>] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br></pre></td></tr></table></figure>
+
 <p>您还可以通过指定初始值，后跟分号，然后在方括号中指定数组的长度，来初始化一个数组，使其每个元素包含相同的值，如下所示：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">a</span> = [<span class="number">3</span>; <span class="number">5</span>];</span><br><span class="line"><span class="comment">// 这与 let a = [3, 3, 3, 3, 3]; 的写法相同，但更简洁。</span></span><br></pre></td></tr></table></figure>
 
 <p>数组是一块已知且固定大小的内存，可在堆栈上分配。您可以使用索引来访问数组的元素，如下所示：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">a</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">first</span> = a[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">second</span> = a[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
 <h2 id="3-1-元组"><a href="#3-1-元组" class="headerlink" title="3.1 元组"></a>3.1 元组</h2><p>元组是一种将多个具有各种类型的值组合成一种复合类型的通用方法。元组的长度是固定的：一旦声明，它们的大小就不能增加或缩小。</p>
 <p>我们通过在括号内写入逗号分隔的值列表来创建元组。元组中的每个位置都有一个类型，并且元组中不同值的类型不必相同。我们在此示例中添加了可选的类型注释：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">tup</span>: (<span class="type">i32</span>, <span class="type">f64</span>, <span class="type">u8</span>) = (<span class="number">500</span>, <span class="number">6.4</span>, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>变量 tup 绑定到整个元组，因为元组被视为单个复合元素。要从元组中获取单个值，我们可以使用模式匹配来解构元组值，如下所示：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">tup</span> = (<span class="number">500</span>, <span class="number">6.4</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> (x, y, z) = tup;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The value of y is: &#123;y&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>我们还可以使用句点 (<code>.</code>) 后跟要访问的值的索引来直接访问元组元素。例如：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span>: (<span class="type">i32</span>, <span class="type">f64</span>, <span class="type">u8</span>) = (<span class="number">500</span>, <span class="number">6.4</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">five_hundred</span> = x.<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">six_point_four</span> = x.<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">one</span> = x.<span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -456,8 +503,10 @@
 <h2 id="3-3-结构体"><a href="#3-3-结构体" class="headerlink" title="3.3 结构体"></a>3.3 结构体</h2><p>结构体类似于“元组类型”部分中讨论的元组，因为两者都包含多个相关值。与元组一样，结构体的各个部分可以是不同的类型。与元组不同，在结构体中，您将命名每个数据部分，以便清楚地了解值的含义。添加这些名称意味着结构体比元组更灵活：您不必依赖数据的顺序来指定或访问实例的值。</p>
 <p>要定义结构体，我们输入关键字 struct 并命名整个结构体。结构体的名称应该描述将数据组合在一起的意义。然后，在花括号内，我们定义数据的名称和类型，我们称之为字段。例如，清单 5-1 显示了一个存储有关用户帐户信息的结构体。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    active: <span class="type">bool</span>,</span><br><span class="line">    username: <span class="type">String</span>,</span><br><span class="line">    email: <span class="type">String</span>,</span><br><span class="line">    sign_in_count: <span class="type">u64</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>要在定义结构体后使用它，我们需要通过为每个字段指定具体值来创建该结构的实例。我们通过声明结构体的名称来创建实例，然后添加包含键：值对的大括号，其中键是字段的名称，值是我们想要存储在这些字段中的数据。我们不必按照在结构体中声明字段的顺序指定字段。换句话说，结构体定义就像类型的通用模板，实例用特定数据填充该模板以创建类型的值。例如，我们可以声明一个特定的用户，如示例 5-2 所示。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user1</span> = User &#123;</span><br><span class="line">        active: <span class="literal">true</span>,</span><br><span class="line">        username: <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;someusername123&quot;</span>),</span><br><span class="line">        email: <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;someone@example.com&quot;</span>),</span><br><span class="line">        sign_in_count: <span class="number">1</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>要从结构体中获取特定值，我们使用点符号。例如，要访问此用户的电子邮件地址，我们使用 user1.email。如果实例是可变的，我们可以使用点符号并赋值到特定字段来更改值。清单 5-3 显示了如何更改可变 User 实例的 email 字段中的值。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">user1</span> = User &#123;</span><br><span class="line">        active: <span class="literal">true</span>,</span><br><span class="line">        username: <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;someusername123&quot;</span>),</span><br><span class="line">        email: <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;someone@example.com&quot;</span>),</span><br><span class="line">        sign_in_count: <span class="number">1</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    user1.email = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;anotheremail@example.com&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -466,16 +515,18 @@
 
 <p>将函数参数命名为与结构字段相同的名称是有意义的，但必须重复电子邮件和用户名字段名称和变量有点乏味。如果结构有更多字段，重复每个名称会变得更加烦人。幸运的是，有一个方便的简写！</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">build_user</span>(email: <span class="type">String</span>, username: <span class="type">String</span>) <span class="punctuation">-&gt;</span> User &#123;</span><br><span class="line">    User &#123;</span><br><span class="line">        active: <span class="literal">true</span>,</span><br><span class="line">        username,</span><br><span class="line">        email,</span><br><span class="line">        sign_in_count: <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这里，我们创建了 User 结构体的一个新实例，该结构体有一个名为 email 的字段。我们想将 email 字段的值设置为 build_user 函数的 email 参数中的值。由于 email 字段和 email 参数同名，因此我们只需要写 email 而不是 email: email。</p>
 <h3 id="3-3-1-结构体更新语法"><a href="#3-3-1-结构体更新语法" class="headerlink" title="3.3.1 结构体更新语法"></a>3.3.1 结构体更新语法</h3><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="comment">// --snip--</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user2</span> = User &#123;</span><br><span class="line">        active: user1.active,</span><br><span class="line">        username: user1.username,</span><br><span class="line">        email: <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;another@example.com&quot;</span>),</span><br><span class="line">        sign_in_count: user1.sign_in_count,</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="comment">// --snip--</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user2</span> = User &#123;</span><br><span class="line">        email: <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;another@example.com&quot;</span>),</span><br><span class="line">        ..user1</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>清单 5-7 中的代码还在 user2 中创建了一个实例，该实例的 email 值与 user1 不同，但 username、active 和 sign_in_count 字段的值与 user1 相同。..user1 必须放在最后，以指定任何剩余字段应从 user1 中的相应字段中获取其值，但我们可以选择以任意顺序为任意数量的字段指定值，而不管结构定义中字段的顺序如何。</p>
 <h3 id="3-3-2-元组结构体"><a href="#3-3-2-元组结构体" class="headerlink" title="3.3.2  元组结构体"></a>3.3.2  元组结构体</h3><p>Rust 还支持类似于元组的结构，称为元组结构。元组结构具有结构名称提供的附加含义，但没有与其字段关联的名称；相反，它们只有字段的类型。当你想给整个元组命名并使元组与其他元组的类型不同，并且像在常规结构中一样命名每个字段会很冗长或冗余时，元组结构很有用。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Color</span>(<span class="type">i32</span>, <span class="type">i32</span>, <span class="type">i32</span>);</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span>(<span class="type">i32</span>, <span class="type">i32</span>, <span class="type">i32</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">black</span> = <span class="title function_ invoke__">Color</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">origin</span> = <span class="title function_ invoke__">Point</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="3-3-3-单元结构体"><a href="#3-3-3-单元结构体" class="headerlink" title="3.3.3 单元结构体"></a>3.3.3 单元结构体</h3><p>您还可以定义没有任何字段的结构体！这些被称为类单元结构，因为它们的行为类似于 <code>()</code>，后者是我们在“元组类型”部分中提到的单元类型。当您需要在某种类型上实现特征但没有任何要存储在类型本身中的数据时，类单元结构会很有用。以下是声明和实例化名为 <code>AlwaysEqual</code> 的单元结构体的示例：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">AlwaysEqual</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">subject</span> = AlwaysEqual;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 
 <h2 id="3-4-枚举"><a href="#3-4-枚举" class="headerlink" title="3.4 枚举"></a>3.4 枚举</h2><p>我们可以通过定义 IpAddrKind 枚举并列出 IP 地址可能的类型 V4 和 V6，在代码中表达这一概念。这些是枚举的变体：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">IpAddrKind</span> &#123;</span><br><span class="line">    V4,</span><br><span class="line">    V6,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -485,11 +536,13 @@
 
 <p>请注意，枚举的变体在其标识符下命名，我们使用双冒号将两者分开。这很有用，因为现在 IpAddrKind::V4 和 IpAddrKind::V6 这两个值都属于同一类型：IpAddrKind。然后，例如，我们可以定义一个接受任何 IpAddrKind 的函数：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">route</span>(ip_kind: IpAddrKind) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我们可以用以下任一方式调用该函数：</span></span><br><span class="line"><span class="title function_ invoke__">route</span>(IpAddrKind::V4);</span><br><span class="line"><span class="title function_ invoke__">route</span>(IpAddrKind::V6);</span><br></pre></td></tr></table></figure>
+
 <p>使用枚举而不是结构还有另一个优势：每个变体可以具有不同类型和数量的关联数据。版本 4 IP 地址将始终具有四个数字组件，其值介于 0 到 255 之间。如果我们想将 V4 地址存储为四个 u8 值，但仍将 V6 地址表示为一个字符串值，则无法使用结构。枚举可以轻松处理这种情况：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">IpAddr</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">V4</span>(<span class="type">u8</span>, <span class="type">u8</span>, <span class="type">u8</span>, <span class="type">u8</span>),</span><br><span class="line">    <span class="title function_ invoke__">V6</span>(<span class="type">String</span>),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">home</span> = IpAddr::<span class="title function_ invoke__">V4</span>(<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">loopback</span> = IpAddr::<span class="title function_ invoke__">V6</span>(<span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;::1&quot;</span>));</span><br></pre></td></tr></table></figure>
 
 <p>让我们看一下示例 6-2 中的另一个枚举示例：这个示例的变体中嵌入了多种类型。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Message</span> &#123;</span><br><span class="line">    Quit,</span><br><span class="line">    Move &#123; x: <span class="type">i32</span>, y: <span class="type">i32</span> &#125;,</span><br><span class="line">    <span class="title function_ invoke__">Write</span>(<span class="type">String</span>),</span><br><span class="line">    <span class="title function_ invoke__">ChangeColor</span>(<span class="type">i32</span>, <span class="type">i32</span>, <span class="type">i32</span>),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>此枚举有四种不同类型的变体：</p>
 <ul>
 <li>Quit 根本没有与之关联的数据。</li>
@@ -501,11 +554,10 @@
 
 <h3 id="3-4-2-Result-枚举"><a href="#3-4-2-Result-枚举" class="headerlink" title="3.4.2 Result 枚举"></a>3.4.2 Result 枚举</h3><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Result</span>&lt;T, E&gt; &#123;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(T),</span><br><span class="line">    <span class="title function_ invoke__">Err</span>(E),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
 <h1 id="0x04-集合类型"><a href="#0x04-集合类型" class="headerlink" title="0x04. 集合类型"></a>0x04. 集合类型</h1><h2 id="4-1-向量-Vec"><a href="#4-1-向量-Vec" class="headerlink" title="4.1 向量 Vec&lt;T&gt;"></a>4.1 向量 <code>Vec&lt;T&gt;</code></h2><p>我们将要介绍的第一个集合类型是 <code>Vec&lt;T&gt;</code>，也称为向量。向量允许您在单个数据结构中存储多个值，该数据结构将所有值并排放置在内存中。向量<strong>只能存储相同类型</strong>的值。当您有项目列表时，它们很有用，例如文件中的文本行或购物车中项目的价格。</p>
 <h3 id="4-1-1-创建新向量"><a href="#4-1-1-创建新向量" class="headerlink" title="4.1.1 创建新向量"></a>4.1.1 创建新向量</h3><p>为了创建一个新的空向量，我们调用 Vec::new 函数，如示例 8-1 所示。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v</span>: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt; = <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>();</span><br></pre></td></tr></table></figure>
+
 <p>更常见的情况是，你会创建一个带有初始值的 Vec<T>，Rust 会推断出你想要存储的值的类型，所以你很少需要做这种类型注释。Rust 方便地提供了 vec! 宏，它将创建一个新的向量来保存你给它的值。示例 8-2 创建了一个新的 Vec<i32>，它保存了值 1、2 和 3。整数类型是 i32，因为这是默认的整数类型，正如我们在第 3 章的“数据类型”部分讨论的那样。</i32></T></p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v</span> = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br></pre></td></tr></table></figure>
 
@@ -514,8 +566,10 @@
 <h3 id="4-1-3-读取向量元素"><a href="#4-1-3-读取向量元素" class="headerlink" title="4.1.3 读取向量元素"></a>4.1.3 读取向量元素</h3><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v</span> = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">third</span>: &amp;<span class="type">i32</span> = &amp;v[<span class="number">2</span>];</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;The third element is &#123;third&#125;&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">third</span>: <span class="type">Option</span>&lt;&amp;<span class="type">i32</span>&gt; = v.<span class="title function_ invoke__">get</span>(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">match</span> third &#123;</span><br><span class="line">    <span class="title function_ invoke__">Some</span>(third) =&gt; <span class="built_in">println!</span>(<span class="string">&quot;The third element is &#123;third&#125;&quot;</span>),</span><br><span class="line">    <span class="literal">None</span> =&gt; <span class="built_in">println!</span>(<span class="string">&quot;There is no third element.&quot;</span>),</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h3 id="4-1-4-迭代向量中的值"><a href="#4-1-4-迭代向量中的值" class="headerlink" title="4.1.4 迭代向量中的值"></a>4.1.4 迭代向量中的值</h3><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v</span> = <span class="built_in">vec!</span>[<span class="number">100</span>, <span class="number">32</span>, <span class="number">57</span>];</span><br><span class="line"><span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> &amp;v &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;i&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>我们还可以迭代可变向量中每个元素的可变引用，以便更改所有元素。示例 8-8 中的 for 循环将为每个元素添加 50。</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">v</span> = <span class="built_in">vec!</span>[<span class="number">100</span>, <span class="number">32</span>, <span class="number">57</span>];</span><br><span class="line"><span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> &amp;<span class="keyword">mut</span> v &#123;</span><br><span class="line">    *i += <span class="number">50</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>要更改可变引用所指的值，我们必须先使用 <code>*</code> 解引用运算符来获取 i 中的值，然后才能使用 +&#x3D; 运算符。我们将在第 15 章的“使用解引用运算符跟踪指针指向值”部分中进一步讨论解引用运算符。</p>
 <h3 id="4-1-5-使用枚举存储多种类型"><a href="#4-1-5-使用枚举存储多种类型" class="headerlink" title="4.1.5 使用枚举存储多种类型"></a>4.1.5 使用枚举存储多种类型</h3><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">SpreadsheetCell</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">Int</span>(<span class="type">i32</span>),</span><br><span class="line">    <span class="title function_ invoke__">Float</span>(<span class="type">f64</span>),</span><br><span class="line">    <span class="title function_ invoke__">Text</span>(<span class="type">String</span>),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">row</span> = <span class="built_in">vec!</span>[</span><br><span class="line">    SpreadsheetCell::<span class="title function_ invoke__">Int</span>(<span class="number">3</span>),</span><br><span class="line">    SpreadsheetCell::<span class="title function_ invoke__">Text</span>(<span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;blue&quot;</span>)),</span><br><span class="line">    SpreadsheetCell::<span class="title function_ invoke__">Float</span>(<span class="number">10.12</span>),</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 
@@ -525,91 +579,61 @@
 
 <p>我们可以使用与向量类似的方式，使用 for 循环遍历哈希图中的每个键值对：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::collections::HashMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">scores</span> = HashMap::<span class="title function_ invoke__">new</span>();</span><br><span class="line"></span><br><span class="line">scores.<span class="title function_ invoke__">insert</span>(<span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;Blue&quot;</span>), <span class="number">10</span>);</span><br><span class="line">scores.<span class="title function_ invoke__">insert</span>(<span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;Yellow&quot;</span>), <span class="number">50</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (key, value) <span class="keyword">in</span> &amp;scores &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;key&#125;: &#123;value&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
 ]]></content>
       <categories>
         <category>Rust</category>
       </categories>
       <tags>
         <tag>Rust</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
-    <title>Rust: 理解所有权</title>
-    <url>/2024/12/16/Rust-Understanding-Ownership/</url>
-    <content><![CDATA[<p>所有权是 Rust 最独特的功能，对语言的其余部分有着深远的影响。它使 Rust 能够在不需要垃圾收集器的情况下保证内存安全，因此了解所有权的工作原理非常重要。</p>
+    <title>Hello World</title>
+    <url>/2024/12/03/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <span id="more"></span>
 
-<h1 id="0x01-什么是所有权？"><a href="#0x01-什么是所有权？" class="headerlink" title="0x01. 什么是所有权？"></a>0x01. 什么是所有权？</h1><p>所有权是一组规则，用于控制 Rust 程序如何管理内存。</p>
-<h1 id="0x02-所有权规则"><a href="#0x02-所有权规则" class="headerlink" title="0x02. 所有权规则"></a>0x02. 所有权规则</h1><ul>
-<li>每个值都有一个所有者。</li>
-<li>一次只能有一个所有者。</li>
-<li>当所有者超出范围时，该值将被删除。</li>
-</ul>
-<h2 id="2-1-每个值都有一个所有者"><a href="#2-1-每个值都有一个所有者" class="headerlink" title="2.1 每个值都有一个所有者"></a>2.1 每个值都有一个所有者</h2><p>Rust 中每一个值都被一个变量所拥有，该变量被称为值的所有者。</p>
-<h2 id="2-2-所有者超出范围时，该值将被删除"><a href="#2-2-所有者超出范围时，该值将被删除" class="headerlink" title="2.2 所有者超出范围时，该值将被删除"></a>2.2 所有者超出范围时，该值将被删除</h2><figure class="highlight rust"><table><tr><td class="code"><pre><span class="line">&#123;                      <span class="comment">// s is not valid here, it’s not yet declared</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s</span> = <span class="string">&quot;hello&quot;</span>;   <span class="comment">// s is valid from this point forward</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// do stuff with s</span></span><br><span class="line">&#125;                      <span class="comment">// this scope is now over, and s is no longer valid</span></span><br></pre></td></tr></table></figure>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>此外，这还隐含着一种设计选择：Rust 永远不会自动创建数据的“深层”副本。因此，可以认为任何自动复制在运行时性能方面都是低成本的。</p>
-</blockquote>
-<h2 id="2-3-一次只能有一个所有者。（变量与数据的交互）"><a href="#2-3-一次只能有一个所有者。（变量与数据的交互）" class="headerlink" title="2.3 一次只能有一个所有者。（变量与数据的交互）"></a>2.3 一次只能有一个所有者。（变量与数据的交互）</h2><blockquote>
-<p>String 由三部分组成：指向保存字符串内容的内存的指针、长度和容量。这组数据存储在栈上。字符串内容保存在堆上。</p>
-</blockquote>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"># 仅栈数据：复制</span><br><span class="line"><span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>; # <span class="number">5</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">y</span> = x; # <span class="number">5</span></span><br><span class="line"></span><br><span class="line"># 所有权转移</span><br><span class="line"><span class="keyword">let</span> <span class="variable">s1</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>); </span><br><span class="line"><span class="keyword">let</span> <span class="variable">s2</span> = s1;                    </span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
 
-<h1 id="0x03-参数传递"><a href="#0x03-参数传递" class="headerlink" title="0x03. 参数传递"></a>0x03. 参数传递</h1><p>将值传递给函数的机制与将值赋给变量的机制类似。</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);  <span class="comment">// s comes into scope</span></span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">takes_ownership</span>(s);             <span class="comment">// s&#x27;s value moves into the function...</span></span><br><span class="line">                                    <span class="comment">// ... and so is no longer valid here</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;                      <span class="comment">// x comes into scope</span></span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">makes_copy</span>(x);                  <span class="comment">// x would move into the function,</span></span><br><span class="line">                                    <span class="comment">// but i32 is Copy, so it&#x27;s okay to still</span></span><br><span class="line">                                    <span class="comment">// use x afterward</span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// Here, x goes out of scope, then s. But because s&#x27;s value was moved, nothing</span></span><br><span class="line">  <span class="comment">// special happens.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">takes_ownership</span>(some_string: <span class="type">String</span>) &#123; <span class="comment">// some_string comes into scope</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;some_string&#125;&quot;</span>);</span><br><span class="line">&#125; <span class="comment">// Here, some_string goes out of scope and `drop` is called. The backing</span></span><br><span class="line">  <span class="comment">// memory is freed.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">makes_copy</span>(some_integer: <span class="type">i32</span>) &#123; <span class="comment">// some_integer comes into scope</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;some_integer&#125;&quot;</span>);</span><br><span class="line">&#125; <span class="comment">// Here, some_integer goes out of scope. Nothing special happens.</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
 
-<h1 id="0x04-函数返回"><a href="#0x04-函数返回" class="headerlink" title="0x04. 函数返回"></a>0x04. 函数返回</h1><p>返回值也可以转移所有权。</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s1</span> = <span class="title function_ invoke__">gives_ownership</span>();         <span class="comment">// gives_ownership moves its return</span></span><br><span class="line">                                        <span class="comment">// value into s1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s2</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);     <span class="comment">// s2 comes into scope</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s3</span> = <span class="title function_ invoke__">takes_and_gives_back</span>(s2);  <span class="comment">// s2 is moved into</span></span><br><span class="line">                                        <span class="comment">// takes_and_gives_back, which also</span></span><br><span class="line">                                        <span class="comment">// moves its return value into s3</span></span><br><span class="line">&#125; <span class="comment">// Here, s3 goes out of scope and is dropped. s2 was moved, so nothing</span></span><br><span class="line">  <span class="comment">// happens. s1 goes out of scope and is dropped.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">gives_ownership</span>() <span class="punctuation">-&gt;</span> <span class="type">String</span> &#123;             <span class="comment">// gives_ownership will move its</span></span><br><span class="line">                                             <span class="comment">// return value into the function</span></span><br><span class="line">                                             <span class="comment">// that calls it</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">some_string</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;yours&quot;</span>); <span class="comment">// some_string comes into scope</span></span><br><span class="line"></span><br><span class="line">    some_string                              <span class="comment">// some_string is returned and</span></span><br><span class="line">                                             <span class="comment">// moves out to the calling</span></span><br><span class="line">                                             <span class="comment">// function</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This function takes a String and returns one</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">takes_and_gives_back</span>(a_string: <span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">String</span> &#123; <span class="comment">// a_string comes into</span></span><br><span class="line">                                                      <span class="comment">// scope</span></span><br><span class="line"></span><br><span class="line">    a_string  <span class="comment">// a_string is returned and moves out to the calling function</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清除旧的文件</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署GitPage</span></span><br><span class="line">hexo deploy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
       <categories>
-        <category>Rust</category>
+        <category>hexo</category>
       </categories>
       <tags>
-        <tag>Rust</tag>
-        <tag>笔记</tag>
+        <tag>hello</tag>
       </tags>
   </entry>
   <entry>
-    <title>开发环境依赖组件容器化配置参考</title>
-    <url>/2023/08/20/docker-compose4dev/</url>
-    <content><![CDATA[<p>为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 <code>docker-compose</code> 用于快速部署依赖组件环境</p>
-<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><ul>
-<li>elasticsearch:8.8.0</li>
-<li>kibana:8.8.0</li>
-<li>redis:7.0.11</li>
-<li>mysql:8</li>
-<li>postgres:15</li>
-<li>grafana-enterprise</li>
-</ul>
-<p>​	</p>
+    <title>CentOS7 下安装 JDK</title>
+    <url>/2023/09/01/setup-jdk/</url>
+    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
+<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
 
+<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
 
-<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/elasticsearch/elasticsearch:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">elasticsearch8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ELASTIC_PASSWORD=&lt;Your_ELASTIC_PASSWORD&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9200:9200&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">esdata:/usr/share/elasticsearch/data</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">kibana:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.elastic.co/kibana/kibana:8.8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kibana8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SERVER_NAME=kibana</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">XPACK_SECURITY_ENABLED=true</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5601:5601&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">kibanadata:/usr/share/kibana/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:7.0.11</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis7</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="comment"># 修改密码以及绑定地址</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">--requirepass</span> <span class="string">&quot;&lt;your_redis_pass&gt;&quot;</span> <span class="string">--bind</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6379:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redisdata:/data</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql8</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">--default-authentication-plugin=caching_sha2_password</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&lt;root_pass&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">&lt;your_db&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">&lt;your_user&gt;</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">&lt;your_pass&gt;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line">      </span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:15</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">postgres15</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">POSTGRES_DB:</span> <span class="string">database</span>       				<span class="comment"># 设置数据库名称</span></span><br><span class="line">      <span class="attr">POSTGRES_USER:</span> <span class="string">user</span>   					<span class="comment"># 设置数据库用户</span></span><br><span class="line">      <span class="attr">POSTGRES_PASSWORD:</span> <span class="string">PasswOrd</span>				<span class="comment"># 设置数据库密码</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgres_data:/var/lib/postgresql/data</span> 	<span class="comment"># 数据持久化存储的路径</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5432:5432&quot;</span> 	<span class="comment"># 将容器的 5432 端口映射到宿主机的 5432 端口</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">grafana:</span> 	<span class="comment"># 默认账号密码: admin/admin</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">grafana/grafana-enterprise</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">GF_INSTALL_PLUGINS=grafana-clock-panel</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;3000:3000&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">grafana-storage:/var/lib/grafana</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">esdata:</span></span><br><span class="line">  <span class="attr">kibanadata:</span></span><br><span class="line">  <span class="attr">redisdata:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br><span class="line">  <span class="attr">postgres_data:</span></span><br><span class="line">  <span class="attr">grafana-storage:</span></span><br></pre></td></tr></table></figure>
+<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
         <category>开发环境</category>
       </categories>
       <tags>
-        <tag>docker</tag>
-        <tag>docker-compose</tag>
+        <tag>centos7</tag>
+        <tag>jdk</tag>
+        <tag>pyspark</tag>
       </tags>
   </entry>
   <entry>
@@ -636,8 +660,8 @@
       </categories>
       <tags>
         <tag>centos7</tag>
-        <tag>jupyterlab</tag>
         <tag>pyspark</tag>
+        <tag>jupyterlab</tag>
       </tags>
   </entry>
   <entry>
@@ -1095,29 +1119,26 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/12/03/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+    <title>CentOS7 下部署 PySpark 开发环境</title>
+    <url>/2023/09/02/setup-pyspark/</url>
+    <content><![CDATA[<h1 id="一、下载预编译包"><a href="#一、下载预编译包" class="headerlink" title="一、下载预编译包"></a>一、下载预编译包</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载页面</span></span><br><span class="line">https://spark.apache.org/downloads.html</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载地址</span></span><br><span class="line">https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz</span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark Standalone Mode</span></span><br><span class="line">https://spark.apache.org/docs/latest/spark-standalone.html</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<h1 id="二、配置环境变量"><a href="#二、配置环境变量" class="headerlink" title="二、配置环境变量"></a>二、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 spark 的 sbin 目录下的 spark-config.sh 中添加JDK的路径</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免报错：</span></span><br><span class="line"><span class="comment"># localhost:   JAVA_HOME is not set</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<h1 id="三、开放端口"><a href="#三、开放端口" class="headerlink" title="三、开放端口"></a>三、开放端口</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=4040/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8081/tcp --permanent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载规则</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+<h1 id="四、启动"><a href="#四、启动" class="headerlink" title="四、启动"></a>四、启动</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./start-all.sh</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清除旧的文件</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署GitPage</span></span><br><span class="line">hexo deploy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h1 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 Spark 的 bin 目录下执行：</span></span><br><span class="line">./run-example SparkPi 10 | grep <span class="string">&quot;Pi is roughly&quot;</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>hexo</category>
+        <category>开发环境</category>
       </categories>
       <tags>
-        <tag>hello</tag>
+        <tag>centos7</tag>
+        <tag>pyspark</tag>
       </tags>
   </entry>
   <entry>
@@ -1148,52 +1169,6 @@
       <tags>
         <tag>DNS</tag>
         <tag>domain</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 下部署 PySpark 开发环境</title>
-    <url>/2023/09/02/setup-pyspark/</url>
-    <content><![CDATA[<h1 id="一、下载预编译包"><a href="#一、下载预编译包" class="headerlink" title="一、下载预编译包"></a>一、下载预编译包</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载页面</span></span><br><span class="line">https://spark.apache.org/downloads.html</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载地址</span></span><br><span class="line">https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz</span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark Standalone Mode</span></span><br><span class="line">https://spark.apache.org/docs/latest/spark-standalone.html</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="二、配置环境变量"><a href="#二、配置环境变量" class="headerlink" title="二、配置环境变量"></a>二、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 spark 的 sbin 目录下的 spark-config.sh 中添加JDK的路径</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免报错：</span></span><br><span class="line"><span class="comment"># localhost:   JAVA_HOME is not set</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="三、开放端口"><a href="#三、开放端口" class="headerlink" title="三、开放端口"></a>三、开放端口</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=4040/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=8081/tcp --permanent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载规则</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、启动"><a href="#四、启动" class="headerlink" title="四、启动"></a>四、启动</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./start-all.sh</span><br></pre></td></tr></table></figure>
-
-<h1 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 Spark 的 bin 目录下执行：</span></span><br><span class="line">./run-example SparkPi 10 | grep <span class="string">&quot;Pi is roughly&quot;</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>pyspark</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7 下安装 JDK</title>
-    <url>/2023/09/01/setup-jdk/</url>
-    <content><![CDATA[<h1 id="一、卸载系统自带的-OpenJDK"><a href="#一、卸载系统自带的-OpenJDK" class="headerlink" title="一、卸载系统自带的 OpenJDK"></a>一、卸载系统自带的 OpenJDK</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">[root@docker ~]<span class="comment"># java -version</span></span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_222&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_222-b10)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">rpm -qa | grep openjdk | xargs rpm -e --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认</span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="二、下载解压"><a href="#二、下载解压" class="headerlink" title="二、下载解压"></a>二、下载解压</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf ./jdk-8u202-linux-x64.tar.gz -C /usr/local/</span><br></pre></td></tr></table></figure>
-
-<h1 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Java Environment</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/local/jdk1.8.0_202</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre/lib/rt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/dt.jar:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使环境变量文件生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost <span class="built_in">local</span>]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>开发环境</category>
-      </categories>
-      <tags>
-        <tag>centos7</tag>
-        <tag>pyspark</tag>
-        <tag>jdk</tag>
       </tags>
   </entry>
   <entry>
