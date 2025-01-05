@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-01-05T11:30:40.521Z</updated>
+  <updated>2025-01-05T11:35:16.879Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/2025/01/05/Rust-Error/"/>
     <id>http://example.com/2025/01/05/Rust-Error/</id>
     <published>2025-01-05T09:52:13.000Z</published>
-    <updated>2025-01-05T11:30:40.521Z</updated>
+    <updated>2025-01-05T11:35:16.879Z</updated>
     
     
     <summary type="html">&lt;p&gt;错误是软件中不可避免的事实，因此 Rust 具有许多功能来处理出现错误的情况。在许多情况下，Rust 要求您承认错误的可能性并在代码编译之前采取一些措施。此要求可确保您在将代码部署到生产环境之前发现错误并适当处理它们，从而使您的程序更加健壮！&lt;/p&gt;
