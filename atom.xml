@@ -118,22 +118,10 @@
     <link href="http://example.com/2024/12/14/Rust-Getting-Started/"/>
     <id>http://example.com/2024/12/14/Rust-Getting-Started/</id>
     <published>2024-12-14T02:54:21.000Z</published>
-    <updated>2025-01-05T09:56:41.942Z</updated>
+    <updated>2025-01-05T12:29:44.140Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;0x01-安装&quot;&gt;&lt;a href=&quot;#0x01-安装&quot; class=&quot;headerlink&quot; title=&quot;0x01. 安装&quot;&gt;&lt;/a&gt;0x01. 安装&lt;/h1&gt;&lt;p&gt;在 Rust 开发环境中，所有工具都安装到 &lt;code&gt;~/.cargo/bin&lt;/code&gt; 目录中，您可以在此处找到 Rust 工具链，包括 &lt;code&gt;rustc&lt;/code&gt;、&lt;code&gt;cargo&lt;/code&gt; 和 &lt;code&gt;rustup&lt;/code&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;1-1-Windows&quot;&gt;&lt;a href=&quot;#1-1-Windows&quot; class=&quot;headerlink&quot; title=&quot;1.1 Windows&quot;&gt;&lt;/a&gt;1.1 Windows&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;Using rustup (Recommended)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.rust-lang.org/tools/install&quot;&gt;去官方网站下载安装程序&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ol start=&quot;3&quot;&gt;
-&lt;li&gt;Windows Subsystem for Linux&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;curl --proto &amp;#39;=https&amp;#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">&lt;h1 id=&quot;0x01-安装&quot;&gt;&lt;a href=&quot;#0x01-安装&quot; class=&quot;headerlink&quot; title=&quot;0x01. 安装&quot;&gt;&lt;/a&gt;0x01. 安装&lt;/h1&gt;&lt;p&gt;在 Rust 开发环境中，所有工具都安装到 &lt;code&gt;~/.cargo/bin&lt;/code&gt; 目录中，您可以在此处找到 Rust 工具链，包括 &lt;code&gt;rustc&lt;/code&gt;、&lt;code&gt;cargo&lt;/code&gt; 和 &lt;code&gt;rustup&lt;/code&gt;。&lt;/p&gt;</summary>
     
     
     
