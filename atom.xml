@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-01-04T14:15:21.714Z</updated>
+  <updated>2025-01-05T09:47:09.015Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,16 +21,17 @@
     <link href="http://example.com/2025/01/04/Rust-Pattern-Matching/"/>
     <id>http://example.com/2025/01/04/Rust-Pattern-Matching/</id>
     <published>2025-01-04T14:09:40.000Z</published>
-    <updated>2025-01-04T14:15:21.714Z</updated>
+    <updated>2025-01-05T09:47:09.015Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;0x01-match-控制流&quot;&gt;&lt;a href=&quot;#0x01-match-控制流&quot; class=&quot;headerlink&quot; title=&quot;0x01. match 控制流&quot;&gt;&lt;/a&gt;0x01. match 控制流&lt;/h1&gt;&lt;p&gt;Rust</summary>
-        
-      
+    <summary type="html">&lt;h1 id=&quot;0x01-模式&quot;&gt;&lt;a href=&quot;#0x01-模式&quot; class=&quot;headerlink&quot; title=&quot;0x01. 模式&quot;&gt;&lt;/a&gt;0x01. 模式&lt;/h1&gt;&lt;p&gt;模式是 Rust 中用于匹配复杂和简单类型的结构的特殊语法。将模式与匹配表达式和其他结构结合使用，可以更好地控制程序的控制流。模式由以下内容的组合组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Literals&lt;/li&gt;
+&lt;li&gt;Destructured arrays, enums, structs, or tuples&lt;/li&gt;
+&lt;li&gt;Variables&lt;/li&gt;
+&lt;li&gt;Wildcards&lt;/li&gt;
+&lt;li&gt;Placeholders&lt;/li&gt;
+&lt;/ul&gt;</summary>
     
     
     
@@ -91,9 +92,9 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
-    
     <category term="Cargo" scheme="http://example.com/tags/Cargo/"/>
+    
+    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -244,9 +245,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
     
   </entry>
   
@@ -292,9 +293,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
-    
     <category term="jdk" scheme="http://example.com/tags/jdk/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
     
   </entry>
   
