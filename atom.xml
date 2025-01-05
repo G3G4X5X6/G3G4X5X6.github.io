@@ -40,7 +40,7 @@
     <link href="http://example.com/2025/01/04/Rust-Pattern-Matching/"/>
     <id>http://example.com/2025/01/04/Rust-Pattern-Matching/</id>
     <published>2025-01-04T14:09:40.000Z</published>
-    <updated>2025-01-05T11:38:34.356Z</updated>
+    <updated>2025-01-05T11:38:46.533Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-模式&quot;&gt;&lt;a href=&quot;#0x01-模式&quot; class=&quot;headerlink&quot; title=&quot;0x01. 模式&quot;&gt;&lt;/a&gt;0x01. 模式&lt;/h1&gt;&lt;p&gt;模式是 Rust 中用于匹配复杂和简单类型的结构的特殊语法。将模式与匹配表达式和其他结构结合使用，可以更好地控制程序的控制流。模式由以下内容的组合组成：&lt;/p&gt;</summary>
@@ -97,11 +97,10 @@
     <link href="http://example.com/2024/12/14/Rust-Cargo-Workspace/"/>
     <id>http://example.com/2024/12/14/Rust-Cargo-Workspace/</id>
     <published>2024-12-14T03:51:48.000Z</published>
-    <updated>2025-01-05T09:56:42.432Z</updated>
+    <updated>2025-01-05T11:44:50.114Z</updated>
     
     
-    <summary type="html">&lt;p&gt;Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（&lt;a href=&quot;crates.io&quot;&gt;Package Registry&lt;/a&gt; ） 。&lt;/p&gt;
-&lt;h1 id=&quot;0x01-快速上手&quot;&gt;&lt;a href=&quot;#0x01-快速上手&quot; class=&quot;headerlink&quot; title=&quot;0x01. 快速上手&quot;&gt;&lt;/a&gt;0x01. 快速上手&lt;/h1&gt;&lt;h2 id=&quot;1-1-创建二进制项目&quot;&gt;&lt;a href=&quot;#1-1-创建二进制项目&quot; class=&quot;headerlink&quot; title=&quot;1.1 创建二进制项目&quot;&gt;&lt;/a&gt;1.1 创建二进制项目&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;cargo new hello_world&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 等价于 cargo new hello_world --bin&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    <summary type="html">&lt;p&gt;Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（&lt;a href=&quot;crates.io&quot;&gt;Package Registry&lt;/a&gt; ） 。&lt;/p&gt;</summary>
     
     
     
@@ -261,9 +260,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
     
   </entry>
   
@@ -309,9 +308,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
-    
     <category term="jdk" scheme="http://example.com/tags/jdk/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
     
   </entry>
   
