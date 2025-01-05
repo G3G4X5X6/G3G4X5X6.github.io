@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-01-05T09:47:09.015Z</updated>
+  <updated>2025-01-05T09:52:34.827Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,30 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Rust: 错误处理</title>
+    <link href="http://example.com/2025/01/05/Rust-Error/"/>
+    <id>http://example.com/2025/01/05/Rust-Error/</id>
+    <published>2025-01-05T09:52:13.000Z</published>
+    <updated>2025-01-05T09:52:34.827Z</updated>
+    
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Rust: 模式与匹配</title>
     <link href="http://example.com/2025/01/04/Rust-Pattern-Matching/"/>
     <id>http://example.com/2025/01/04/Rust-Pattern-Matching/</id>
     <published>2025-01-04T14:09:40.000Z</published>
-    <updated>2025-01-05T09:47:09.015Z</updated>
+    <updated>2025-01-05T09:51:46.187Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-模式&quot;&gt;&lt;a href=&quot;#0x01-模式&quot; class=&quot;headerlink&quot; title=&quot;0x01. 模式&quot;&gt;&lt;/a&gt;0x01. 模式&lt;/h1&gt;&lt;p&gt;模式是 Rust 中用于匹配复杂和简单类型的结构的特殊语法。将模式与匹配表达式和其他结构结合使用，可以更好地控制程序的控制流。模式由以下内容的组合组成：&lt;/p&gt;
@@ -35,21 +54,33 @@
     
     
     
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
   <entry>
-    <title>Rust：理解所有权</title>
+    <title>Rust: 理解所有权</title>
     <link href="http://example.com/2024/12/16/Rust-Understanding-Ownership/"/>
     <id>http://example.com/2024/12/16/Rust-Understanding-Ownership/</id>
     <published>2024-12-16T14:24:01.000Z</published>
-    <updated>2025-01-04T13:51:40.304Z</updated>
+    <updated>2025-01-05T09:51:43.346Z</updated>
     
     
     <summary type="html">&lt;p&gt;所有权是 Rust 最独特的功能，对语言的其余部分有着深远的影响。它使 Rust 能够在不需要垃圾收集器的情况下保证内存安全，因此了解所有权的工作原理非常重要。&lt;/p&gt;</summary>
     
     
     
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+    <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -92,9 +123,9 @@
     
     <category term="Rust" scheme="http://example.com/tags/Rust/"/>
     
-    <category term="Cargo" scheme="http://example.com/tags/Cargo/"/>
-    
     <category term="笔记" scheme="http://example.com/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+    <category term="Cargo" scheme="http://example.com/tags/Cargo/"/>
     
   </entry>
   
@@ -245,9 +276,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
-    
     <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
     
   </entry>
   
@@ -293,9 +324,9 @@
     
     <category term="centos7" scheme="http://example.com/tags/centos7/"/>
     
-    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
-    
     <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
     
   </entry>
   
