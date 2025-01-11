@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"Gemini":240},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="生命周期是我们已经使用的另一种泛型。生命周期不是确保类型具有我们想要的行为，而是确保引用在我们需要的时间内有效。 Rust 中的每个引用都有一个生命周期，即该引用有效的范围。大多数情况下，生命周期是隐式的和推断的，就像大多数情况下类型是推断的一样。只有当有多种类型可能时，我们才必须注释类型。类似地，当引用的生命周期可以以几种不同的方式关联时，我们必须注释生命周期。Rust 要求我们使用通用生命周期">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust：使用生命周期验证引用">
+<meta property="og:url" content="http://example.com/2025/01/11/Rust-Lifetime-Syntax/index.html">
+<meta property="og:site_name" content="勾三股四弦五小六">
+<meta property="og:description" content="生命周期是我们已经使用的另一种泛型。生命周期不是确保类型具有我们想要的行为，而是确保引用在我们需要的时间内有效。 Rust 中的每个引用都有一个生命周期，即该引用有效的范围。大多数情况下，生命周期是隐式的和推断的，就像大多数情况下类型是推断的一样。只有当有多种类型可能时，我们才必须注释类型。类似地，当引用的生命周期可以以几种不同的方式关联时，我们必须注释生命周期。Rust 要求我们使用通用生命周期">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-11T03:34:02.000Z">
+<meta property="article:modified_time" content="2025-01-11T08:46:10.052Z">
+<meta property="article:author" content="G3G4X5X6">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2025/01/11/Rust-Lifetime-Syntax/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/01/11/Rust-Lifetime-Syntax/","path":"2025/01/11/Rust-Lifetime-Syntax/","title":"Rust：使用生命周期验证引用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Rust：使用生命周期验证引用 | 勾三股四弦五小六</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-7VJ6G6FE1D","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="勾三股四弦五小六" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">勾三股四弦五小六</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">路漫漫其修远兮，吾将上下而求索</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">22</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a></li><li class="menu-item menu-item-关注"><a href="/follow/" rel="section"><i class="fa fa-list fa-fw"></i>关注</a></li><li class="menu-item menu-item-sitemap"><a href="/atom.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%98%B2%E6%AD%A2%E6%82%AC%E5%9E%82%E5%BC%95%E7%94%A8"><span class="nav-text">使用生命周期防止悬垂引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%80%9F%E7%94%A8%E6%A3%80%E6%9F%A5%E5%99%A8"><span class="nav-text">借用检查器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF"><span class="nav-text">错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE"><span class="nav-text">正确</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">函数中的泛型生命周期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B3%A8%E8%A7%A3%E8%AF%AD%E6%B3%95"><span class="nav-text">生命周期注解语法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%AD%BE%E5%90%8D%E4%B8%AD%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B3%A8%E8%A7%A3"><span class="nav-text">函数签名中的生命周期注解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E4%BE%8B"><span class="nav-text">正例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E4%BE%8B"><span class="nav-text">反例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84%E8%A7%92%E5%BA%A6%E6%80%9D%E8%80%83"><span class="nav-text">从生命周期的角度思考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B3%A8%E8%A7%A3"><span class="nav-text">结构体定义中的生命周期注解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9C%81%E7%95%A5%E8%A7%84%E5%88%99"><span class="nav-text">生命周期省略规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B3%A8%E8%A7%A3"><span class="nav-text">方法定义中的生命周期注解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">静态生命周期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E7%A4%BA%E4%BE%8B%EF%BC%9A%E6%B3%9B%E5%9E%8B%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0%E3%80%81%E7%89%B9%E5%BE%81%E7%95%8C%E9%99%90%E5%92%8C%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">综合示例：泛型类型参数、特征界限和生命周期</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">G3G4X5X6</p>
+  <div class="site-description" itemprop="description">学而时习之</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/G3G4X5X6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;G3G4X5X6" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:g3g4x5x6@foxmail.com" title="E-Mail → mailto:g3g4x5x6@foxmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/11/Rust-Lifetime-Syntax/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="G3G4X5X6">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勾三股四弦五小六">
+      <meta itemprop="description" content="学而时习之">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Rust：使用生命周期验证引用 | 勾三股四弦五小六">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rust：使用生命周期验证引用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-01-11 11:34:02 / 修改时间：16:46:10" itemprop="dateCreated datePublished" datetime="2025-01-11T11:34:02+08:00">2025-01-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Rust/" itemprop="url" rel="index"><span itemprop="name">Rust</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>生命周期是我们已经使用的另一种泛型。生命周期不是确保类型具有我们想要的行为，而是确保引用在我们需要的时间内有效。</p>
+<p>Rust 中的每个引用都有一个生命周期，即该引用有效的范围。大多数情况下，生命周期是隐式的和推断的，就像大多数情况下类型是推断的一样。只有当有多种类型可能时，我们才必须注释类型。类似地，当引用的生命周期可以以几种不同的方式关联时，我们必须注释生命周期。Rust 要求我们使用通用生命周期参数注释关系，以确保运行时使用的实际引用肯定有效。</p>
+<blockquote>
+<p>生命周期标注是给引用检查器做安全检查的。</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="使用生命周期防止悬垂引用"><a href="#使用生命周期防止悬垂引用" class="headerlink" title="使用生命周期防止悬垂引用"></a>使用生命周期防止悬垂引用</h1><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r</span>;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;</span><br><span class="line">        r = &amp;x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;r: &#123;r&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ cargo run</span><br><span class="line">   Compiling chapter10 v0.1.0 (file:///projects/chapter10)</span><br><span class="line">error[E0597]: `x` does not live long enough</span><br><span class="line"> --&gt; src/main.rs:6:13</span><br><span class="line">  |</span><br><span class="line">5 |         <span class="built_in">let</span> x = 5;</span><br><span class="line">  |             - binding `x` declared here</span><br><span class="line">6 |         r = &amp;x;</span><br><span class="line">  |             ^^ borrowed value does not live long enough</span><br><span class="line">7 |     &#125;</span><br><span class="line">  |     - `x` dropped here <span class="keyword">while</span> still borrowed</span><br><span class="line">8 |</span><br><span class="line">9 |     println!(<span class="string">&quot;r: &#123;r&#125;&quot;</span>);</span><br><span class="line">  |                  --- borrow later used here</span><br><span class="line"></span><br><span class="line">For more information about this error, try `rustc --explain E0597`.</span><br><span class="line">error: could not compile `chapter10` (bin <span class="string">&quot;chapter10&quot;</span>) due to 1 previous error</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="借用检查器"><a href="#借用检查器" class="headerlink" title="借用检查器"></a>借用检查器</h1><h2 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r</span>;                <span class="comment">// ---------+-- &#x27;a</span></span><br><span class="line">                          <span class="comment">//          |</span></span><br><span class="line">    &#123;                     <span class="comment">//          |</span></span><br><span class="line">        <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;        <span class="comment">// -+-- &#x27;b  |</span></span><br><span class="line">        r = &amp;x;           <span class="comment">//  |       |</span></span><br><span class="line">    &#125;                     <span class="comment">// -+       |</span></span><br><span class="line">                          <span class="comment">//          |</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;r: &#123;r&#125;&quot;</span>);   <span class="comment">//          |</span></span><br><span class="line">&#125;                         <span class="comment">// ---------+</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="正确"><a href="#正确" class="headerlink" title="正确"></a>正确</h2><p>这里，x 的生命周期为 ‘b，在本例中大于 ‘a。这意味着 r 可以引用 x，因为 Rust 知道只要 x 有效，r 中的引用就始终有效。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">x</span> = <span class="number">5</span>;            <span class="comment">// ----------+-- &#x27;b</span></span><br><span class="line">                          <span class="comment">//           |</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r</span> = &amp;x;           <span class="comment">// --+-- &#x27;a  |</span></span><br><span class="line">                          <span class="comment">//   |       |</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;r: &#123;r&#125;&quot;</span>);   <span class="comment">//   |       |</span></span><br><span class="line">                          <span class="comment">// --+       |</span></span><br><span class="line">&#125;                         <span class="comment">// ----------+</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="函数中的泛型生命周期"><a href="#函数中的泛型生命周期" class="headerlink" title="函数中的泛型生命周期"></a>函数中的泛型生命周期</h1><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">longest</span>(x: &amp;<span class="type">str</span>, y: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> &amp;<span class="type">str</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> x.<span class="title function_ invoke__">len</span>() &gt; y.<span class="title function_ invoke__">len</span>() &#123;</span><br><span class="line">        x</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        y</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ cargo run</span><br><span class="line">   Compiling chapter10 v0.1.0 (file:///projects/chapter10)</span><br><span class="line">error[E0106]: missing lifetime specifier</span><br><span class="line"> --&gt; src/main.rs:9:33</span><br><span class="line">  |</span><br><span class="line">9 | fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str &#123;</span><br><span class="line">  |               ----     ----     ^ expected named lifetime parameter</span><br><span class="line">  |</span><br><span class="line">  = <span class="built_in">help</span>: this <span class="keyword">function</span><span class="string">&#x27;s return type contains a borrowed value, but the signature does not say whether it is borrowed from `x` or `y`</span></span><br><span class="line"><span class="string">help: consider introducing a named lifetime parameter</span></span><br><span class="line"><span class="string">  |</span></span><br><span class="line"><span class="string">9 | fn longest&lt;&#x27;</span>a&gt;(x: &amp;<span class="string">&#x27;a str, y: &amp;&#x27;</span>a str) -&gt; &amp;<span class="string">&#x27;a str &#123;</span></span><br><span class="line"><span class="string">  |           ++++     ++          ++          ++</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">For more information about this error, try `rustc --explain E0106`.</span></span><br><span class="line"><span class="string">error: could not compile `chapter10` (bin &quot;chapter10&quot;) due to 1 previous error</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="生命周期注解语法"><a href="#生命周期注解语法" class="headerlink" title="生命周期注解语法"></a>生命周期注解语法</h1><p>生命周期注解不会改变任何引用的生存期。相反，它们描述了多个引用的生命周期之间的关系，而不会影响生命周期。就像函数在签名指定泛型类型参数时可以接受任何类型一样，函数也可以通过指定泛型生命周期参数来接受具有任何生命周期的引用。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;<span class="type">i32</span>        <span class="comment">// a reference</span></span><br><span class="line">&amp;<span class="symbol">&#x27;a</span> <span class="type">i32</span>     <span class="comment">// a reference with an explicit lifetime</span></span><br><span class="line">&amp;<span class="symbol">&#x27;a</span> <span class="keyword">mut</span> <span class="type">i32</span> <span class="comment">// a mutable reference with an explicit lifetime</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="函数签名中的生命周期注解"><a href="#函数签名中的生命周期注解" class="headerlink" title="函数签名中的生命周期注解"></a>函数签名中的生命周期注解</h1><p>我们希望签名能够表达以下约束：只要两个参数都有效，返回的引用就有效。这是参数和返回值的生命周期之间的关系。我们将生命周期命名为 <code>&#39;a</code>，然后将其添加到每个引用中，如示例所示：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// x，y 和返回的生命周期一样</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">longest</span>&lt;<span class="symbol">&#x27;a</span>&gt;(x: &amp;<span class="symbol">&#x27;a</span> <span class="type">str</span>, y: &amp;<span class="symbol">&#x27;a</span> <span class="type">str</span>) <span class="punctuation">-&gt;</span> &amp;<span class="symbol">&#x27;a</span> <span class="type">str</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> x.<span class="title function_ invoke__">len</span>() &gt; y.<span class="title function_ invoke__">len</span>() &#123;</span><br><span class="line">        x</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        y</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="正例"><a href="#正例" class="headerlink" title="正例"></a>正例</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">string1</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;long string is long&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">string2</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;xyz&quot;</span>);</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">result</span> = <span class="title function_ invoke__">longest</span>(string1.<span class="title function_ invoke__">as_str</span>(), string2.<span class="title function_ invoke__">as_str</span>());</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;The longest string is &#123;result&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="反例"><a href="#反例" class="headerlink" title="反例"></a>反例</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">string1</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;long string is long&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">result</span>;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">string2</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;xyz&quot;</span>);</span><br><span class="line">        result = <span class="title function_ invoke__">longest</span>(string1.<span class="title function_ invoke__">as_str</span>(), string2.<span class="title function_ invoke__">as_str</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The longest string is &#123;result&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在此例中，因为借用检查器知道的是你们的生命周期一样长，那么在y(string2)的生命周期结束后，x和返回值的生命周期也应该结束了，在引用的生命周期结束后还使用无效引用就会报错。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ cargo run</span><br><span class="line">   Compiling chapter10 v0.1.0 (file:///projects/chapter10)</span><br><span class="line">error[E0597]: `string2` does not live long enough</span><br><span class="line"> --&gt; src/main.rs:6:44</span><br><span class="line">  |</span><br><span class="line">5 |         <span class="built_in">let</span> string2 = String::from(<span class="string">&quot;xyz&quot;</span>);</span><br><span class="line">  |             ------- binding `string2` declared here</span><br><span class="line">6 |         result = longest(string1.as_str(), string2.as_str());</span><br><span class="line">  |                                            ^^^^^^^ borrowed value does not live long enough</span><br><span class="line">7 |     &#125;</span><br><span class="line">  |     - `string2` dropped here <span class="keyword">while</span> still borrowed</span><br><span class="line">8 |     println!(<span class="string">&quot;The longest string is &#123;result&#125;&quot;</span>);</span><br><span class="line">  |                                     -------- borrow later used here</span><br><span class="line"></span><br><span class="line">For more information about this error, try `rustc --explain E0597`.</span><br><span class="line">error: could not compile `chapter10` (bin <span class="string">&quot;chapter10&quot;</span>) due to 1 previous error</span><br></pre></td></tr></table></figure>
+
+<h1 id="从生命周期的角度思考"><a href="#从生命周期的角度思考" class="headerlink" title="从生命周期的角度思考"></a>从生命周期的角度思考</h1><p>归根结底，生命周期语法就是将各种参数和函数返回值的生命周期连接起来。一旦连接起来，Rust 就有足够的信息来允许内存安全的操作，并禁止创建悬空指针或以其他方式违反内存安全的操作。</p>
+<h1 id="结构体定义中的生命周期注解"><a href="#结构体定义中的生命周期注解" class="headerlink" title="结构体定义中的生命周期注解"></a>结构体定义中的生命周期注解</h1><p>到目前为止，我们定义的结构体都保存了从属类型。我们可以定义结构体来保存引用，但在这种情况下，我们需要在结构体定义中的每个引用上添加生命周期注解。示例中有一个名为 ImportantExcerpt 的结构体，它保存了一个字符串切片。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">ImportantExcerpt</span>&lt;<span class="symbol">&#x27;a</span>&gt; &#123;</span><br><span class="line">    part: &amp;<span class="symbol">&#x27;a</span> <span class="type">str</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">novel</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;Call me Ishmael. Some years ago...&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">first_sentence</span> = novel.<span class="title function_ invoke__">split</span>(<span class="string">&#x27;.&#x27;</span>).<span class="title function_ invoke__">next</span>().<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">i</span> = ImportantExcerpt &#123;</span><br><span class="line">        part: first_sentence,</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此结构体具有单个字段 part，该字段保存字符串切片，即引用。与泛型数据类型一样，我们在结构体名称后的尖括号内声明泛型生命周期参数的名称，以便我们可以在结构体定义的主体中使用生命周期参数。此注释意味着 ImportantExcerpt 的实例不能比其 part 字段中保存的引用存活更久。</p>
+<h1 id="生命周期省略规则"><a href="#生命周期省略规则" class="headerlink" title="生命周期省略规则"></a>生命周期省略规则</h1><p>Rust 引用分析中编入的模式称为生命周期省略规则。这些不是程序员要遵循的规则；它们是编译器会考虑的一组特殊情况，如果您的代码符合这些情况，您无需明确编写生命周期。</p>
+<p>省略规则不提供完整的推理。如果在 Rust 应用规则后，引用的生命周期仍然存在歧义，则编译器不会猜测剩余引用的生命周期应该是多少。编译器不会猜测，而是会给出一个错误，您可以通过添加生命周期注释来解决。</p>
+<p>函数或方法参数的生命周期称为输入生命周期，返回值的生命周期称为输出生命周期。</p>
+<h1 id="方法定义中的生命周期注解"><a href="#方法定义中的生命周期注解" class="headerlink" title="方法定义中的生命周期注解"></a>方法定义中的生命周期注解</h1><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">impl</span>&lt;<span class="symbol">&#x27;a</span>&gt; ImportantExcerpt&lt;<span class="symbol">&#x27;a</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">level</span>(&amp;<span class="keyword">self</span>) <span class="punctuation">-&gt;</span> <span class="type">i32</span> &#123;</span><br><span class="line">        <span class="number">3</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="静态生命周期"><a href="#静态生命周期" class="headerlink" title="静态生命周期"></a>静态生命周期</h1><p>我们需要讨论的一个特殊生命周期是 <code>&#39;static</code>，它表示受影响的引用可以在整个程序运行期间存在。所有字符串文字都具有 <code>&#39;static</code> 生命周期，我们可以对其进行注释如下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">s</span>: &amp;<span class="symbol">&#x27;static</span> <span class="type">str</span> = <span class="string">&quot;I have a static lifetime.&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>此字符串的文本直接存储在程序的二进制文件中，该二进制文件始终可用。因此，所有字符串文字的生存期都是“静态的”。</p>
+<p>您可能会在错误消息中看到建议使用 ‘static 生命周期。但在将 ‘static 指定为引用的生命周期之前，请考虑您拥有的引用是否真的在程序的整个生命周期中存在，以及您是否希望它存在。大多数情况下，建议使用 ‘static 生命周期的错误消息是由于尝试创建悬空引用或可用生命周期不匹配而导致的。在这种情况下，解决方案是修复这些问题，而不是指定 ‘static 生命周期。</p>
+<h1 id="综合示例：泛型类型参数、特征界限和生命周期"><a href="#综合示例：泛型类型参数、特征界限和生命周期" class="headerlink" title="综合示例：泛型类型参数、特征界限和生命周期"></a>综合示例：泛型类型参数、特征界限和生命周期</h1><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fmt::Display;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">longest_with_an_announcement</span>&lt;<span class="symbol">&#x27;a</span>, T&gt;(</span><br><span class="line">    x: &amp;<span class="symbol">&#x27;a</span> <span class="type">str</span>,</span><br><span class="line">    y: &amp;<span class="symbol">&#x27;a</span> <span class="type">str</span>,</span><br><span class="line">    ann: T,</span><br><span class="line">) <span class="punctuation">-&gt;</span> &amp;<span class="symbol">&#x27;a</span> <span class="type">str</span></span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">    T: Display,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Announcement! &#123;ann&#125;&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> x.<span class="title function_ invoke__">len</span>() &gt; y.<span class="title function_ invoke__">len</span>() &#123;</span><br><span class="line">        x</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        y</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Rust/" rel="tag"># Rust</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/11/Rust-Traits/" rel="prev" title="Rust：特征">
+                  <i class="fa fa-angle-left"></i> Rust：特征
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2023 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">G3G4X5X6</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

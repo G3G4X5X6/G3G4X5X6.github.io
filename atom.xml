@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-01-05T11:38:20.840Z</updated>
+  <updated>2025-01-11T08:46:10.052Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,71 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Rust：使用生命周期验证引用</title>
+    <link href="http://example.com/2025/01/11/Rust-Lifetime-Syntax/"/>
+    <id>http://example.com/2025/01/11/Rust-Lifetime-Syntax/</id>
+    <published>2025-01-11T03:34:02.000Z</published>
+    <updated>2025-01-11T08:46:10.052Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;生命周期是我们已经使用的另一种泛型。生命周期不是确保类型具有我们想要的行为，而是确保引用在我们需要的时间内有效。&lt;/p&gt;
+&lt;p&gt;Rust 中的每个引用都有一个生命周期，即该引用有效的范围。大多数情况下，生命周期是隐式的和推断的，就像大多数情况下类型是推断的一样。只有当有多种类型可能时，我们才必须注释类型。类似地，当引用的生命周期可以以几种不同的方式关联时，我们必须注释生命周期。Rust 要求我们使用通用生命周期参数注释关系，以确保运行时使用的实际引用肯定有效。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;生命周期标注是给引用检查器做安全检查的。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust：特征</title>
+    <link href="http://example.com/2025/01/11/Rust-Traits/"/>
+    <id>http://example.com/2025/01/11/Rust-Traits/</id>
+    <published>2025-01-11T02:29:28.000Z</published>
+    <updated>2025-01-11T03:30:19.574Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;strong&gt;特征：定义共享行为&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;特征定义了特定类型所具有的功能，并且可以与其他类型共享。我们可以使用特征以抽象方式定义共享行为。我们可以&lt;strong&gt;使用特征界限来指定泛型类型可以是具有特定行为的任何类型&lt;/strong&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：特征与其他语言中常称为接口的功能类似，尽管也存在一些差异。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust：泛型</title>
+    <link href="http://example.com/2025/01/11/Rust-Generics/"/>
+    <id>http://example.com/2025/01/11/Rust-Generics/</id>
+    <published>2025-01-11T02:14:19.000Z</published>
+    <updated>2025-01-11T02:36:29.424Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;我们首先看看如何使用泛型定义函数、结构、枚举和方法。然后我们将讨论泛型如何影响代码性能。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
   
   <entry>
     <title>Rust: 错误处理</title>
