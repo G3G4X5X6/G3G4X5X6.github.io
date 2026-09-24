@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>勾三股四弦五小六</title>
+  <icon>http://example.com/icon.png</icon>
+  <subtitle>路漫漫其修远兮，吾将上下而求索</subtitle>
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2026-09-24T06:56:23.954Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>G3G4X5X6</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://example.com/2026/09/24/hello-world/"/>
+    <id>http://example.com/2026/09/24/hello-world/</id>
+    <published>2026-09-24T06:56:23.954Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="其他" scheme="http://example.com/categories/%E5%85%B6%E4%BB%96/"/>
+    
+    
+    <category term="hexo" scheme="http://example.com/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust：使用生命周期验证引用</title>
+    <link href="http://example.com/2025/01/11/Rust-Lifetime-Syntax/"/>
+    <id>http://example.com/2025/01/11/Rust-Lifetime-Syntax/</id>
+    <published>2025-01-11T03:34:02.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;生命周期是我们已经使用的另一种泛型。生命周期不是确保类型具有我们想要的行为，而是确保引用在我们需要的时间内有效。&lt;/p&gt;
+&lt;p&gt;Rust 中的每个引用都有一个生命周期，即该引用有效的范围。大多数情况下，生命周期是隐式的和推断的，就像大多数情况下类型是推断的一样。只有当有多种类型可能时，我们才必须注释类型。类似地，当引用的生命周期可以以几种不同的方式关联时，我们必须注释生命周期。Rust 要求我们使用通用生命周期参数注释关系，以确保运行时使用的实际引用肯定有效。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;生命周期标注是给引用检查器做安全检查的。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust：特征</title>
+    <link href="http://example.com/2025/01/11/Rust-Traits/"/>
+    <id>http://example.com/2025/01/11/Rust-Traits/</id>
+    <published>2025-01-11T02:29:28.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;strong&gt;特征：定义共享行为&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;特征定义了特定类型所具有的功能，并且可以与其他类型共享。我们可以使用特征以抽象方式定义共享行为。我们可以&lt;strong&gt;使用特征界限来指定泛型类型可以是具有特定行为的任何类型&lt;/strong&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：特征与其他语言中常称为接口的功能类似，尽管也存在一些差异。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust：泛型</title>
+    <link href="http://example.com/2025/01/11/Rust-Generics/"/>
+    <id>http://example.com/2025/01/11/Rust-Generics/</id>
+    <published>2025-01-11T02:14:19.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;我们首先看看如何使用泛型定义函数、结构、枚举和方法。然后我们将讨论泛型如何影响代码性能。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust: 错误处理</title>
+    <link href="http://example.com/2025/01/05/Rust-Error/"/>
+    <id>http://example.com/2025/01/05/Rust-Error/</id>
+    <published>2025-01-05T09:52:13.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;错误是软件中不可避免的事实，因此 Rust 具有许多功能来处理出现错误的情况。在许多情况下，Rust 要求您承认错误的可能性并在代码编译之前采取一些措施。此要求可确保您在将代码部署到生产环境之前发现错误并适当处理它们，从而使您的程序更加健壮！&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust: 模式与匹配</title>
+    <link href="http://example.com/2025/01/04/Rust-Pattern-Matching/"/>
+    <id>http://example.com/2025/01/04/Rust-Pattern-Matching/</id>
+    <published>2025-01-04T14:09:40.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;0x01-模式&quot;&gt;&lt;a href=&quot;#0x01-模式&quot; class=&quot;headerlink&quot; title=&quot;0x01. 模式&quot;&gt;&lt;/a&gt;0x01. 模式&lt;/h1&gt;&lt;p&gt;模式是 Rust 中用于匹配复杂和简单类型的结构的特殊语法。将模式与匹配表达式和其他结构结合使用，可以更好地控制程序的控制流。模式由以下内容的组合组成：&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust: 理解所有权</title>
+    <link href="http://example.com/2024/12/16/Rust-Understanding-Ownership/"/>
+    <id>http://example.com/2024/12/16/Rust-Understanding-Ownership/</id>
+    <published>2024-12-16T14:24:01.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;所有权是 Rust 最独特的功能，对语言的其余部分有着深远的影响。它使 Rust 能够在不需要垃圾收集器的情况下保证内存安全，因此了解所有权的工作原理非常重要。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust “类型”</title>
+    <link href="http://example.com/2024/12/14/Rust-Types/"/>
+    <id>http://example.com/2024/12/14/Rust-Types/</id>
+    <published>2024-12-14T13:45:09.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;0x01-标量类型&quot;&gt;&lt;a href=&quot;#0x01-标量类型&quot; class=&quot;headerlink&quot; title=&quot;0x01. 标量类型&quot;&gt;&lt;/a&gt;0x01. 标量类型&lt;/h1&gt;&lt;p&gt;标量类型表示单个值。Rust 有四种主要标量类型：整数、浮点数、布尔值和字符。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Cargo 使用指南之代码组织管理</title>
+    <link href="http://example.com/2024/12/14/Rust-Cargo-Workspace/"/>
+    <id>http://example.com/2024/12/14/Rust-Cargo-Workspace/</id>
+    <published>2024-12-14T03:51:48.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Cargo 是 Rust 软件包管理器。Cargo 可以下载 Rust 软件包的依赖项、编译软件包、制作可分发的软件包，并将它们上传到 Rust 社区的软件包注册中心（&lt;a href=&quot;crates.io&quot;&gt;Package Registry&lt;/a&gt; ） 。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+    <category term="Cargo" scheme="http://example.com/tags/Cargo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rust: 快速开始</title>
+    <link href="http://example.com/2024/12/14/Rust-Getting-Started/"/>
+    <id>http://example.com/2024/12/14/Rust-Getting-Started/</id>
+    <published>2024-12-14T02:54:21.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;0x01-安装&quot;&gt;&lt;a href=&quot;#0x01-安装&quot; class=&quot;headerlink&quot; title=&quot;0x01. 安装&quot;&gt;&lt;/a&gt;0x01. 安装&lt;/h1&gt;&lt;p&gt;在 Rust 开发环境中，所有工具都安装到 &lt;code&gt;~/.cargo/bin&lt;/code&gt; 目录中，您可以在此处找到 Rust 工具链，包括 &lt;code&gt;rustc&lt;/code&gt;、&lt;code&gt;cargo&lt;/code&gt; 和 &lt;code&gt;rustup&lt;/code&gt;。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Rust" scheme="http://example.com/categories/Rust/"/>
+    
+    
+    <category term="Rust" scheme="http://example.com/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 部署 OpenVPN</title>
+    <link href="http://example.com/2023/10/29/setup-openvpn/"/>
+    <id>http://example.com/2023/10/29/setup-openvpn/</id>
+    <published>2023-10-29T01:51:39.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;0x01-环境安装&quot;&gt;&lt;a href=&quot;#0x01-环境安装&quot; class=&quot;headerlink&quot; title=&quot;0x01. 环境安装&quot;&gt;&lt;/a&gt;0x01. 环境安装&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 更新 CentOS 软件包&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum -y update&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 安装 OpenVPN 和 EasyRSA&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum -y install openvpn easy-rsa firewalld&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 如果未能成功安装 OpenVPN，则可能需要先安装一下 Epel 库&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum install epel-release -y&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="自建服务" scheme="http://example.com/categories/%E8%87%AA%E5%BB%BA%E6%9C%8D%E5%8A%A1/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="openvpn" scheme="http://example.com/tags/openvpn/"/>
+    
+    <category term="security" scheme="http://example.com/tags/security/"/>
+    
+    <category term="self-hosted" scheme="http://example.com/tags/self-hosted/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 下部署 PySpark 开发环境</title>
+    <link href="http://example.com/2023/09/01/setup-pyspark/"/>
+    <id>http://example.com/2023/09/01/setup-pyspark/</id>
+    <published>2023-09-01T16:05:11.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;一、下载预编译包&quot;&gt;&lt;a href=&quot;#一、下载预编译包&quot; class=&quot;headerlink&quot; title=&quot;一、下载预编译包&quot;&gt;&lt;/a&gt;一、下载预编译包&lt;/h1&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 下载页面&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://spark.apache.org/downloads.html&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 下载地址&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://dlcdn.apache.org/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# Spark Standalone Mode&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;https://spark.apache.org/docs/latest/spark-standalone.html&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 下安装 Jupyter</title>
+    <link href="http://example.com/2023/09/01/setup-jupyter/"/>
+    <id>http://example.com/2023/09/01/setup-jupyter/</id>
+    <published>2023-09-01T16:03:38.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;JupyterLab&quot;&gt;&lt;a href=&quot;#JupyterLab&quot; class=&quot;headerlink&quot; title=&quot;JupyterLab&quot;&gt;&lt;/a&gt;JupyterLab&lt;/h1&gt;&lt;p&gt;Install JupyterLab with pip:&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip3 install jupyterlab&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;Once installed, launch JupyterLab with:&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;jupyter lab&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="jupyterlab" scheme="http://example.com/tags/jupyterlab/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 下安装 Python3.8.5</title>
+    <link href="http://example.com/2023/09/01/setup-python3-8-5/"/>
+    <id>http://example.com/2023/09/01/setup-python3-8-5/</id>
+    <published>2023-09-01T16:01:07.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;一、前置条件&quot;&gt;&lt;a href=&quot;#一、前置条件&quot; class=&quot;headerlink&quot; title=&quot;一、前置条件&quot;&gt;&lt;/a&gt;一、前置条件&lt;/h1&gt;&lt;h2 id=&quot;1）安装依赖&quot;&gt;&lt;a href=&quot;#1）安装依赖&quot; class=&quot;headerlink&quot; title=&quot;1）安装依赖&quot;&gt;&lt;/a&gt;1）安装依赖&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;yum -y install libffi-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;2）更新-openssl&quot;&gt;&lt;a href=&quot;#2）更新-openssl&quot; class=&quot;headerlink&quot; title=&quot;2）更新 openssl&quot;&gt;&lt;/a&gt;2）更新 openssl&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget --no-check-certificate   https://www.openssl.org/source/openssl-1.1.1t.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;tar -zxvf openssl-1.1.1t.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; openssl-1.1.1t/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;./config --prefix=/usr/local/my_openssl&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;make&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;make install&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;mv&lt;/span&gt; /usr/bin/openssl /usr/bin/oldopenssl&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;ln&lt;/span&gt; -s /usr/local/my_openssl/bin/openssl /usr/bin/openssl&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;ln&lt;/span&gt; -s /usr/local/my_openssl/lib/libssl.so.1.1 /usr/lib64/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;ln&lt;/span&gt; -s /usr/local/my_openssl/lib/libcrypto.so.1.1  /usr/lib64/&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+    <category term="python3" scheme="http://example.com/tags/python3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 下安装 JDK</title>
+    <link href="http://example.com/2023/09/01/setup-jdk/"/>
+    <id>http://example.com/2023/09/01/setup-jdk/</id>
+    <published>2023-09-01T15:58:29.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;一、卸载系统自带的-OpenJDK&quot;&gt;&lt;a href=&quot;#一、卸载系统自带的-OpenJDK&quot; class=&quot;headerlink&quot; title=&quot;一、卸载系统自带的 OpenJDK&quot;&gt;&lt;/a&gt;一、卸载系统自带的 OpenJDK&lt;/h1&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 查看&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[root@docker ~]# java -version&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;openjdk version &lt;span class=&quot;string&quot;&gt;&amp;quot;1.8.0_222&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;OpenJDK Runtime Environment (build 1.8.0_222-b10)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode) &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 卸载&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;rpm -qa | grep openjdk | xargs rpm -e --nodeps&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 确认&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;java -version&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="centos7" scheme="http://example.com/tags/centos7/"/>
+    
+    <category term="jdk" scheme="http://example.com/tags/jdk/"/>
+    
+    <category term="pyspark" scheme="http://example.com/tags/pyspark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>开发环境依赖组件容器化配置参考</title>
+    <link href="http://example.com/2023/08/20/docker-compose4dev/"/>
+    <id>http://example.com/2023/08/20/docker-compose4dev/</id>
+    <published>2023-08-20T04:05:26.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;为避免开发时总是需要耗时搭建开发依赖的组件，因此维护一个 &lt;code&gt;docker-compose&lt;/code&gt; 用于快速部署依赖组件环境&lt;/p&gt;
+&lt;h2 id=&quot;组件&quot;&gt;&lt;a href=&quot;#组件&quot; class=&quot;headerlink&quot; title=&quot;组件&quot;&gt;&lt;/a&gt;组件&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;elasticsearch:8.8.0&lt;/li&gt;
+&lt;li&gt;kibana:8.8.0&lt;/li&gt;
+&lt;li&gt;redis:7.0.11&lt;/li&gt;
+&lt;li&gt;mysql:8&lt;/li&gt;
+&lt;li&gt;postgres:15&lt;/li&gt;
+&lt;li&gt;grafana-enterprise&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​	&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="开发环境" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="docker" scheme="http://example.com/tags/docker/"/>
+    
+    <category term="docker-compose" scheme="http://example.com/tags/docker-compose/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ARP协议</title>
+    <link href="http://example.com/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/"/>
+    <id>http://example.com/2023/06/15/ARP%E5%8D%8F%E8%AE%AE/</id>
+    <published>2023-06-15T11:11:59.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;协议解析&quot;&gt;&lt;a href=&quot;#协议解析&quot; class=&quot;headerlink&quot; title=&quot;协议解析&quot;&gt;&lt;/a&gt;协议解析&lt;/h2&gt;&lt;p&gt;ARP（Address Resolution Protocol）协议是一种用于在计算机网络中解析网络层地址（如IP地址）与物理地址（如MAC地址）之间映射关系的协议。在数据包从源主机发送到目标主机的过程中，需要将目标主机的网络层地址转换为物理地址，才能在链路层上进行数据传输。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="协议分析" scheme="http://example.com/categories/%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="arp" scheme="http://example.com/tags/arp/"/>
+    
+    <category term="socket" scheme="http://example.com/tags/socket/"/>
+    
+    <category term="chatgpt" scheme="http://example.com/tags/chatgpt/"/>
+    
+    <category term="网络编程" scheme="http://example.com/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>域名缓存侦测技术</title>
+    <link href="http://example.com/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/"/>
+    <id>http://example.com/2023/06/15/%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E4%BE%A6%E6%B5%8B%E6%8A%80%E6%9C%AF/</id>
+    <published>2023-06-15T04:44:19.000Z</published>
+    <updated>2026-09-24T06:56:23.954Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;技术说明&quot;&gt;&lt;a href=&quot;#技术说明&quot; class=&quot;headerlink&quot; title=&quot;技术说明&quot;&gt;&lt;/a&gt;技术说明&lt;/h1&gt;&lt;p&gt;域名缓存探测技术是一种用于获取目标系统 DNS 缓存信息的技术。通过发送特定的 DNS 查询请求并观察响应时间和内容，可以推断出目标系统是否存在特定域名的 DNS 缓存记录。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="渗透测试" scheme="http://example.com/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    
+    <category term="DNS" scheme="http://example.com/tags/DNS/"/>
+    
+    <category term="domain" scheme="http://example.com/tags/domain/"/>
+    
+  </entry>
+  
+</feed>
